@@ -64,6 +64,10 @@ public class ProblemController {
                     throw new IllegalArgumentException(
                             "Size must be greater than 0");
                 }
+                if (Integer.parseInt(size) > 100) {
+                    throw new IllegalArgumentException(
+                            "Size must be less than or equal to 100");
+                }
             } catch (NumberFormatException ex) {
                 throw new IllegalArgumentException(
                         "Size must be a valid integer");
