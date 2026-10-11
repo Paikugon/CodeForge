@@ -7,13 +7,10 @@ import com.codeforge.backend.repository.ProblemRepository;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.List;
 
 @Service
 public class ProblemService {
@@ -52,9 +49,10 @@ public class ProblemService {
         Throwable cause = exception;
 
         while (cause != null) {
-            if (cause instanceof ConstraintViolationException constraintEx) {
-                return "uk_problems_slug".equals(
-                        constraintEx.getConstraintName());
+            if (cause instanceof ConstraintViolationException constraintEx
+                    && "uk_problems_slug".equals(
+                            constraintEx.getConstraintName())) {
+                return true;
             }
 
             cause = cause.getCause();
@@ -64,11 +62,9 @@ public class ProblemService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProblemResponse> findAll() {
-        return problemRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"))
-                .stream()
-                .map(ProblemResponse::from)
-                .toList();
+    public Page<ProblemResponse> findAll(Pageable pageable) {
+        return problemRepository.findAll(pageable)
+                .map(ProblemResponse::from);
     }
 
     @Transactional(readOnly = true)
@@ -78,19 +74,4 @@ public class ProblemService {
                 .orElseThrow(() -> new ProblemNotFoundException(id));
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public static class ProblemNotFoundException extends RuntimeException {
-
-        public ProblemNotFoundException(Long id) {
-            super("Problem with id " + id + " was not found");
-        }
-    }
-
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public static class ProblemAlreadyExistsException extends RuntimeException {
-
-        public ProblemAlreadyExistsException(String slug) {
-            super("A problem with slug '" + slug + "' already exists");
-        }
-    }
 }
