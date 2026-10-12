@@ -1,6 +1,6 @@
 package com.codeforge.backend.service;
 
-import com.codeforge.backend.dto.CreateProblemRequest;
+import com.codeforge.backend.dto.ProblemRequest;
 import com.codeforge.backend.dto.ProblemResponse;
 import com.codeforge.backend.entity.Problem;
 import com.codeforge.backend.repository.ProblemRepository;
@@ -22,7 +22,7 @@ public class ProblemService {
     }
 
     @Transactional
-    public ProblemResponse create(CreateProblemRequest request) {
+    public ProblemResponse create(ProblemRequest request) {
         if (problemRepository.existsBySlug(request.slug())) {
             throw new ProblemAlreadyExistsException(request.slug());
         }

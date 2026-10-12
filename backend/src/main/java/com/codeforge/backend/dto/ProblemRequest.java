@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public record CreateProblemRequest(
+public record ProblemRequest(
         @NotBlank @Size(max = 255) String title,
 
         @NotBlank 

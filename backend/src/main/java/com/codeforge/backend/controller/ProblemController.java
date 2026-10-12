@@ -1,6 +1,6 @@
 package com.codeforge.backend.controller;
 
-import com.codeforge.backend.dto.CreateProblemRequest;
+import com.codeforge.backend.dto.ProblemRequest;
 import com.codeforge.backend.dto.ProblemResponse;
 import com.codeforge.backend.service.ProblemService;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class ProblemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProblemResponse create(@Valid @RequestBody CreateProblemRequest request) {
+    public ProblemResponse create(@Valid @RequestBody ProblemRequest request) {
         return problemService.create(request);
     }
 
