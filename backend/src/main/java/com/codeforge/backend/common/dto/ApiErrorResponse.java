@@ -1,4 +1,4 @@
-package com.codeforge.backend.dto;
+package com.codeforge.backend.common.dto;
 
 import java.time.OffsetDateTime;
 import java.util.Map;

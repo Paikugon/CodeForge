@@ -1,4 +1,4 @@
-package com.codeforge.backend.dto;
+package com.codeforge.backend.testcase.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

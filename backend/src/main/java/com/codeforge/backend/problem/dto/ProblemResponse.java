@@ -1,6 +1,6 @@
-package com.codeforge.backend.dto;
+package com.codeforge.backend.problem.dto;
 
-import com.codeforge.backend.entity.Problem;
+import com.codeforge.backend.problem.model.Problem;
 
 import java.time.OffsetDateTime;
 

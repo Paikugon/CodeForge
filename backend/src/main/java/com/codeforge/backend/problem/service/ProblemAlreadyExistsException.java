@@ -1,4 +1,4 @@
-package com.codeforge.backend.service;
+package com.codeforge.backend.problem.service;
 
 public class ProblemAlreadyExistsException extends RuntimeException {
 

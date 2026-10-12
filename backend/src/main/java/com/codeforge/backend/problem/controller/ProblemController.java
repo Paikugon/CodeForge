@@ -1,8 +1,8 @@
-package com.codeforge.backend.controller;
+package com.codeforge.backend.problem.controller;
 
-import com.codeforge.backend.dto.ProblemRequest;
-import com.codeforge.backend.dto.ProblemResponse;
-import com.codeforge.backend.service.ProblemService;
+import com.codeforge.backend.problem.dto.ProblemRequest;
+import com.codeforge.backend.problem.dto.ProblemResponse;
+import com.codeforge.backend.problem.service.ProblemService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

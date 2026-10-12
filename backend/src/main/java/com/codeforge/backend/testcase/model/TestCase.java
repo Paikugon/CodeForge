@@ -1,4 +1,4 @@
-package com.codeforge.backend.entity;
+package com.codeforge.backend.testcase.model;
 
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;

@@ -1,10 +1,10 @@
-package com.codeforge.backend.service;
+package com.codeforge.backend.testcase.service;
 
-import com.codeforge.backend.dto.TestCaseRequest;
-import com.codeforge.backend.dto.TestCaseResponse;
-import com.codeforge.backend.entity.TestCase;
-import com.codeforge.backend.repository.ProblemRepository;
-import com.codeforge.backend.repository.TestCaseRepository;
+import com.codeforge.backend.problem.repository.ProblemRepository;
+import com.codeforge.backend.testcase.dto.TestCaseRequest;
+import com.codeforge.backend.testcase.dto.TestCaseResponse;
+import com.codeforge.backend.testcase.model.TestCase;
+import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

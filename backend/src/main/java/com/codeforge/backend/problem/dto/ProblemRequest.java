@@ -1,4 +1,4 @@
-package com.codeforge.backend.dto;
+package com.codeforge.backend.problem.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

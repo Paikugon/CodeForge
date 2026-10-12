@@ -1,4 +1,4 @@
-package com.codeforge.backend.dto;
+package com.codeforge.backend.testcase.dto;
 
 import java.time.OffsetDateTime;
 

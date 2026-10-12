@@ -1,6 +1,6 @@
-package com.codeforge.backend.repository;
+package com.codeforge.backend.testcase.repository;
 
-import com.codeforge.backend.entity.TestCase;
+import com.codeforge.backend.testcase.model.TestCase;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;

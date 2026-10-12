@@ -1,8 +1,8 @@
-package com.codeforge.backend.controller;
+package com.codeforge.backend.common.error;
 
-import com.codeforge.backend.dto.ApiErrorResponse;
-import com.codeforge.backend.service.ProblemAlreadyExistsException;
-import com.codeforge.backend.service.ProblemNotFoundException;
+import com.codeforge.backend.common.dto.ApiErrorResponse;
+import com.codeforge.backend.problem.service.ProblemAlreadyExistsException;
+import com.codeforge.backend.problem.service.ProblemNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;

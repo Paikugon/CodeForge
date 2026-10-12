@@ -1,9 +1,9 @@
-package com.codeforge.backend.service;
+package com.codeforge.backend.problem.service;
 
-import com.codeforge.backend.dto.ProblemRequest;
-import com.codeforge.backend.dto.ProblemResponse;
-import com.codeforge.backend.entity.Problem;
-import com.codeforge.backend.repository.ProblemRepository;
+import com.codeforge.backend.problem.dto.ProblemRequest;
+import com.codeforge.backend.problem.dto.ProblemResponse;
+import com.codeforge.backend.problem.model.Problem;
+import com.codeforge.backend.problem.repository.ProblemRepository;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;

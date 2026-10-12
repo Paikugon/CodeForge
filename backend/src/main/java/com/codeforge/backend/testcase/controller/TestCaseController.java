@@ -1,8 +1,8 @@
-package com.codeforge.backend.controller;
+package com.codeforge.backend.testcase.controller;
 
-import com.codeforge.backend.dto.TestCaseRequest;
-import com.codeforge.backend.dto.TestCaseResponse;
-import com.codeforge.backend.service.TestCaseService;
+import com.codeforge.backend.testcase.dto.TestCaseRequest;
+import com.codeforge.backend.testcase.dto.TestCaseResponse;
+import com.codeforge.backend.testcase.service.TestCaseService;
 
 import jakarta.validation.Valid;
 
