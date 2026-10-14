@@ -146,4 +146,32 @@ public class Submission {
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
+
+    public void setVerdict(SubmissionVerdict verdict) {
+        this.verdict = verdict;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public void setExecutionTimeMs(Integer executionTimeMs) {
+        this.executionTimeMs = executionTimeMs;
+    }
+
+    public void setMemoryUsedKb(Integer memoryUsedKb) {
+        this.memoryUsedKb = memoryUsedKb;
+    }
+
+    public void setPassedTestCases(Integer passedTestCases) {
+        this.passedTestCases = passedTestCases;
+    }
+
+    public void setTotalTestCases(Integer totalTestCases) {
+        this.totalTestCases = totalTestCases;
+    }
+
+    public void setCompileOutput(String compileOutput) {
+        this.compileOutput = compileOutput;
+    }
 }

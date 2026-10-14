@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.PosixFilePermission;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashMap;
@@ -33,6 +34,24 @@ public class TestCaseStorageService {
         return "codeforge_" + problemId;
     }
 
+    private void ensureDirectory(Path directory) throws IOException {
+        Files.createDirectories(directory);
+
+        try {
+            Files.setPosixFilePermissions(
+                    directory,
+                    Set.of(
+                            PosixFilePermission.OWNER_READ,
+                            PosixFilePermission.OWNER_WRITE,
+                            PosixFilePermission.OWNER_EXECUTE,
+                            PosixFilePermission.GROUP_READ,
+                            PosixFilePermission.GROUP_EXECUTE,
+                            PosixFilePermission.OTHERS_READ,
+                            PosixFilePermission.OTHERS_EXECUTE));
+        } catch (UnsupportedOperationException ignored) {
+        }
+    }
+
     public void writeTestCase(
             Long problemId,
             Long testCaseId,
@@ -40,17 +59,15 @@ public class TestCaseStorageService {
             String expectedOutput) throws IOException {
 
         Path directory = getProblemDirectory(problemId);
-        Files.createDirectories(directory);
+        ensureDirectory(directory);
 
         writeAtomically(
                 directory.resolve(testCaseId + ".in"),
-                input
-        );
+                input);
 
         writeAtomically(
                 directory.resolve(testCaseId + ".out"),
-                expectedOutput
-        );
+                expectedOutput);
     }
 
     public void deleteTestCase(Long problemId, Long testCaseId)
@@ -73,7 +90,7 @@ public class TestCaseStorageService {
 
         try (var paths = Files.list(directory)) {
             paths.filter(path -> path.getFileName().toString().endsWith(".in")
-                            || path.getFileName().toString().endsWith(".out"))
+                    || path.getFileName().toString().endsWith(".out"))
                     .forEach(path -> deleteIfNotExpected(path, testCaseIds));
         }
     }
@@ -83,7 +100,7 @@ public class TestCaseStorageService {
             Map<Long, String> expectedOutputs) throws IOException {
 
         Path directory = getProblemDirectory(problemId);
-        Files.createDirectories(directory);
+        ensureDirectory(directory);
 
         Map<String, Object> testCases = new LinkedHashMap<>();
 
@@ -95,8 +112,7 @@ public class TestCaseStorageService {
             metadata.put("output_name", id + ".out");
             metadata.put(
                     "stripped_output_md5",
-                    md5(entry.getValue().strip())
-            );
+                    md5(entry.getValue().strip()));
 
             testCases.put(id + ".in", metadata);
         }
@@ -107,13 +123,18 @@ public class TestCaseStorageService {
 
         writeAtomically(
                 directory.resolve("info"),
-                objectMapper.writeValueAsString(info)
-        );
+                objectMapper.writeValueAsString(info));
     }
 
     private void deleteIfNotExpected(Path path, Set<Long> testCaseIds) {
         String fileName = path.getFileName().toString();
-        String idPart = fileName.substring(0, fileName.length() - 4);
+        
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex <= 0) {
+            throw new IllegalStateException(
+                    "Unexpected test case file name: " + fileName);
+        }
+        String idPart = fileName.substring(0, lastDotIndex);
 
         try {
             if (!testCaseIds.contains(Long.valueOf(idPart))) {
@@ -144,30 +165,29 @@ public class TestCaseStorageService {
         Path temporary = Files.createTempFile(
                 target.getParent(),
                 ".codeforge-",
-                ".tmp"
-        );
+                ".tmp");
 
         try {
             Files.writeString(
                     temporary,
                     content,
-                    StandardCharsets.UTF_8
-            );
+                    StandardCharsets.UTF_8);
 
             try {
                 Files.move(
                         temporary,
                         target,
                         StandardCopyOption.REPLACE_EXISTING,
-                        StandardCopyOption.ATOMIC_MOVE
-                );
+                        StandardCopyOption.ATOMIC_MOVE);
             } catch (java.nio.file.AtomicMoveNotSupportedException e) {
                 Files.move(
                         temporary,
                         target,
-                        StandardCopyOption.REPLACE_EXISTING
-                );
+                        StandardCopyOption.REPLACE_EXISTING);
             }
+
+            setReadablePermissions(target);
+
         } finally {
             Files.deleteIfExists(temporary);
         }
@@ -182,6 +202,20 @@ public class TestCaseStorageService {
             return java.util.HexFormat.of().formatHex(digest);
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("MD5 unavailable", e);
+        }
+    }
+
+    private void setReadablePermissions(Path path) throws IOException {
+        try {
+            Files.setPosixFilePermissions(
+                    path,
+                    Set.of(
+                            PosixFilePermission.OWNER_READ,
+                            PosixFilePermission.OWNER_WRITE,
+                            PosixFilePermission.GROUP_READ,
+                            PosixFilePermission.OTHERS_READ));
+        } catch (UnsupportedOperationException ignored) {
+            // Filesystem không hỗ trợ POSIX permissions
         }
     }
 }

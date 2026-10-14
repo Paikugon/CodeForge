@@ -16,4 +16,6 @@ public interface TestCaseRepository
             Long id,
             Long problemId
     );
+
+    long countByProblemId(Long problemId);
 }
