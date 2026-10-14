@@ -38,4 +38,22 @@ public class TestCaseController {
 
         return testCaseService.findAll(problemId);
     }
+
+    @PutMapping("/{testCaseId}")
+    public TestCaseResponse update(
+            @PathVariable Long problemId,
+            @PathVariable Long testCaseId,
+            @Valid @RequestBody TestCaseRequest request) {
+
+        return testCaseService.update(problemId, testCaseId, request);
+    }
+
+    @DeleteMapping("/{testCaseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable Long problemId,
+            @PathVariable Long testCaseId) {
+
+        testCaseService.delete(problemId, testCaseId);
+    }
 }

@@ -49,6 +49,18 @@ public class TestCase {
         this.orderIndex = orderIndex;
     }
 
+    public void update(
+            String input,
+            String expectedOutput,
+            Boolean isSample,
+            Integer orderIndex) {
+
+        this.input = input;
+        this.expectedOutput = expectedOutput;
+        this.isSample = isSample;
+        this.orderIndex = orderIndex;
+    }
+
     public Long getId() {
         return id;
     }
