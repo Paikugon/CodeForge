@@ -1,6 +1,5 @@
 package com.codeforge.backend.submission.service;
 
-import com.codeforge.backend.judge.service.JudgeService;
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.submission.dto.SubmissionRequest;
 import com.codeforge.backend.submission.dto.SubmissionResponse;
@@ -10,14 +9,13 @@ import com.codeforge.backend.submission.repository.SubmissionRepository;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-import com.codeforge.backend.judge.dto.JudgeResult;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
@@ -25,37 +23,38 @@ public class SubmissionService {
 
     private final SubmissionRepository submissionRepository;
     private final ProblemRepository problemRepository;
-    private final JudgeService judgeService;
     private final TestCaseRepository testCaseRepository;
+    private final SubmissionJudgeService submissionJudgeService;
 
     public SubmissionService(
             SubmissionRepository submissionRepository,
             ProblemRepository problemRepository,
-            JudgeService judgeService,
+            SubmissionJudgeService submissionJudgeService,
             TestCaseRepository testCaseRepository) {
 
         this.submissionRepository = submissionRepository;
         this.problemRepository = problemRepository;
-        this.judgeService = judgeService;
+        this.submissionJudgeService = submissionJudgeService;
         this.testCaseRepository = testCaseRepository;
     }
 
     public SubmissionResponse create(SubmissionRequest request) {
+
         if (!problemRepository.existsById(request.problemId())) {
             throw new ResponseStatusException(
-                    NOT_FOUND,
+                    HttpStatus.NOT_FOUND,
                     "Problem not found");
         }
 
         if (!request.language().equalsIgnoreCase("cpp")) {
             throw new ResponseStatusException(
-                    BAD_REQUEST,
+                    HttpStatus.BAD_REQUEST,
                     "Unsupported language");
         }
 
         if (testCaseRepository.countByProblemId(request.problemId()) == 0) {
             throw new ResponseStatusException(
-                    BAD_REQUEST,
+                    HttpStatus.BAD_REQUEST,
                     "Problem has no test cases");
         }
 
@@ -65,33 +64,12 @@ public class SubmissionService {
                 request.sourceCode());
 
         submission.setStatus(SubmissionStatus.PENDING);
-        submission = submissionRepository.saveAndFlush(submission);
 
-        try {
-            submission.setStatus(SubmissionStatus.JUDGING);
-            submission = submissionRepository.saveAndFlush(submission);
+        Submission saved = submissionRepository.saveAndFlush(submission);
 
-            String testCaseId = "codeforge_" + request.problemId();
+        submissionJudgeService.judge(saved.getId());
 
-            JudgeResult result = judgeService.judgeCpp20(
-                    request.sourceCode(),
-                    testCaseId);
-
-            submission.setVerdict(result.verdict());
-            submission.setExecutionTimeMs(result.executionTimeMs());
-            submission.setMemoryUsedKb(result.memoryUsedKb());
-            submission.setPassedTestCases(result.passedTestCases());
-            submission.setTotalTestCases(result.totalTestCases());
-            submission.setCompileOutput(result.compileOutput());
-            submission.setStatus(SubmissionStatus.COMPLETED);
-
-        } catch (Exception e) {
-            submission.setStatus(SubmissionStatus.FAILED);
-            submission.setErrorMessage(e.getMessage());
-        }
-
-        return toResponse(
-                submissionRepository.saveAndFlush(submission));
+        return toResponse(saved);
     }
 
     @Transactional(readOnly = true)
