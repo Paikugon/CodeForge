@@ -1,5 +1,6 @@
 package com.codeforge.backend.problem.controller;
 
+import com.codeforge.backend.common.pagination.PaginationValidator;
 import com.codeforge.backend.problem.dto.ProblemRequest;
 import com.codeforge.backend.problem.dto.ProblemResponse;
 import com.codeforge.backend.problem.service.ProblemService;
@@ -40,39 +41,9 @@ public class ProblemController {
             @RequestParam(required = false) String size,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        validatePagination(page, size);
+        PaginationValidator.validate(page, size, 100);
 
         return problemService.findAll(pageable);
-    }
-
-    private void validatePagination(String page, String size) {
-        if (page != null) {
-            try {
-                if (Integer.parseInt(page) < 0) {
-                    throw new IllegalArgumentException(
-                            "Page must be greater than or equal to 0");
-                }
-            } catch (NumberFormatException ex) {
-                throw new IllegalArgumentException(
-                        "Page must be a valid integer");
-            }
-        }
-
-        if (size != null) {
-            try {
-                if (Integer.parseInt(size) <= 0) {
-                    throw new IllegalArgumentException(
-                            "Size must be greater than 0");
-                }
-                if (Integer.parseInt(size) > 100) {
-                    throw new IllegalArgumentException(
-                            "Size must be less than or equal to 100");
-                }
-            } catch (NumberFormatException ex) {
-                throw new IllegalArgumentException(
-                        "Size must be a valid integer");
-            }
-        }
     }
 
     @GetMapping("/{id}")

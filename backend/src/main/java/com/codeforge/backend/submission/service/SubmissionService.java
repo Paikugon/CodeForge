@@ -8,13 +8,12 @@ import com.codeforge.backend.submission.model.Submission;
 import com.codeforge.backend.submission.repository.SubmissionRepository;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -82,20 +81,16 @@ public class SubmissionService {
     }
 
     @Transactional(readOnly = true)
-    public List<SubmissionResponse> getAll(Long problemId) {
-        List<Submission> submissions;
-
+    public Page<SubmissionResponse> getAll(
+            Long problemId,
+            Pageable pageable) {
         if (problemId == null) {
-            submissions = submissionRepository.findAll(
-                    Sort.by(Sort.Direction.DESC, "createdAt"));
-        } else {
-            submissions = submissionRepository
-                    .findByProblemIdOrderByCreatedAtDesc(problemId);
+            return submissionRepository.findAll(pageable)
+                    .map(this::toResponse);
         }
 
-        return submissions.stream()
-                .map(this::toResponse)
-                .toList();
+        return submissionRepository.findByProblemId(problemId, pageable)
+                .map(this::toResponse);
     }
 
     private SubmissionResponse toResponse(Submission submission) {

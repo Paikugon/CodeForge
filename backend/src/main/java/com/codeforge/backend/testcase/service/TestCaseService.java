@@ -6,13 +6,13 @@ import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
 import org.springframework.context.ApplicationEventPublisher;
-
-import java.util.List;
 
 @Service
 public class TestCaseService {
@@ -51,14 +51,11 @@ public class TestCaseService {
     }
 
     @Transactional(readOnly = true)
-    public List<TestCaseResponse> findAll(Long problemId) {
+    public Page<TestCaseResponse> findAll(Long problemId, Pageable pageable) {
         validateProblemExists(problemId);
 
-        return testCaseRepository
-                .findByProblemIdOrderByOrderIndexAscIdAsc(problemId)
-                .stream()
-                .map(this::toResponse)
-                .toList();
+        return testCaseRepository.findByProblemId(problemId, pageable)
+                .map(this::toResponse);
     }
 
     @Transactional
