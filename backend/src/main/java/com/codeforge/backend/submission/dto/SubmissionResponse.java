@@ -24,6 +24,8 @@ public record SubmissionResponse(
     String compileOutput,
     String errorMessage,
 
+    FailedTestCaseResponse failedTestCase,
+
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt
 ) {}

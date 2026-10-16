@@ -58,6 +58,12 @@ public class Submission {
     @Column(name = "error_message", columnDefinition = "TEXT")
     private String errorMessage;
 
+    @Column(name = "failed_test_case")
+    private String failedTestCase;
+
+    @Column(name = "failed_output", columnDefinition = "TEXT")
+    private String failedOutput;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
@@ -173,5 +179,21 @@ public class Submission {
 
     public void setCompileOutput(String compileOutput) {
         this.compileOutput = compileOutput;
+    }
+
+    public String getFailedTestCase() {
+        return failedTestCase;
+    }
+
+    public void setFailedTestCase(String failedTestCase) {
+        this.failedTestCase = failedTestCase;
+    }
+
+    public String getFailedOutput() {
+        return failedOutput;
+    }
+
+    public void setFailedOutput(String failedOutput) {
+        this.failedOutput = failedOutput;
     }
 }

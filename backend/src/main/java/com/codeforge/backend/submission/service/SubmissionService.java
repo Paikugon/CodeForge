@@ -3,9 +3,11 @@ package com.codeforge.backend.submission.service;
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.submission.dto.SubmissionRequest;
 import com.codeforge.backend.submission.dto.SubmissionResponse;
+import com.codeforge.backend.submission.dto.FailedTestCaseResponse;
 import com.codeforge.backend.submission.enums.SubmissionStatus;
 import com.codeforge.backend.submission.model.Submission;
 import com.codeforge.backend.submission.repository.SubmissionRepository;
+import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
 import org.springframework.data.domain.Page;
@@ -45,7 +47,9 @@ public class SubmissionService {
                     "Problem not found");
         }
 
-        if (!request.language().equalsIgnoreCase("cpp")) {
+        if (!request.language().equalsIgnoreCase("cpp")
+                && !request.language().equalsIgnoreCase("java")
+                && !request.language().equalsIgnoreCase("python")) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "Unsupported language");
@@ -59,7 +63,7 @@ public class SubmissionService {
 
         Submission submission = new Submission(
                 request.problemId(),
-                "cpp",
+                request.language(),
                 request.sourceCode());
 
         submission.setStatus(SubmissionStatus.PENDING);
@@ -107,7 +111,51 @@ public class SubmissionService {
                 submission.getTotalTestCases(),
                 submission.getCompileOutput(),
                 submission.getErrorMessage(),
+                toFailedTestCaseResponse(submission),
                 submission.getCreatedAt(),
                 submission.getUpdatedAt());
+    }
+
+    private FailedTestCaseResponse toFailedTestCaseResponse(
+            Submission submission) {
+        if (submission.getFailedTestCase() == null) {
+            return null;
+        }
+
+        Long testCaseId = parseTestCaseId(submission.getFailedTestCase());
+        TestCase testCase = testCaseRepository
+                .findByIdAndProblemId(testCaseId, submission.getProblemId())
+                .orElse(null);
+
+        if (testCase == null) {
+            return new FailedTestCaseResponse(
+                    submission.getFailedTestCase(),
+                    null,
+                    null,
+                    submission.getFailedOutput());
+        }
+
+        return new FailedTestCaseResponse(
+                submission.getFailedTestCase(),
+                testCase.getInput(),
+                testCase.getExpectedOutput(),
+                submission.getFailedOutput());
+    }
+
+    private Long parseTestCaseId(String testCase) {
+        String fileName = testCase.substring(
+                testCase.lastIndexOf('/') + 1);
+        int extensionIndex = fileName.lastIndexOf('.');
+        String id = extensionIndex > 0
+                ? fileName.substring(0, extensionIndex)
+                : fileName;
+
+        try {
+            return Long.valueOf(id);
+        } catch (NumberFormatException e) {
+            throw new IllegalStateException(
+                    "Invalid failed test case identifier: " + testCase,
+                    e);
+        }
     }
 }

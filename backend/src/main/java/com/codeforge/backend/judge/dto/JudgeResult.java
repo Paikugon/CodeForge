@@ -8,5 +8,8 @@ public record JudgeResult(
         Integer memoryUsedKb,
         Integer passedTestCases,
         Integer totalTestCases,
-        String compileOutput) {
+        String compileOutput,
+        String failedTestCase,
+        String failedOutput
+) {
 }

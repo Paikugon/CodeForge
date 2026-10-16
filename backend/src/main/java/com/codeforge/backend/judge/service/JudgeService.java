@@ -22,6 +22,8 @@ public class JudgeService {
     private final JudgeClient judgeClient;
     private final ObjectMapper objectMapper;
     private final JsonNode cpp20Config;
+    private final JsonNode java21Config;
+    private final JsonNode python3Config;
 
     public JudgeService(JudgeClient judgeClient, ObjectMapper objectMapper)
             throws IOException {
@@ -39,19 +41,51 @@ public class JudgeService {
 
             this.cpp20Config = objectMapper.readTree(input);
         }
+        try (InputStream input = getClass().getResourceAsStream(
+                "/judge/java21.json")) {
+
+            if (input == null) {
+                throw new IllegalStateException(
+                        "Missing judge/java21.json");
+            }
+
+            this.java21Config = objectMapper.readTree(input);
+        }
+
+        try (InputStream input = getClass().getResourceAsStream(
+                "/judge/python3.json")) {
+
+            if (input == null) {
+                throw new IllegalStateException(
+                        "Missing judge/python3.json");
+            }
+
+            this.python3Config = objectMapper.readTree(input);
+        }
     }
 
-    public JudgeResult judgeCpp20(
+    public JudgeResult judge(
+            String language,
             String sourceCode,
-            String testCaseId) {
+            String testCaseId,
+            int timeLimitMs,
+            int memoryLimitMb) {
+
+        JsonNode languageConfig = switch (language.toLowerCase()) {
+            case "cpp" -> cpp20Config;
+            case "java" -> java21Config;
+            case "python" -> python3Config;
+            default -> throw new IllegalArgumentException(
+                    "Unsupported language: " + language);
+        };
 
         JudgeRequest request = new JudgeRequest(
                 sourceCode,
-                cpp20Config,
-                1000,
-                128L * 1024 * 1024,
+                languageConfig,
+                timeLimitMs,
+                (long) memoryLimitMb * 1024 * 1024,
                 testCaseId,
-                false);
+                true);
 
         JudgeResponse response = judgeClient.judge(request);
 
@@ -62,6 +96,8 @@ public class JudgeService {
                     null,
                     0,
                     0,
+                    null,
+                    null,
                     response.data() != null
                             ? response.data().stringValue()
                             : null);
@@ -95,6 +131,8 @@ public class JudgeService {
         long maxMemory = 0;
 
         SubmissionVerdict verdict = SubmissionVerdict.AC;
+        String failedTestCase = null;
+        String failedOutput = null;
 
         for (JudgeTestCaseResult result : results) {
 
@@ -110,6 +148,11 @@ public class JudgeService {
                 passed++;
             } else if (verdict == SubmissionVerdict.AC) {
                 verdict = mapVerdict(result.result());
+
+                if (failedTestCase == null) {
+                    failedTestCase = result.testCase();
+                    failedOutput = result.output();
+                }
             }
         }
 
@@ -119,7 +162,9 @@ public class JudgeService {
                 Math.toIntExact(maxMemory / 1024),
                 passed,
                 results.size(),
-                null);
+                null,
+                failedTestCase,
+                failedOutput);
     }
 
     private SubmissionVerdict mapVerdict(int result) {
