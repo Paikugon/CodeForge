@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClient;
 
 import com.codeforge.backend.judge.dto.JudgeRequest;
 import com.codeforge.backend.judge.dto.JudgeResponse;
+import com.codeforge.backend.judge.dto.JudgeRunRequest;
 
 @Component
 public class JudgeClient {
@@ -31,6 +32,21 @@ public class JudgeClient {
     }
 
     public JudgeResponse judge(JudgeRequest request) {
+        JudgeResponse response = restClient.post()
+                .uri("/judge")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .retrieve()
+                .body(JudgeResponse.class);
+
+        if (response == null) {
+            throw new IllegalStateException("Judge Server returned an empty response");
+        }
+
+        return response;
+    }
+
+    public JudgeResponse run(JudgeRunRequest request) {
         JudgeResponse response = restClient.post()
                 .uri("/judge")
                 .contentType(MediaType.APPLICATION_JSON)

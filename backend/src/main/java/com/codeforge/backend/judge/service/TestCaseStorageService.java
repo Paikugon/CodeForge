@@ -128,7 +128,7 @@ public class TestCaseStorageService {
 
     private void deleteIfNotExpected(Path path, Set<Long> testCaseIds) {
         String fileName = path.getFileName().toString();
-        
+
         int lastDotIndex = fileName.lastIndexOf('.');
         if (lastDotIndex <= 0) {
             throw new IllegalStateException(

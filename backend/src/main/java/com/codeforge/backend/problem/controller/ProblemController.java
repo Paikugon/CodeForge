@@ -4,13 +4,18 @@ import com.codeforge.backend.common.pagination.PaginationValidator;
 import com.codeforge.backend.problem.dto.ProblemRequest;
 import com.codeforge.backend.problem.dto.ProblemListResponse;
 import com.codeforge.backend.problem.dto.ProblemResponse;
+import com.codeforge.backend.problem.dto.RunCodeRequest;
+import com.codeforge.backend.problem.dto.RunCodeResponse;
 import com.codeforge.backend.problem.service.ProblemService;
+import com.codeforge.backend.problem.service.RunCodeService;
+
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +30,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ProblemController {
 
     private final ProblemService problemService;
+    private final RunCodeService runCodeService;
 
-    public ProblemController(ProblemService problemService) {
+    public ProblemController(ProblemService problemService, RunCodeService runCodeService) {
         this.problemService = problemService;
+        this.runCodeService = runCodeService;
     }
 
     @PostMapping
@@ -50,5 +57,14 @@ public class ProblemController {
     @GetMapping("/{id}")
     public ProblemResponse findById(@PathVariable Long id) {
         return problemService.findById(id);
+    }
+
+    @PostMapping("/{id}/run")
+    public ResponseEntity<RunCodeResponse> run(
+            @PathVariable Long id,
+            @Valid @RequestBody RunCodeRequest request) {
+
+        return ResponseEntity.ok(
+                runCodeService.run(id, request));
     }
 }

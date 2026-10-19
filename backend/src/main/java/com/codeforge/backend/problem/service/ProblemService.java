@@ -73,5 +73,4 @@ public class ProblemService {
                 .map(ProblemResponse::from)
                 .orElseThrow(() -> new ProblemNotFoundException(id));
     }
-
 }
