@@ -4,5 +4,5 @@ import tools.jackson.databind.JsonNode;
 
 public record JudgeResponse(
         String err,
-        JsonNode data
-) {}
+        JsonNode data) {
+}

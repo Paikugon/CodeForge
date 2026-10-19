@@ -46,8 +46,7 @@ public class RunCodeService {
                 request.sourceCode(),
                 request.input(),
                 problem.getTimeLimitMs(),
-                problem.getMemoryLimitMb()
-        );
+                problem.getMemoryLimitMb());
 
         return new RunCodeResponse(
                 result.resultCode(),
@@ -55,7 +54,6 @@ public class RunCodeService {
                 result.exitCode(),
                 result.executionTimeMs(),
                 result.memoryUsedKb(),
-                result.compileOutput()
-        );
+                result.compileOutput());
     }
 }

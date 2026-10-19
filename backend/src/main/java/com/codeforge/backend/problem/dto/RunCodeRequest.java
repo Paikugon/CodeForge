@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotBlank;
 public record RunCodeRequest(
         @NotBlank String language,
         @NotBlank String sourceCode,
-        String input
-) {}
+        String input) {
+}

@@ -7,25 +7,25 @@ import com.codeforge.backend.submission.enums.SubmissionVerdict;
 import java.time.OffsetDateTime;
 
 public record SubmissionResponse(
-    Long id,
-    Long problemId,
-    String language,
-    String sourceCode,
+        Long id,
+        Long problemId,
+        String language,
+        String sourceCode,
 
-    SubmissionStatus status,
-    SubmissionVerdict verdict,
+        SubmissionStatus status,
+        SubmissionVerdict verdict,
 
-    Integer executionTimeMs,
-    Integer memoryUsedKb,
+        Integer executionTimeMs,
+        Integer memoryUsedKb,
 
-    Integer passedTestCases,
-    Integer totalTestCases,
+        Integer passedTestCases,
+        Integer totalTestCases,
 
-    String compileOutput,
-    String errorMessage,
+        String compileOutput,
+        String errorMessage,
 
-    FailedTestCaseResponse failedTestCase,
+        FailedTestCaseResponse failedTestCase,
 
-    OffsetDateTime createdAt,
-    OffsetDateTime updatedAt
-) {}
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt) {
+}

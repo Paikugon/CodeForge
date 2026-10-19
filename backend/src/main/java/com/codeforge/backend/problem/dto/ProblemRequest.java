@@ -6,16 +6,13 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 public record ProblemRequest(
-        @NotBlank @Size(max = 255) String title,
+		@NotBlank @Size(max = 255) String title,
 
-        @NotBlank 
-        @Size(max = 255) 
-        @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") 
-        String slug,
+		@NotBlank @Size(max = 255) @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") String slug,
 
-        @NotBlank String description,
+		@NotBlank String description,
 
-        @Positive Integer timeLimitMs,
+		@Positive Integer timeLimitMs,
 
-        @Positive Integer memoryLimitMb) {
+		@Positive Integer memoryLimitMb) {
 }

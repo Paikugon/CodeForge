@@ -6,13 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record SubmissionRequest(
-    @NotNull
-    Long problemId,
+        @NotNull Long problemId,
 
-    @NotBlank
-    String language,
+        @NotBlank String language,
 
-    @NotBlank
-    @Size(max = 100_000)
-    String sourceCode
-) {}
+        @NotBlank @Size(max = 100_000) String sourceCode) {
+}

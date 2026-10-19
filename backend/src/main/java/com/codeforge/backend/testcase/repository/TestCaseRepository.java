@@ -8,21 +8,18 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TestCaseRepository
-        extends JpaRepository<TestCase, Long> {
+		extends JpaRepository<TestCase, Long> {
 
-    List<TestCase> findByProblemIdOrderByOrderIndexAscIdAsc(
-            Long problemId
-    );
+	List<TestCase> findByProblemIdOrderByOrderIndexAscIdAsc(
+			Long problemId);
 
-    Page<TestCase> findByProblemId(
-            Long problemId,
-            Pageable pageable
-    );
+	Page<TestCase> findByProblemId(
+			Long problemId,
+			Pageable pageable);
 
-    Optional<TestCase> findByIdAndProblemId(
-            Long id,
-            Long problemId
-    );
+	Optional<TestCase> findByIdAndProblemId(
+			Long id,
+			Long problemId);
 
-    long countByProblemId(Long problemId);
+	long countByProblemId(Long problemId);
 }
