@@ -2,6 +2,7 @@ package com.codeforge.backend.submission.controller;
 
 import com.codeforge.backend.common.pagination.PaginationValidator;
 import com.codeforge.backend.submission.dto.SubmissionRequest;
+import com.codeforge.backend.submission.dto.SubmissionListResponse;
 import com.codeforge.backend.submission.dto.SubmissionResponse;
 import com.codeforge.backend.submission.service.SubmissionService;
 
@@ -36,7 +37,7 @@ public class SubmissionController {
     }
 
     @GetMapping
-    public Page<SubmissionResponse> getAll(
+    public Page<SubmissionListResponse> getAll(
             @RequestParam(required = false) Long problemId,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,

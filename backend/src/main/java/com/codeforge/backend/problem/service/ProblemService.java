@@ -1,6 +1,7 @@
 package com.codeforge.backend.problem.service;
 
 import com.codeforge.backend.problem.dto.ProblemRequest;
+import com.codeforge.backend.problem.dto.ProblemListResponse;
 import com.codeforge.backend.problem.dto.ProblemResponse;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
@@ -62,9 +63,8 @@ public class ProblemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProblemResponse> findAll(Pageable pageable) {
-        return problemRepository.findAll(pageable)
-                .map(ProblemResponse::from);
+    public Page<ProblemListResponse> findAll(Pageable pageable) {
+        return problemRepository.findAllSummaries(pageable);
     }
 
     @Transactional(readOnly = true)

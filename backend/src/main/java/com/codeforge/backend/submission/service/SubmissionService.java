@@ -2,6 +2,7 @@ package com.codeforge.backend.submission.service;
 
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.submission.dto.SubmissionRequest;
+import com.codeforge.backend.submission.dto.SubmissionListResponse;
 import com.codeforge.backend.submission.dto.SubmissionResponse;
 import com.codeforge.backend.submission.dto.FailedTestCaseResponse;
 import com.codeforge.backend.submission.enums.SubmissionStatus;
@@ -85,16 +86,14 @@ public class SubmissionService {
     }
 
     @Transactional(readOnly = true)
-    public Page<SubmissionResponse> getAll(
+    public Page<SubmissionListResponse> getAll(
             Long problemId,
             Pageable pageable) {
-        if (problemId == null) {
-            return submissionRepository.findAll(pageable)
-                    .map(this::toResponse);
-        }
+            if (problemId == null) {
+                return submissionRepository.findAllSummaries(pageable);
+            }
 
-        return submissionRepository.findByProblemId(problemId, pageable)
-                .map(this::toResponse);
+            return submissionRepository.findSummaryByProblemId(problemId, pageable);
     }
 
     private SubmissionResponse toResponse(Submission submission) {

@@ -2,6 +2,7 @@ package com.codeforge.backend.problem.controller;
 
 import com.codeforge.backend.common.pagination.PaginationValidator;
 import com.codeforge.backend.problem.dto.ProblemRequest;
+import com.codeforge.backend.problem.dto.ProblemListResponse;
 import com.codeforge.backend.problem.dto.ProblemResponse;
 import com.codeforge.backend.problem.service.ProblemService;
 import jakarta.validation.Valid;
@@ -36,7 +37,7 @@ public class ProblemController {
     }
 
     @GetMapping
-    public Page<ProblemResponse> findAll(
+    public Page<ProblemListResponse> findAll(
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
