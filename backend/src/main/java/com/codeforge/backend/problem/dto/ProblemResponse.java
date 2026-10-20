@@ -1,8 +1,10 @@
 package com.codeforge.backend.problem.dto;
 
 import com.codeforge.backend.problem.model.Problem;
+import com.codeforge.backend.testcase.dto.TestCaseResponse;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 public record ProblemResponse(
     Long id,
@@ -12,10 +14,18 @@ public record ProblemResponse(
     Integer timeLimitMs,
     Integer memoryLimitMb,
     OffsetDateTime createdAt,
-    OffsetDateTime updatedAt
+    OffsetDateTime updatedAt,
+    List<TestCaseResponse> testCases
 ) {
 
     public static ProblemResponse from(Problem problem) {
+        return from(problem, List.of());
+    }
+
+    public static ProblemResponse from(
+        Problem problem,
+        List<TestCaseResponse> testCases
+    ) {
         return new ProblemResponse(
             problem.getId(),
             problem.getTitle(),
@@ -24,7 +34,8 @@ public record ProblemResponse(
             problem.getTimeLimitMs(),
             problem.getMemoryLimitMb(),
             problem.getCreatedAt(),
-            problem.getUpdatedAt()
+            problem.getUpdatedAt(),
+            testCases
         );
     }
 }

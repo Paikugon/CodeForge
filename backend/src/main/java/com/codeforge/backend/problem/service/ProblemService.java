@@ -5,6 +5,9 @@ import com.codeforge.backend.problem.dto.ProblemListResponse;
 import com.codeforge.backend.problem.dto.ProblemResponse;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
+import com.codeforge.backend.testcase.dto.TestCaseResponse;
+import com.codeforge.backend.testcase.model.TestCase;
+import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,9 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProblemService {
 
     private final ProblemRepository problemRepository;
+    private final TestCaseRepository testCaseRepository;
 
-    public ProblemService(ProblemRepository problemRepository) {
+    public ProblemService(
+            ProblemRepository problemRepository,
+            TestCaseRepository testCaseRepository) {
         this.problemRepository = problemRepository;
+        this.testCaseRepository = testCaseRepository;
     }
 
     @Transactional
@@ -70,7 +77,24 @@ public class ProblemService {
     @Transactional(readOnly = true)
     public ProblemResponse findById(Long id) {
         return problemRepository.findById(id)
-                .map(ProblemResponse::from)
+                .map(problem -> ProblemResponse.from(
+                        problem,
+                        testCaseRepository.findSampleByProblemId(problem.getId())
+                                .stream()
+                                .map(this::toResponse)
+                                .toList()))
                 .orElseThrow(() -> new ProblemNotFoundException(id));
+    }
+
+    private TestCaseResponse toResponse(TestCase testCase) {
+        return new TestCaseResponse(
+                testCase.getId(),
+                testCase.getProblemId(),
+                testCase.getInput(),
+                testCase.getExpectedOutput(),
+                testCase.getIsSample(),
+                testCase.getOrderIndex(),
+                testCase.getCreatedAt(),
+                testCase.getUpdatedAt());
     }
 }
