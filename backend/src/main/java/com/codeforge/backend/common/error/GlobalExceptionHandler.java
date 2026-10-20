@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.data.core.PropertyReferenceException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.core.AuthenticationException;
 
 import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
@@ -123,6 +124,16 @@ public class GlobalExceptionHandler {
         return error(
                 HttpStatus.valueOf(exception.getStatusCode().value()),
                 exception.getReason(),
+                request);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthentication(
+            AuthenticationException exception,
+            HttpServletRequest request) {
+        return error(
+                HttpStatus.UNAUTHORIZED,
+                "Invalid email or password",
                 request);
     }
 

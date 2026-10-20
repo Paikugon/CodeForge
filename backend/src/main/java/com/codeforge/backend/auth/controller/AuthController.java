@@ -1,5 +1,7 @@
 package com.codeforge.backend.auth.controller;
 
+import com.codeforge.backend.auth.dto.LoginRequest;
+import com.codeforge.backend.auth.dto.LoginResponse;
 import com.codeforge.backend.auth.dto.RegisterRequest;
 import com.codeforge.backend.auth.dto.UserResponse;
 import com.codeforge.backend.auth.service.AuthService;
@@ -7,6 +9,7 @@ import com.codeforge.backend.auth.service.AuthService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,5 +28,12 @@ public class AuthController {
             @Valid @RequestBody RegisterRequest request) {
 
         return authService.register(request);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request) {
+
+        return ResponseEntity.ok(authService.login(request));
     }
 }
