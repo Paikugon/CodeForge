@@ -5,6 +5,8 @@ import java.time.OffsetDateTime;
 import org.hibernate.annotations.Generated;
 import org.hibernate.generator.EventType;
 
+import com.codeforge.backend.problem.enums.ProblemDifficulty;
+
 @Entity
 @Table(name = "problems")
 public class Problem {
@@ -32,9 +34,13 @@ public class Problem {
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Generated(event = EventType.INSERT)
-    @Column(name = "updated_at", insertable = false)
+    @Generated(event = EventType.UPDATE)
+    @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "difficulty", nullable = false, length = 20)
+    private ProblemDifficulty difficulty;
 
     protected Problem() {
     }
@@ -44,12 +50,23 @@ public class Problem {
             String slug,
             String description,
             Integer timeLimitMs,
-            Integer memoryLimitMb) {
+            Integer memoryLimitMb,
+            ProblemDifficulty difficulty) {
         this.title = title;
         this.slug = slug;
         this.description = description;
         this.timeLimitMs = timeLimitMs;
         this.memoryLimitMb = memoryLimitMb;
+        this.difficulty = difficulty;
+    }
+
+    public Problem(
+            String title,
+            String slug,
+            String description,
+            Integer timeLimitMs,
+            Integer memoryLimitMb) {
+        this(title, slug, description, timeLimitMs, memoryLimitMb, ProblemDifficulty.EASY);
     }
 
     public Long getId() {
@@ -86,5 +103,13 @@ public class Problem {
 
     public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public ProblemDifficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(ProblemDifficulty difficulty) {
+        this.difficulty = difficulty;
     }
 }
