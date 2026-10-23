@@ -7,7 +7,7 @@
 
 ## 1. Overview and implementation status
 
-CodeForge is an Online Judge application for managing programming problems, executing code and evaluating submissions. The **implemented runtime** is a Java 21 / Spring Boot backend backed by PostgreSQL and integrated with an external Judge Server. The repository has a full-stack layout, but the current implementation is backend-only: frontend and standalone worker applications are **not implemented** in the inspected repository snapshot.
+CodeForge is an Online Judge application for managing programming problems, executing code and evaluating submissions. The **implemented runtime** is a Java 25 / Spring Boot backend backed by PostgreSQL and integrated with an external Judge Server. The repository has a full-stack layout, but the current implementation is backend-only: frontend and standalone worker applications are **not implemented** in the inspected repository snapshot.
 
 | Component | Responsibility | Current status |
 | --- | --- | --- |
@@ -58,7 +58,7 @@ The Spring Boot application is the orchestration boundary. It handles API reques
 
 | Area | Technology / approach |
 | --- | --- |
-| Runtime | Java 21, Spring Boot (source snapshot lists 4.0.8) |
+| Runtime | Java 25, Spring Boot (source snapshot lists 4.0.8) |
 | HTTP and validation | Spring Web MVC, JSON, Jakarta Bean Validation |
 | Persistence | Spring Data JPA / Hibernate, PostgreSQL |
 | Schema migration | Flyway; `ddl-auto=validate` |
