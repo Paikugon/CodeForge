@@ -3,11 +3,14 @@ package com.codeforge.backend.problem.service;
 import com.codeforge.backend.problem.dto.ProblemRequest;
 import com.codeforge.backend.problem.dto.ProblemListResponse;
 import com.codeforge.backend.problem.dto.ProblemResponse;
+import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
+
+import java.time.OffsetDateTime;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -40,7 +43,8 @@ public class ProblemService {
                 request.slug(),
                 request.description(),
                 request.timeLimitMs() == null ? 1000 : request.timeLimitMs(),
-                request.memoryLimitMb() == null ? 256 : request.memoryLimitMb());
+                request.memoryLimitMb() == null ? 256 : request.memoryLimitMb(),
+                request.difficulty() == null ? ProblemDifficulty.EASY : request.difficulty());
 
         try {
             return ProblemResponse.from(problemRepository.saveAndFlush(problem));
@@ -96,5 +100,40 @@ public class ProblemService {
                 testCase.getOrderIndex(),
                 testCase.getCreatedAt(),
                 testCase.getUpdatedAt());
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Problem problem = problemRepository.findById(id)
+                .orElseThrow(() -> new ProblemNotFoundException(id));
+
+        problemRepository.delete(problem);
+    }
+
+    @Transactional
+    public ProblemResponse edit(Long id, ProblemRequest request) {
+        Problem problem = problemRepository.findById(id)
+                .orElseThrow(() -> new ProblemNotFoundException(id));
+
+        if (request.title() != null) {
+            problem.setTitle(request.title());
+        }
+        if (request.slug() != null) {
+            problem.setSlug(request.slug());
+        }
+        if (request.description() != null) {
+            problem.setDescription(request.description());
+        }
+        if (request.timeLimitMs() != null) {
+            problem.setTimeLimitMs(request.timeLimitMs());
+        }
+        if (request.memoryLimitMb() != null) {
+            problem.setMemoryLimitMb(request.memoryLimitMb());
+        }
+        if (request.difficulty() != null) {
+            problem.setDifficulty(request.difficulty());
+        }
+        problem.setUpdatedAt(OffsetDateTime.now());
+        return ProblemResponse.from(problemRepository.saveAndFlush(problem));
     }
 }

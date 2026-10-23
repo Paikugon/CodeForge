@@ -109,6 +109,27 @@ public class Problem {
         return difficulty;
     }
 
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    public void setTimeLimitMs(Integer timeLimitMs) {
+        this.timeLimitMs = timeLimitMs;
+    }
+    
+    public void setMemoryLimitMb(Integer memoryLimitMb) {
+        this.memoryLimitMb = memoryLimitMb;
+    }
+    
     public void setDifficulty(ProblemDifficulty difficulty) {
         this.difficulty = difficulty;
     }

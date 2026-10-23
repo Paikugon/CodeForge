@@ -1,5 +1,7 @@
 package com.codeforge.backend.problem.dto;
 
+import com.codeforge.backend.problem.enums.ProblemDifficulty;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
@@ -11,6 +13,8 @@ public record ProblemRequest(
 		@NotBlank @Size(max = 255) @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") String slug,
 
 		@NotBlank String description,
+
+		ProblemDifficulty difficulty,
 
 		@Positive Integer timeLimitMs,
 
