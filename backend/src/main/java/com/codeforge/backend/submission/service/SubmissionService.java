@@ -40,7 +40,7 @@ public class SubmissionService {
         this.testCaseRepository = testCaseRepository;
     }
 
-    public SubmissionResponse create(SubmissionRequest request) {
+    public SubmissionResponse create(SubmissionRequest request, long userId) {
 
         if (!problemRepository.existsById(request.problemId())) {
             throw new ResponseStatusException(
@@ -64,6 +64,7 @@ public class SubmissionService {
 
         Submission submission = new Submission(
                 request.problemId(),
+                userId,
                 request.language(),
                 request.sourceCode());
 
@@ -99,6 +100,7 @@ public class SubmissionService {
     private SubmissionResponse toResponse(Submission submission) {
         return new SubmissionResponse(
                 submission.getId(),
+                submission.getUserId(),
                 submission.getProblemId(),
                 submission.getLanguage(),
                 submission.getSourceCode(),

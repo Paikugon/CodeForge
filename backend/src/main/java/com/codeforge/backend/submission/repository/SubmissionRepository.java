@@ -18,19 +18,21 @@ public interface SubmissionRepository
 
     @Query("""
             select new com.codeforge.backend.submission.dto.SubmissionListResponse(
-                s.id, s.problemId, s.language, s.status, s.verdict,
+                s.id, s.userId, u.username, s.problemId, s.language, s.status, s.verdict,
                 s.executionTimeMs, s.memoryUsedKb, s.passedTestCases,
                 s.totalTestCases, s.createdAt, s.updatedAt)
             from Submission s
+            left join User u on u.id = s.userId
             """)
     Page<SubmissionListResponse> findAllSummaries(Pageable pageable);
 
     @Query("""
             select new com.codeforge.backend.submission.dto.SubmissionListResponse(
-                s.id, s.problemId, s.language, s.status, s.verdict,
+                s.id, s.userId, u.username, s.problemId, s.language, s.status, s.verdict,
                 s.executionTimeMs, s.memoryUsedKb, s.passedTestCases,
                 s.totalTestCases, s.createdAt, s.updatedAt)
             from Submission s
+            left join User u on u.id = s.userId
             where s.problemId = :problemId
             """)
     Page<SubmissionListResponse> findSummaryByProblemId(

@@ -13,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 @RestController
 @RequestMapping("/api/submissions")
@@ -27,8 +29,10 @@ public class SubmissionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SubmissionResponse create(
-            @Valid @RequestBody SubmissionRequest request) {
-        return submissionService.create(request);
+            @Valid @RequestBody SubmissionRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        long userId = Long.parseLong(jwt.getSubject());
+        return submissionService.create(request, userId);
     }
 
     @GetMapping("/{id}")
@@ -41,10 +45,7 @@ public class SubmissionController {
             @RequestParam(required = false) Long problemId,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
-            @PageableDefault(
-                    size = 20,
-                    sort = "createdAt",
-                    direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         PaginationValidator.validate(page, size, 100);
 
         return submissionService.getAll(problemId, pageable);

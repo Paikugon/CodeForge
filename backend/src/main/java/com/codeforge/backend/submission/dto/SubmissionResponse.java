@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 
 public record SubmissionResponse(
         Long id,
+        Long userId,
         Long problemId,
         String language,
         String sourceCode,

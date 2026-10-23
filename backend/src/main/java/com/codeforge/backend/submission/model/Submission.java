@@ -26,6 +26,9 @@ public class Submission {
     @Column(name = "problem_id", nullable = false)
     private Long problemId;
 
+    @Column (name = "user_id", nullable = false)
+    private Long userId;
+
     @Column(nullable = false, length = 30)
     private String language;
 
@@ -75,10 +78,19 @@ public class Submission {
     public Submission() {
     }
 
-    public Submission(Long problemId, String language, String sourceCode) {
+    public Submission(Long problemId, Long userId, String language, String sourceCode) {
         this.problemId = problemId;
+        this.userId = userId;
         this.language = language;
         this.sourceCode = sourceCode;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {
