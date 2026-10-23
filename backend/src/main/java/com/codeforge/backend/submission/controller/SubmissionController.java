@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -36,8 +37,17 @@ public class SubmissionController {
     }
 
     @GetMapping("/{id}")
-    public SubmissionResponse getById(@PathVariable Long id) {
-        return submissionService.getById(id);
+    public SubmissionResponse getById(
+            @PathVariable Long id,
+            @AuthenticationPrincipal Jwt jwt,
+            Authentication authentication) {
+
+        long userId = Long.parseLong(jwt.getSubject());
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+        return submissionService.getById(id, userId, isAdmin);
     }
 
     @GetMapping
@@ -49,5 +59,20 @@ public class SubmissionController {
         PaginationValidator.validate(page, size, 100);
 
         return submissionService.getAll(problemId, pageable);
+    }
+
+    @GetMapping("/me")
+    public Page<SubmissionListResponse> getMine(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(required = false) Long problemId,
+            @RequestParam(required = false) String page,
+            @RequestParam(required = false) String size,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        PaginationValidator.validate(page, size, 100);
+
+        long userId = Long.parseLong(jwt.getSubject());
+
+        return submissionService.getMine(userId, problemId, pageable);
     }
 }

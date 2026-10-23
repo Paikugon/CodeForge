@@ -78,11 +78,16 @@ public class SubmissionService {
     }
 
     @Transactional(readOnly = true)
-    public SubmissionResponse getById(Long id) {
+    public SubmissionResponse getById(Long id, long userId, boolean isAdmin) {
         Submission submission = submissionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         NOT_FOUND, "Submission not found"));
-
+        boolean isOwner = Long.valueOf(userId).equals(submission.getUserId());
+        if (!isOwner && !isAdmin) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN,
+                    "You are not allowed to view this submission");
+        }
         return toResponse(submission);
     }
 
@@ -90,11 +95,11 @@ public class SubmissionService {
     public Page<SubmissionListResponse> getAll(
             Long problemId,
             Pageable pageable) {
-            if (problemId == null) {
-                return submissionRepository.findAllSummaries(pageable);
-            }
+        if (problemId == null) {
+            return submissionRepository.findAllSummaries(pageable);
+        }
 
-            return submissionRepository.findSummaryByProblemId(problemId, pageable);
+        return submissionRepository.findSummaryByProblemId(problemId, pageable);
     }
 
     private SubmissionResponse toResponse(Submission submission) {
@@ -158,5 +163,15 @@ public class SubmissionService {
                     "Invalid failed test case identifier: " + testCase,
                     e);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<SubmissionListResponse> getMine(
+            long userId,
+            Long problemId,
+            Pageable pageable) {
+
+        return submissionRepository.findSummariesByUserId(
+                userId, problemId, pageable);
     }
 }
