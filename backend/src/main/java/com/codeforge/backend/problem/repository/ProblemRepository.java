@@ -14,7 +14,7 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
     @Query("""
             select new com.codeforge.backend.problem.dto.ProblemListResponse(
                 p.id, p.title, p.slug, p.timeLimitMs, p.memoryLimitMb,
-                p.createdAt, p.updatedAt)
+                p.difficulty, p.createdAt, p.updatedAt)
             from Problem p
             """)
     Page<ProblemListResponse> findAllSummaries(Pageable pageable);

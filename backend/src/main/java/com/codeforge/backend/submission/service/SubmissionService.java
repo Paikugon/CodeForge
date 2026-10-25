@@ -10,6 +10,7 @@ import com.codeforge.backend.submission.model.Submission;
 import com.codeforge.backend.submission.repository.SubmissionRepository;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
+import com.codeforge.backend.user.repository.UserRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,17 +28,20 @@ public class SubmissionService {
     private final ProblemRepository problemRepository;
     private final TestCaseRepository testCaseRepository;
     private final SubmissionJudgeService submissionJudgeService;
+    private final UserRepository userRepository;
 
     public SubmissionService(
             SubmissionRepository submissionRepository,
             ProblemRepository problemRepository,
             SubmissionJudgeService submissionJudgeService,
-            TestCaseRepository testCaseRepository) {
+            TestCaseRepository testCaseRepository,
+            UserRepository userRepository) {
 
         this.submissionRepository = submissionRepository;
         this.problemRepository = problemRepository;
         this.submissionJudgeService = submissionJudgeService;
         this.testCaseRepository = testCaseRepository;
+        this.userRepository = userRepository;
     }
 
     public SubmissionResponse create(SubmissionRequest request, long userId) {
@@ -78,17 +82,12 @@ public class SubmissionService {
     }
 
     @Transactional(readOnly = true)
-    public SubmissionResponse getById(Long id, long userId, boolean isAdmin) {
+    public SubmissionResponse getById(Long id, long userId) {
         Submission submission = submissionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         NOT_FOUND, "Submission not found"));
         boolean isOwner = Long.valueOf(userId).equals(submission.getUserId());
-        if (!isOwner && !isAdmin) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN,
-                    "You are not allowed to view this submission");
-        }
-        return toResponse(submission);
+        return toResponse(submission, isOwner);
     }
 
     @Transactional(readOnly = true)
@@ -103,12 +102,24 @@ public class SubmissionService {
     }
 
     private SubmissionResponse toResponse(Submission submission) {
+        return toResponse(submission, true);
+    }
+
+    private SubmissionResponse toResponse(
+            Submission submission,
+            boolean includePrivateInfo) {
+        String username = userRepository.findById(submission.getUserId())
+                .map(user -> user.getUsername())
+                .orElseThrow(() -> new IllegalStateException(
+                        "User not found for submission: " + submission.getId()));
+
         return new SubmissionResponse(
                 submission.getId(),
                 submission.getUserId(),
+                username,
                 submission.getProblemId(),
                 submission.getLanguage(),
-                submission.getSourceCode(),
+                includePrivateInfo ? submission.getSourceCode() : null,
                 submission.getStatus(),
                 submission.getVerdict(),
                 submission.getExecutionTimeMs(),
@@ -116,8 +127,8 @@ public class SubmissionService {
                 submission.getPassedTestCases(),
                 submission.getTotalTestCases(),
                 submission.getCompileOutput(),
-                submission.getErrorMessage(),
-                toFailedTestCaseResponse(submission),
+                includePrivateInfo ? submission.getErrorMessage() : null,
+                includePrivateInfo ? toFailedTestCaseResponse(submission) : null,
                 submission.getCreatedAt(),
                 submission.getUpdatedAt());
     }

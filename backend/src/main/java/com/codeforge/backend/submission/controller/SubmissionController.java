@@ -13,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -39,15 +38,11 @@ public class SubmissionController {
     @GetMapping("/{id}")
     public SubmissionResponse getById(
             @PathVariable Long id,
-            @AuthenticationPrincipal Jwt jwt,
-            Authentication authentication) {
+            @AuthenticationPrincipal Jwt jwt) {
 
-        long userId = Long.parseLong(jwt.getSubject());
+        long userId = (jwt == null) ? -1L : Long.parseLong(jwt.getSubject());
 
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-
-        return submissionService.getById(id, userId, isAdmin);
+        return submissionService.getById(id, userId);
     }
 
     @GetMapping

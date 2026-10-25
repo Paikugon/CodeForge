@@ -1,5 +1,6 @@
 package com.codeforge.backend.problem.dto;
 
+import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 
@@ -10,6 +11,7 @@ public record ProblemResponse(
     Long id,
     String title,
     String slug,
+    ProblemDifficulty difficulty,
     String description,
     Integer timeLimitMs,
     Integer memoryLimitMb,
@@ -30,6 +32,7 @@ public record ProblemResponse(
             problem.getId(),
             problem.getTitle(),
             problem.getSlug(),
+            problem.getDifficulty(),
             problem.getDescription(),
             problem.getTimeLimitMs(),
             problem.getMemoryLimitMb(),

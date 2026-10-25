@@ -88,6 +88,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST,
                     "/api/problems/*/run")
                     .permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/submissions/**")
+                    .permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth -> oauth

@@ -1,6 +1,7 @@
 package com.codeforge.backend.problem.dto;
 
 import com.codeforge.backend.problem.model.Problem;
+import com.codeforge.backend.problem.enums.ProblemDifficulty;
 
 import java.time.OffsetDateTime;
 
@@ -10,6 +11,7 @@ public record ProblemListResponse(
         String slug,
         Integer timeLimitMs,
         Integer memoryLimitMb,
+        ProblemDifficulty difficulty,
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt) {
 
@@ -20,6 +22,7 @@ public record ProblemListResponse(
                 problem.getSlug(),
                 problem.getTimeLimitMs(),
                 problem.getMemoryLimitMb(),
+                problem.getDifficulty(),
                 problem.getCreatedAt(),
                 problem.getUpdatedAt());
     }
