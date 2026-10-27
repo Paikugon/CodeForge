@@ -9,9 +9,13 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.oauth2.server.resource.authentication.*;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -29,12 +33,12 @@ public class SecurityConfig {
             UserRepository repository) {
 
         return email -> repository.findByEmail(email)
-            .map(user -> User.withUsername(user.getEmail())
-                .password(user.getPasswordHash())
-                .roles(user.getRole().name())
-                .build())
-            .orElseThrow(() ->
-                new UsernameNotFoundException("User not found"));
+                .map(user -> User.withUsername(user.getEmail())
+                        .password(user.getPasswordHash())
+                        .roles(user.getRole().name())
+                        .disabled(!user.isEnabled())
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean
@@ -42,8 +46,7 @@ public class SecurityConfig {
             UserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder) {
 
-        var provider =
-            new DaoAuthenticationProvider(userDetailsService);
+        var provider = new DaoAuthenticationProvider(userDetailsService);
 
         provider.setPasswordEncoder(passwordEncoder);
 
@@ -51,20 +54,35 @@ public class SecurityConfig {
     }
 
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtAuthenticationConverter jwtAuthenticationConverter(
+            UserRepository repository) {
+
         var converter = new JwtAuthenticationConverter();
 
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            String role = jwt.getClaimAsString("role");
+            long userId;
 
-            if (!"USER".equals(role) && !"ADMIN".equals(role)) {
-                return java.util.List.of();
+            try {
+                userId = Long.parseLong(jwt.getSubject());
+            } catch (NumberFormatException ex) {
+                throw new InvalidBearerTokenException("Invalid token subject");
+            }
+
+            var user = repository.findById(userId)
+                    .orElseThrow(() -> new InvalidBearerTokenException("User not found"));
+
+            // Đặt ở đây
+            if (!user.isEnabled()) {
+                throw new OAuth2AuthenticationException(
+                        new OAuth2Error(
+                                "ACCOUNT_DISABLED",
+                                "Tài khoản của bạn đã bị khóa",
+                                null));
             }
 
             return java.util.List.of(
-                new org.springframework.security.core.authority
-                    .SimpleGrantedAuthority("ROLE_" + role)
-            );
+                    new SimpleGrantedAuthority(
+                            "ROLE_" + user.getRole().name()));
         });
 
         return converter;
@@ -76,36 +94,59 @@ public class SecurityConfig {
             JwtAuthenticationConverter converter) throws Exception {
 
         return http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(
-                    SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/login").permitAll()
-                .requestMatchers("/api/auth/register").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/problems/me/solved")
-                    .authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/problems/me/unsolved")
-                    .authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/problems/**")
-                    .permitAll()
-                .requestMatchers(HttpMethod.POST,
-                    "/api/problems/*/run")
-                    .permitAll()
-                .requestMatchers("/api/users/me").authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/submissions/me")
-                    .authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/submissions/**")
-                    .permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/users/profile/me")
-                    .authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/users/profile/*")
-                    .permitAll()
-                .anyRequest().authenticated()
-            )
-            .oauth2ResourceServer(oauth -> oauth
-                .jwt(jwt -> jwt
-                    .jwtAuthenticationConverter(converter)))
-            .build();
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/problems/me/solved")
+                        .authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/problems/me/unsolved")
+                        .authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/problems/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/problems/*/run")
+                        .permitAll()
+                        .requestMatchers("/api/users/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/submissions/me")
+                        .authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/submissions/**")
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/profile/me")
+                        .authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/users/profile/*")
+                        .permitAll()
+                        .requestMatchers(
+                                "/api/problems/*/test-cases",
+                                "/api/problems/*/test-cases/**")
+                        .hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .oauth2ResourceServer(oauth -> oauth
+                        .authenticationEntryPoint((request, response, exception) -> {
+                            boolean disabled = exception instanceof OAuth2AuthenticationException oauthEx
+                                    && "ACCOUNT_DISABLED".equals(oauthEx.getError().getErrorCode());
+
+                            response.setStatus(disabled ? 403 : 401);
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+
+                            response.getWriter().write(disabled
+                                    ? """
+                                            {
+                                              "code": "ACCOUNT_DISABLED",
+                                              "message": "Tài khoản của bạn đã bị khóa"
+                                            }
+                                            """
+                                    : """
+                                            {
+                                              "code": "UNAUTHORIZED",
+                                              "message": "Phiên đăng nhập không hợp lệ hoặc đã hết hạn"
+                                            }
+                                            """);
+                        })
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(converter)))
+                .build();
     }
 }

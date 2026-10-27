@@ -26,13 +26,14 @@ public class User {
     @Column(nullable = false, length = 20)
     private UserRole role = UserRole.USER;
 
-    @Column(name = "created_at", nullable = false,
-            insertable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false,
-            insertable = false, updatable = false)
+    @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
+
+    @Column(nullable = false)
+    private boolean enabled = true;
 
     protected User() {
     }
@@ -68,7 +69,19 @@ public class User {
         return createdAt;
     }
 
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     public OffsetDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

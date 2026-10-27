@@ -9,7 +9,9 @@ import com.codeforge.backend.auth.dto.LoginResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -99,10 +101,20 @@ public class AuthService {
 				.trim()
 				.toLowerCase(Locale.ROOT);
 
-		authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(
-						email,
-						request.password()));
+		try {
+			authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(
+							request.email(),
+							request.password()));
+		} catch (DisabledException ex) {
+			throw new ResponseStatusException(
+					HttpStatus.FORBIDDEN,
+					"Account is banned");
+		} catch (AuthenticationException ex) {
+			throw new ResponseStatusException(
+					HttpStatus.UNAUTHORIZED,
+					"Invalid email or password");
+		}
 
 		User user = userRepository.findByEmail(email)
 				.orElseThrow(() -> new BadCredentialsException(
