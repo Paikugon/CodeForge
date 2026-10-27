@@ -108,6 +108,7 @@ public class ProblemController {
             @RequestParam(required = false) String size,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
+        PaginationValidator.validate(page, size, 100);
         return problemService.findSolvedByUserId(userId, pageable);
     }
 
@@ -118,6 +119,7 @@ public class ProblemController {
             @RequestParam(required = false) String size,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
+        PaginationValidator.validate(page, size, 100);
         return problemService.findUnsolvedByUserId(userId, pageable);
     }
     

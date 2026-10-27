@@ -79,6 +79,7 @@ public interface SubmissionRepository
 			select count(distinct s.problemId)
 			from Submission s
 			where s.userId = :userId
+			  and s.verdict is not null
 			  and not exists (
 			      select 1
 			      from Submission s2
