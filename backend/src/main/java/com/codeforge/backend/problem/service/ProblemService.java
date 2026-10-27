@@ -79,6 +79,20 @@ public class ProblemService {
     }
 
     @Transactional(readOnly = true)
+    public Page<ProblemListResponse> findSolvedByUserId(
+            long userId,
+            Pageable pageable) {
+        return problemRepository.findSolvedByUserId(userId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProblemListResponse> findUnsolvedByUserId(
+            long userId,
+            Pageable pageable) {
+        return problemRepository.findUnsolvedByUserId(userId, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public ProblemResponse findById(Long id) {
         return problemRepository.findById(id)
                 .map(problem -> ProblemResponse.from(

@@ -4,6 +4,7 @@ import com.codeforge.backend.common.pagination.PaginationValidator;
 import com.codeforge.backend.submission.dto.SubmissionRequest;
 import com.codeforge.backend.submission.dto.SubmissionListResponse;
 import com.codeforge.backend.submission.dto.SubmissionResponse;
+import com.codeforge.backend.submission.enums.SubmissionVerdict;
 import com.codeforge.backend.submission.service.SubmissionService;
 
 import jakarta.validation.Valid;
@@ -60,6 +61,7 @@ public class SubmissionController {
     public Page<SubmissionListResponse> getMine(
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) Long problemId,
+            @RequestParam(required = false) SubmissionVerdict verdict,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -68,6 +70,6 @@ public class SubmissionController {
 
         long userId = Long.parseLong(jwt.getSubject());
 
-        return submissionService.getMine(userId, problemId, pageable);
+        return submissionService.getMine(userId, problemId, verdict, pageable);
     }
 }

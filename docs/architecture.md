@@ -289,10 +289,11 @@ Main API groups in the inspected snapshot:
 | --- | --- |
 | Health | `GET /api/health` |
 | Auth | `POST /api/auth/register` |
-| Problems | `POST /api/problems`, `GET /api/problems`, `GET /api/problems/{id}` |
+| Problems | `POST /api/problems`, `GET /api/problems`, `GET /api/problems/{id}`, `GET /api/problems/me/solved` |
 | Run | `POST /api/problems/{id}/run` |
 | Test cases | Nested CRUD under `/api/problems/{problemId}/test-cases` |
-| Submissions | `POST /api/submissions`, `GET /api/submissions`, `GET /api/submissions/{id}` |
+| Submissions | `POST /api/submissions`, `GET /api/submissions`, `GET /api/submissions/{id}`, `GET /api/submissions/me?verdict=AC` |
+| Users | `GET /api/users/me` (profile and submission statistics) |
 
 List endpoints use Spring Data pagination and shared pagination validation. Problem list defaults to size 20 with a maximum of 100 in the inspected implementation.
 

@@ -6,6 +6,7 @@ import com.codeforge.backend.submission.dto.SubmissionListResponse;
 import com.codeforge.backend.submission.dto.SubmissionResponse;
 import com.codeforge.backend.submission.dto.FailedTestCaseResponse;
 import com.codeforge.backend.submission.enums.SubmissionStatus;
+import com.codeforge.backend.submission.enums.SubmissionVerdict;
 import com.codeforge.backend.submission.model.Submission;
 import com.codeforge.backend.submission.repository.SubmissionRepository;
 import com.codeforge.backend.testcase.model.TestCase;
@@ -180,9 +181,10 @@ public class SubmissionService {
     public Page<SubmissionListResponse> getMine(
             long userId,
             Long problemId,
+            SubmissionVerdict verdict,
             Pageable pageable) {
 
         return submissionRepository.findSummariesByUserId(
-                userId, problemId, pageable);
+                userId, problemId, verdict, pageable);
     }
 }

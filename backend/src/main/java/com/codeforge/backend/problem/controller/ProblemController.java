@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 @RestController
 @RequestMapping("/api/problems")
@@ -77,6 +79,48 @@ public class ProblemController {
         return problemService.findById(id);
     }
 
+    @GetMapping("/me/solved")
+    public Page<ProblemListResponse> findSolvedByCurrentUser(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(required = false) String page,
+            @RequestParam(required = false) String size,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        PaginationValidator.validate(page, size, 100);
+        return problemService.findSolvedByUserId(
+                Long.parseLong(jwt.getSubject()), pageable);
+    }
+
+    @GetMapping("/me/unsolved")
+    public Page<ProblemListResponse> findUnsolvedByCurrentUser(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam(required = false) String page,
+            @RequestParam(required = false) String size,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        PaginationValidator.validate(page, size, 100);
+        return problemService.findUnsolvedByUserId(
+                Long.parseLong(jwt.getSubject()), pageable);
+    }
+
+    @GetMapping("/{userId}/solved")
+    public Page<ProblemListResponse> findSolvedByUser(
+            @PathVariable Long userId,
+            @RequestParam(required = false) String page,
+            @RequestParam(required = false) String size,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return problemService.findSolvedByUserId(userId, pageable);
+    }
+
+    @GetMapping("/{userId}/unsolved")
+    public Page<ProblemListResponse> findUnsolvedByUser(
+            @PathVariable Long userId,
+            @RequestParam(required = false) String page,
+            @RequestParam(required = false) String size,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return problemService.findUnsolvedByUserId(userId, pageable);
+    }
+    
     @PostMapping("/{id}/run")
     public ResponseEntity<RunCodeResponse> run(
             @PathVariable Long id,

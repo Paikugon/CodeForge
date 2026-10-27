@@ -83,11 +83,16 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/login").permitAll()
                 .requestMatchers("/api/auth/register").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/problems/me/solved")
+                    .authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/problems/**")
                     .permitAll()
                 .requestMatchers(HttpMethod.POST,
                     "/api/problems/*/run")
                     .permitAll()
+                .requestMatchers("/api/users/me").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/submissions/me")
+                    .authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/submissions/**")
                     .permitAll()
                 .anyRequest().authenticated()

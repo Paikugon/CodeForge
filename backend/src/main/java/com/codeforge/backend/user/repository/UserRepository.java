@@ -1,6 +1,7 @@
 package com.codeforge.backend.user.repository;
 
 import com.codeforge.backend.user.model.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
