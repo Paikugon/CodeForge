@@ -104,6 +104,10 @@ public class SecurityConfig {
                         .authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/problems/me/unsolved")
                         .authenticated()
+                        .requestMatchers(
+                                "/api/problems/*/test-cases",
+                                "/api/problems/*/test-cases/**")
+                        .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/problems/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST,
@@ -118,10 +122,6 @@ public class SecurityConfig {
                         .authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/users/profile/*")
                         .permitAll()
-                        .requestMatchers(
-                                "/api/problems/*/test-cases",
-                                "/api/problems/*/test-cases/**")
-                        .hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth
                         .authenticationEntryPoint((request, response, exception) -> {

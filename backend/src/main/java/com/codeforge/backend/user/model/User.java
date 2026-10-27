@@ -84,4 +84,9 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = OffsetDateTime.now();
+    }
 }

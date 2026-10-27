@@ -104,7 +104,7 @@ public class AuthService {
 		try {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(
-							request.email(),
+							email,
 							request.password()));
 		} catch (DisabledException ex) {
 			throw new ResponseStatusException(
