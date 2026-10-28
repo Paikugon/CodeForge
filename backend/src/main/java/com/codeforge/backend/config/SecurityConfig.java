@@ -71,13 +71,20 @@ public class SecurityConfig {
             var user = repository.findById(userId)
                     .orElseThrow(() -> new InvalidBearerTokenException("User not found"));
 
-            // Đặt ở đây
             if (!user.isEnabled()) {
                 throw new OAuth2AuthenticationException(
                         new OAuth2Error(
                                 "ACCOUNT_DISABLED",
                                 "Tài khoản của bạn đã bị khóa",
                                 null));
+            }
+
+            Number tokenVersion = jwt.getClaim("token_version");
+
+            if (tokenVersion == null
+                    || tokenVersion.longValue() != user.getTokenVersion()) {
+                throw new InvalidBearerTokenException(
+                        "Token has been revoked. Please log in again");
             }
 
             return java.util.List.of(

@@ -1,0 +1,3 @@
+ALTER TABLE users
+    ADD COLUMN must_change_password BOOLEAN NOT NULL DEFAULT FALSE,
+    ADD COLUMN token_version BIGINT NOT NULL DEFAULT 0;

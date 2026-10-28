@@ -32,6 +32,7 @@ public class JwtService {
             .expiresAt(
                 now.plus(Duration.ofMinutes(expirationMinutes))
             )
+            .claim("token_version", user.getTokenVersion())
             .claim("role", user.getRole().name())
             .build();
 

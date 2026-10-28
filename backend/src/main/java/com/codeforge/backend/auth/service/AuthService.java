@@ -2,6 +2,8 @@ package com.codeforge.backend.auth.service;
 
 import com.codeforge.backend.auth.dto.RegisterRequest;
 import com.codeforge.backend.auth.dto.UserResponse;
+import com.codeforge.backend.user.dto.AdminResetPasswordRequest;
+import com.codeforge.backend.user.dto.ChangePasswordRequest;
 import com.codeforge.backend.user.model.User;
 import com.codeforge.backend.user.repository.UserRepository;
 import com.codeforge.backend.auth.dto.LoginRequest;
@@ -125,6 +127,67 @@ public class AuthService {
 		return new LoginResponse(
 				accessToken,
 				"Bearer",
-				jwtService.getExpiresInSeconds());
+				jwtService.getExpiresInSeconds(),
+				user.isMustChangePassword());
+	}
+
+	private void validateNewPassword(String newPassword) {
+		if (newPassword.getBytes(StandardCharsets.UTF_8).length > 72) {
+			throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Password exceeds BCrypt byte limit");
+		}
+		if (newPassword.length() < 8 || newPassword.length() > 72) {
+			throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Password must be between 8 and 72 characters");
+		}
+	}
+
+	@Transactional
+	public void resetPassword(
+			long userId,
+			AdminResetPasswordRequest request) {
+		User user = userRepository.findByIdForUpdate(userId)
+				.orElseThrow(() -> new ResponseStatusException(
+						HttpStatus.NOT_FOUND, "User not found"));
+
+		validateNewPassword(request.newPassword());
+
+		user.setPasswordHash(
+				passwordEncoder.encode(request.newPassword()));
+		user.setMustChangePassword(true);
+		user.incrementTokenVersion();
+	}
+
+	@Transactional
+	public void changePassword(
+			long userId,
+			ChangePasswordRequest request) {
+
+		validateNewPassword(request.newPassword());
+
+		User user = userRepository.findByIdForUpdate(userId)
+				.orElseThrow(() -> new ResponseStatusException(
+						HttpStatus.NOT_FOUND, "User not found"));
+
+		if (!passwordEncoder.matches(
+				request.currentPassword(), user.getPasswordHash())) {
+			throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"Current password is incorrect");
+		}
+
+		if (passwordEncoder.matches(
+				request.newPassword(), user.getPasswordHash())) {
+			throw new ResponseStatusException(
+					HttpStatus.BAD_REQUEST,
+					"New password must differ from current password");
+		}
+
+		user.setPasswordHash(
+				passwordEncoder.encode(request.newPassword()));
+		user.setMustChangePassword(false);
+		user.incrementTokenVersion();
 	}
 }

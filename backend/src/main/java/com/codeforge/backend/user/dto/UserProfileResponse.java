@@ -11,5 +11,6 @@ public record UserProfileResponse(
         long acceptedSubmissionCount,
         long submissionCount,
         long unsolvedCount,
-        OffsetDateTime createdAt) {
+        OffsetDateTime createdAt,
+        Boolean mustChangePassword) {
 }

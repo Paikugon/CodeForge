@@ -42,7 +42,8 @@ public class UserService {
                 submissionRepository.countAcceptedByUserId(userId),
                 submissionRepository.countByUserId(userId),
                 submissionRepository.countUnsolvedProblemsByUserId(userId),
-                user.getCreatedAt());
+                user.getCreatedAt(),
+                includePrivateInfo ? user.isMustChangePassword() : null);
     }
 
     @Transactional
