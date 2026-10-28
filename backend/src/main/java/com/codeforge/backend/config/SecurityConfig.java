@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.oauth2.server.resource.authentication.*;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -87,6 +88,11 @@ public class SecurityConfig {
                         "Token has been revoked. Please log in again");
             }
 
+            if (user.isMustChangePassword()) {
+                return java.util.List.of(
+                        new SimpleGrantedAuthority("PASSWORD_CHANGE_REQUIRED"));
+            }
+
             return java.util.List.of(
                     new SimpleGrantedAuthority(
                             "ROLE_" + user.getRole().name()));
@@ -107,6 +113,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/profile/me")
+                        .authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/users/me/password")
+                        .authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/problems/me/solved")
                         .authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/problems/me/unsolved")
@@ -125,8 +135,6 @@ public class SecurityConfig {
                         .authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/submissions/**")
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/users/profile/me")
-                        .authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/users/profile/*")
                         .permitAll()
                         .anyRequest().authenticated())
@@ -154,6 +162,7 @@ public class SecurityConfig {
                                             """);
                         })
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(converter)))
+                        .addFilterAfter(new PasswordChangeRequiredFilter(), BearerTokenAuthenticationFilter.class)
                 .build();
     }
 }

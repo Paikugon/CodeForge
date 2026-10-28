@@ -43,6 +43,7 @@ public class UserService {
                 submissionRepository.countByUserId(userId),
                 submissionRepository.countUnsolvedProblemsByUserId(userId),
                 user.getCreatedAt(),
+                user.getUpdatedAt(),
                 includePrivateInfo ? user.isMustChangePassword() : null);
     }
 

@@ -63,7 +63,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void resetPassword(
             @PathVariable Long userId,
-            @RequestBody AdminResetPasswordRequest request) {
+            @Valid @RequestBody AdminResetPasswordRequest request) {
 
         authService.resetPassword(userId, request);
     }

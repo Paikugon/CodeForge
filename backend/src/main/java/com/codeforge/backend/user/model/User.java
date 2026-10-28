@@ -29,7 +29,7 @@ public class User {
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
+    @Column(name = "updated_at", nullable = false, insertable = false)
     private OffsetDateTime updatedAt;
 
     @Column(nullable = false)
