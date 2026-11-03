@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.server.resource.InvalidBearerTokenExc
 import org.springframework.security.oauth2.server.resource.authentication.*;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
+import static com.codeforge.backend.common.error.ErrorCode.*;
 
 @Configuration
 @EnableMethodSecurity
@@ -39,7 +40,7 @@ public class SecurityConfig {
                         .roles(user.getRole().name())
                         .disabled(!user.isEnabled())
                         .build())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
     }
 
     @Bean
@@ -66,17 +67,17 @@ public class SecurityConfig {
             try {
                 userId = Long.parseLong(jwt.getSubject());
             } catch (NumberFormatException ex) {
-                throw new InvalidBearerTokenException("Invalid token subject");
+                throw new InvalidBearerTokenException(INVALID_TOKEN);
             }
 
             var user = repository.findById(userId)
-                    .orElseThrow(() -> new InvalidBearerTokenException("User not found"));
+                    .orElseThrow(() -> new InvalidBearerTokenException(USER_NOT_FOUND));
 
             if (!user.isEnabled()) {
                 throw new OAuth2AuthenticationException(
                         new OAuth2Error(
                                 "ACCOUNT_DISABLED",
-                                "Tài khoản của bạn đã bị khóa",
+                                ACCOUNT_DISABLED,
                                 null));
             }
 
@@ -85,7 +86,7 @@ public class SecurityConfig {
             if (tokenVersion == null
                     || tokenVersion.longValue() != user.getTokenVersion()) {
                 throw new InvalidBearerTokenException(
-                        "Token has been revoked. Please log in again");
+                        AUTHENTICATION_REQUIRED);
             }
 
             if (user.isMustChangePassword()) {
@@ -150,14 +151,14 @@ public class SecurityConfig {
                             response.getWriter().write(disabled
                                     ? """
                                             {
-                                              "code": "ACCOUNT_DISABLED",
-                                              "message": "Tài khoản của bạn đã bị khóa"
+                                              "code": "CODE_ACCOUNT_DISABLED",
+                                              "message": "CODE_ACCOUNT_DISABLED"
                                             }
                                             """
                                     : """
                                             {
-                                              "code": "UNAUTHORIZED",
-                                              "message": "Phiên đăng nhập không hợp lệ hoặc đã hết hạn"
+                                              "code": "CODE_AUTHENTICATION_REQUIRED",
+                                              "message": "CODE_AUTHENTICATION_REQUIRED"
                                             }
                                             """);
                         })

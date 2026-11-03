@@ -14,6 +14,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import org.springframework.http.HttpStatus;
 
+import static com.codeforge.backend.common.error.ErrorCode.*;
+
 @Service
 public class UserService {
 
@@ -31,7 +33,7 @@ public class UserService {
     public UserProfileResponse getProfile(long userId, boolean includePrivateInfo) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        NOT_FOUND, "User not found"));
+                        NOT_FOUND, USER_NOT_FOUND));
 
         return new UserProfileResponse(
                 user.getId(),
@@ -51,7 +53,7 @@ public class UserService {
     public void updateUser(long userId, AdminUpdateUserRequest request) {
         if (request.role() == null && request.enabled() == null) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "At least one field is required");
+                    HttpStatus.BAD_REQUEST, REQUEST_VALIDATION_FAILED);
         }
 
         // Lấy khóa trước khi đọc user và kiểm tra số admin.
@@ -59,7 +61,7 @@ public class UserService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        NOT_FOUND, "User not found"));
+                        NOT_FOUND, USER_NOT_FOUND));
 
         UserRole nextRole = request.role() != null
                 ? request.role()
@@ -79,7 +81,7 @@ public class UserService {
 
         if (removesActiveAdmin && activeAdminCount <= 1) {
             throw new ResponseStatusException(
-                    HttpStatus.CONFLICT, "Cannot disable or demote the last active admin");
+                    HttpStatus.CONFLICT, LAST_ACTIVE_ADMIN);
         }
 
         user.setRole(nextRole);

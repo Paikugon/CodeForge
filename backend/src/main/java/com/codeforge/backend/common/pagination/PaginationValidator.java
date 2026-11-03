@@ -10,7 +10,7 @@ public final class PaginationValidator {
             int pageNumber = parse(page, "Page");
             if (pageNumber < 0) {
                 throw new IllegalArgumentException(
-                        "Page must be greater than or equal to 0");
+                        "CODE_PAGE_MUST_BE_NON_NEGATIVE");
             }
         }
 
@@ -18,11 +18,11 @@ public final class PaginationValidator {
             int pageSize = parse(size, "Size");
             if (pageSize <= 0) {
                 throw new IllegalArgumentException(
-                        "Size must be greater than 0");
+                        "CODE_PAGE_SIZE_MUST_BE_POSITIVE");
             }
             if (pageSize > maxSize) {
                 throw new IllegalArgumentException(
-                        "Size must be less than or equal to " + maxSize);
+                        "CODE_PAGE_SIZE_EXCEEDS_MAXIMUM");
             }
         }
     }
@@ -32,7 +32,7 @@ public final class PaginationValidator {
             return Integer.parseInt(value);
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException(
-                    parameterName + " must be a valid integer");
+                    "CODE_INVALID_PAGE_PARAMETER");
         }
     }
 }

@@ -16,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static com.codeforge.backend.common.error.ErrorCode.INVALID_VALUE;
+
 @Service
 public class TestCaseStorageService {
 
@@ -153,7 +155,7 @@ public class TestCaseStorageService {
 
     private Path getProblemDirectory(Long problemId) {
         if (problemId == null || problemId <= 0) {
-            throw new IllegalArgumentException("Invalid problem ID");
+            throw new IllegalArgumentException(INVALID_VALUE);
         }
 
         return storageRoot.resolve(getTestCaseDirectoryId(problemId));

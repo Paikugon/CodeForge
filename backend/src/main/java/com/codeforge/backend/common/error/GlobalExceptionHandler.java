@@ -24,6 +24,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.codeforge.backend.common.error.ErrorCode.*;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -36,7 +38,7 @@ public class GlobalExceptionHandler {
 
         return error(
                 HttpStatus.BAD_REQUEST,
-                exception.getMessage(),
+                responseCode(exception.getMessage(), INVALID_VALUE),
                 request);
     }
 
@@ -46,7 +48,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         return error(
                 HttpStatus.FORBIDDEN,
-                exception.getMessage(),
+                FORBIDDEN,
                 request);
     }
 
@@ -57,7 +59,7 @@ public class GlobalExceptionHandler {
 
         return error(
                 HttpStatus.BAD_REQUEST,
-                "Invalid sort property: " + exception.getPropertyName(),
+                INVALID_SORT_PROPERTY,
                 request);
     }
 
@@ -68,7 +70,7 @@ public class GlobalExceptionHandler {
 
         return error(
                 HttpStatus.BAD_REQUEST,
-                "Invalid value for parameter: " + exception.getName(),
+                INVALID_VALUE,
                 request);
     }
 
@@ -76,14 +78,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleProblemNotFound(
             ProblemNotFoundException exception,
             HttpServletRequest request) {
-        return error(HttpStatus.NOT_FOUND, exception.getMessage(), request);
+        return error(HttpStatus.NOT_FOUND, PROBLEM_NOT_FOUND, request);
     }
 
     @ExceptionHandler(ProblemAlreadyExistsException.class)
     public ResponseEntity<ApiErrorResponse> handleProblemAlreadyExists(
             ProblemAlreadyExistsException exception,
             HttpServletRequest request) {
-        return error(HttpStatus.CONFLICT, exception.getMessage(), request);
+        return error(HttpStatus.CONFLICT, PROBLEM_ALREADY_EXISTS, request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -94,9 +96,9 @@ public class GlobalExceptionHandler {
         exception.getBindingResult().getFieldErrors()
                 .forEach(fieldError -> fieldErrors.putIfAbsent(
                         fieldError.getField(),
-                        fieldError.getDefaultMessage()));
+                        REQUEST_VALIDATION_FAILED));
 
-        return error(HttpStatus.BAD_REQUEST, "Request validation failed", request, fieldErrors);
+        return error(HttpStatus.BAD_REQUEST, REQUEST_VALIDATION_FAILED, request, fieldErrors);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -111,12 +113,12 @@ public class GlobalExceptionHandler {
 
             fieldErrors.putIfAbsent(
                     field,
-                    violation.getMessage());
+                    REQUEST_VALIDATION_FAILED);
         });
 
         return error(
                 HttpStatus.BAD_REQUEST,
-                "Request validation failed",
+                REQUEST_VALIDATION_FAILED,
                 request,
                 fieldErrors);
     }
@@ -125,7 +127,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleMalformedRequest(
             HttpMessageNotReadableException exception,
             HttpServletRequest request) {
-        return error(HttpStatus.BAD_REQUEST, "Request body is malformed", request);
+        return error(HttpStatus.BAD_REQUEST, INVALID_REQUEST_BODY, request);
     }
 
     @ExceptionHandler(ResponseStatusException.class)
@@ -134,7 +136,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         return error(
                 HttpStatus.valueOf(exception.getStatusCode().value()),
-                exception.getReason(),
+                responseCode(exception.getReason(), INVALID_VALUE),
                 request);
     }
 
@@ -144,7 +146,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         return error(
                 HttpStatus.UNAUTHORIZED,
-                "Invalid email or password",
+                INVALID_EMAIL_OR_PASSWORD,
                 request);
     }
 
@@ -160,7 +162,7 @@ public class GlobalExceptionHandler {
 
         return error(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "An unexpected error occurred",
+                UNEXPECTED_ERROR,
                 request);
     }
 
@@ -184,5 +186,11 @@ public class GlobalExceptionHandler {
                 request.getRequestURI(),
                 fieldErrors);
         return ResponseEntity.status(status).body(response);
+    }
+
+    private String responseCode(String message, String fallback) {
+        return message != null && message.startsWith("CODE_")
+                ? message
+                : fallback;
     }
 }

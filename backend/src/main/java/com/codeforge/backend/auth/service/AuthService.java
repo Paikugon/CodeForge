@@ -24,6 +24,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
+import static com.codeforge.backend.common.error.ErrorCode.*;
+
 @Service
 public class AuthService {
 
@@ -55,20 +57,20 @@ public class AuthService {
 		if (userRepository.existsByUsername(username)) {
 			throw new ResponseStatusException(
 					HttpStatus.CONFLICT,
-					"Username already exists");
+					USERNAME_ALREADY_EXISTS);
 		}
 
 		if (userRepository.existsByEmail(email)) {
 			throw new ResponseStatusException(
 					HttpStatus.CONFLICT,
-					"Email already exists");
+					EMAIL_ALREADY_EXISTS);
 		}
 
 		if (request.password()
 				.getBytes(StandardCharsets.UTF_8).length > 72) {
 			throw new ResponseStatusException(
 					HttpStatus.BAD_REQUEST,
-					"Password exceeds BCrypt byte limit");
+					PASSWORD_BCRYPT_LIMIT);
 		}
 
 		String passwordHash = passwordEncoder.encode(
@@ -85,7 +87,7 @@ public class AuthService {
 		} catch (DataIntegrityViolationException exception) {
 			throw new ResponseStatusException(
 					HttpStatus.CONFLICT,
-					"Username or email already exists",
+					USERNAME_OR_EMAIL_ALREADY_EXISTS,
 					exception);
 		}
 
@@ -111,16 +113,16 @@ public class AuthService {
 		} catch (DisabledException ex) {
 			throw new ResponseStatusException(
 					HttpStatus.FORBIDDEN,
-					"Account is banned");
+					ACCOUNT_BANNED);
 		} catch (AuthenticationException ex) {
 			throw new ResponseStatusException(
 					HttpStatus.UNAUTHORIZED,
-					"Invalid email or password");
+					INVALID_EMAIL_OR_PASSWORD);
 		}
 
 		User user = userRepository.findByEmail(email)
 				.orElseThrow(() -> new BadCredentialsException(
-						"Invalid email or password"));
+						INVALID_EMAIL_OR_PASSWORD));
 
 		String accessToken = jwtService.generateToken(user);
 
@@ -135,12 +137,12 @@ public class AuthService {
 		if (newPassword.getBytes(StandardCharsets.UTF_8).length > 72) {
 			throw new ResponseStatusException(
 					HttpStatus.BAD_REQUEST,
-					"Password exceeds BCrypt byte limit");
+					PASSWORD_BCRYPT_LIMIT);
 		}
 		if (newPassword.length() < 8 || newPassword.length() > 72) {
 			throw new ResponseStatusException(
 					HttpStatus.BAD_REQUEST,
-					"Password must be between 8 and 72 characters");
+					PASSWORD_LENGTH_INVALID);
 		}
 	}
 
@@ -150,7 +152,7 @@ public class AuthService {
 			AdminResetPasswordRequest request) {
 		User user = userRepository.findByIdForUpdate(userId)
 				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND, "User not found"));
+						HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
 		validateNewPassword(request.newPassword());
 
@@ -169,20 +171,20 @@ public class AuthService {
 
 		User user = userRepository.findByIdForUpdate(userId)
 				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND, "User not found"));
+						HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
 		if (!passwordEncoder.matches(
 				request.currentPassword(), user.getPasswordHash())) {
 			throw new ResponseStatusException(
 					HttpStatus.BAD_REQUEST,
-					"Current password is incorrect");
+					CURRENT_PASSWORD_INCORRECT);
 		}
 
 		if (passwordEncoder.matches(
 				request.newPassword(), user.getPasswordHash())) {
 			throw new ResponseStatusException(
 					HttpStatus.BAD_REQUEST,
-					"New password must differ from current password");
+					NEW_PASSWORD_MUST_DIFFER);
 		}
 
 		user.setPasswordHash(

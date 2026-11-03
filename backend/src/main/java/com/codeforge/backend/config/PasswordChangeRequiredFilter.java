@@ -41,8 +41,8 @@ public class PasswordChangeRequiredFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("""
                     {
-                      "code": "PASSWORD_CHANGE_REQUIRED",
-                      "message": "Please change your password before continuing."
+                      "code": "CODE_PASSWORD_CHANGE_REQUIRED",
+                      "message": "CODE_PASSWORD_CHANGE_REQUIRED"
                     }
                     """);
             return;

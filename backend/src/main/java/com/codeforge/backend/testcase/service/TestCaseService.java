@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import static com.codeforge.backend.common.error.ErrorCode.*;
 
 @Service
 public class TestCaseService {
@@ -70,7 +71,7 @@ public class TestCaseService {
                 .findByIdAndProblemId(testCaseId, problemId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Test case not found: " + testCaseId));
+                        TEST_CASE_NOT_FOUND));
 
         testCase.update(
                 request.input(),
@@ -92,7 +93,7 @@ public class TestCaseService {
                 .findByIdAndProblemId(testCaseId, problemId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Test case not found: " + testCaseId));
+                        TEST_CASE_NOT_FOUND));
 
         testCaseRepository.delete(testCase);
         testCaseRepository.flush();
@@ -103,7 +104,7 @@ public class TestCaseService {
         if (!problemRepository.existsById(problemId)) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Problem not found: " + problemId);
+                    PROBLEM_NOT_FOUND);
         }
     }
 

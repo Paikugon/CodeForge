@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import static com.codeforge.backend.common.error.ErrorCode.INVALID_VALUE;
 
 @Service
 public class JudgeService {
@@ -241,7 +242,7 @@ public class JudgeService {
 			case 4 -> SubmissionVerdict.RE;
 			case 5 -> SubmissionVerdict.SE;
 			default -> throw new IllegalStateException(
-					"Unknown Judge Server result: " + result);
+					INVALID_VALUE);
 		};
 	}
 
@@ -251,7 +252,7 @@ public class JudgeService {
 			case "java" -> java21Config;
 			case "python" -> python3Config;
 			default -> throw new IllegalArgumentException(
-					"Unsupported language: " + language);
+					INVALID_VALUE);
 		};
 	}
 }

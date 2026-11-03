@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static com.codeforge.backend.common.error.ErrorCode.*;
 
 @Service
 public class SubmissionService {
@@ -50,7 +51,7 @@ public class SubmissionService {
         if (!problemRepository.existsById(request.problemId())) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Problem not found");
+                    PROBLEM_NOT_FOUND);
         }
 
         if (!request.language().equalsIgnoreCase("cpp")
@@ -58,13 +59,13 @@ public class SubmissionService {
                 && !request.language().equalsIgnoreCase("python")) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "Unsupported language");
+                    UNSUPPORTED_LANGUAGE);
         }
 
         if (testCaseRepository.countByProblemId(request.problemId()) == 0) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "Problem has no test cases");
+                    PROBLEM_HAS_NO_TEST_CASES);
         }
 
         Submission submission = new Submission(
@@ -86,7 +87,7 @@ public class SubmissionService {
     public SubmissionResponse getById(Long id, long userId) {
         Submission submission = submissionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        NOT_FOUND, "Submission not found"));
+                        NOT_FOUND, SUBMISSION_NOT_FOUND));
         boolean isOwner = Long.valueOf(userId).equals(submission.getUserId());
         return toResponse(submission, isOwner);
     }

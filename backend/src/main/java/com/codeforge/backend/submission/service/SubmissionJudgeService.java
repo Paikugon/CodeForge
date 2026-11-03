@@ -11,6 +11,8 @@ import com.codeforge.backend.submission.repository.SubmissionRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import static com.codeforge.backend.common.error.ErrorCode.*;
+
 @Service
 public class SubmissionJudgeService {
 
@@ -32,10 +34,10 @@ public class SubmissionJudgeService {
     public void judge(Long submissionId) {
         Submission submission = submissionRepository.findById(submissionId)
                 .orElseThrow(() -> new IllegalStateException(
-                        "Submission not found: " + submissionId));
+                        SUBMISSION_NOT_FOUND));
         Problem problem = problemRepository.findById(submission.getProblemId())
                 .orElseThrow(() -> new IllegalStateException(
-                        "Problem not found: " + submission.getProblemId()));
+                        PROBLEM_NOT_FOUND));
 
         try {
             submission.setStatus(SubmissionStatus.JUDGING);

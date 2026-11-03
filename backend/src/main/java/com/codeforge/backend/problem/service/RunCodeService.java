@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import static com.codeforge.backend.common.error.ErrorCode.*;
+
 @Service
 public class RunCodeService {
 
@@ -29,7 +31,7 @@ public class RunCodeService {
         Problem problem = problemRepository.findById(problemId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Problem not found"));
+                        PROBLEM_NOT_FOUND));
 
         String language = request.language().toLowerCase();
 
@@ -38,7 +40,7 @@ public class RunCodeService {
                 && !language.equals("python")) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "Unsupported language");
+                    UNSUPPORTED_LANGUAGE);
         }
 
         RunCodeResult result = judgeService.run(
