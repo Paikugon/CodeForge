@@ -1,14 +1,21 @@
 package com.codeforge.backend.user.controller;
 
 import com.codeforge.backend.auth.service.AuthService;
+import com.codeforge.backend.common.pagination.PaginationValidator;
 import com.codeforge.backend.user.dto.AdminResetPasswordRequest;
 import com.codeforge.backend.user.dto.AdminUpdateUserRequest;
 import com.codeforge.backend.user.dto.ChangePasswordRequest;
+import com.codeforge.backend.user.dto.UserListResponse;
 import com.codeforge.backend.user.dto.UserProfileResponse;
+import com.codeforge.backend.user.enums.UserRole;
 import com.codeforge.backend.user.service.UserService;
 
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +25,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -76,5 +84,17 @@ public class UserController {
 
         authService.changePassword(
                 Long.parseLong(jwt.getSubject()), request);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<UserListResponse> getAll(
+            @RequestParam(required = false) UserRole role,
+            @RequestParam(required = false) Boolean enabled,
+            @RequestParam(required = false) String page,
+            @RequestParam(required = false) String size,
+            @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        PaginationValidator.validate(page, size, 100);
+        return userService.getAll(role, enabled, pageable);
     }
 }

@@ -1,12 +1,19 @@
 package com.codeforge.backend.submission.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+
+import java.time.OffsetDateTime;
+import java.util.Collection;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.codeforge.backend.submission.dto.SubmissionListResponse;
+import com.codeforge.backend.submission.enums.SubmissionStatus;
 import com.codeforge.backend.submission.enums.SubmissionVerdict;
 import com.codeforge.backend.submission.model.Submission;
 
@@ -89,4 +96,19 @@ public interface SubmissionRepository
 			  )
 			""")
 	long countUnsolvedProblemsByUserId(@Param("userId") Long userId);
+
+	@Transactional
+	@Modifying(clearAutomatically = true, flushAutomatically = true)
+	@Query("""
+			update Submission s
+			set s.status = :failedStatus,
+			    s.errorMessage = :errorMessage,
+			    s.updatedAt = :updatedAt
+			where s.status in :unfinishedStatuses
+			""")
+	int failUnfinishedSubmissions(
+			@Param("unfinishedStatuses") Collection<SubmissionStatus> unfinishedStatuses,
+			@Param("failedStatus") SubmissionStatus failedStatus,
+			@Param("errorMessage") String errorMessage,
+			@Param("updatedAt") OffsetDateTime updatedAt);
 }

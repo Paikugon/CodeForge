@@ -13,6 +13,9 @@ public final class ErrorCode {
     public static final String INVALID_SORT_PROPERTY = "CODE_INVALID_SORT_PROPERTY";
     public static final String INVALID_TOKEN = "CODE_INVALID_TOKEN";
     public static final String INVALID_VALUE = "CODE_INVALID_VALUE";
+    public static final String JUDGE_FAILED = "CODE_JUDGE_FAILED";
+    public static final String JUDGE_INTERRUPTED = "CODE_JUDGE_INTERRUPTED";
+    public static final String JUDGE_QUEUE_FULL = "CODE_JUDGE_QUEUE_FULL";
     public static final String LAST_ACTIVE_ADMIN = "CODE_LAST_ACTIVE_ADMIN";
     public static final String NEW_PASSWORD_MUST_DIFFER = "CODE_NEW_PASSWORD_MUST_DIFFER";
     public static final String PASSWORD_BCRYPT_LIMIT = "CODE_PASSWORD_BCRYPT_LIMIT";

@@ -128,26 +128,37 @@ public class ProblemService {
     public ProblemResponse edit(Long id, ProblemRequest request) {
         Problem problem = problemRepository.findById(id)
                 .orElseThrow(() -> new ProblemNotFoundException(id));
-
-        if (request.title() != null) {
-            problem.setTitle(request.title());
-        }
-        if (request.slug() != null) {
+        if (request.slug() != null && !request.slug().equals(problem.getSlug())) {
+            if (problemRepository.existsBySlug(request.slug())) {
+                throw new ProblemAlreadyExistsException(request.slug());
+            }
             problem.setSlug(request.slug());
         }
-        if (request.description() != null) {
+        if (request.title() != null && request.title().length() > 0 && !request.title().equals(problem.getTitle())) {
+            problem.setTitle(request.title());
+        }
+        if (request.description() != null && request.description().length() > 0
+                && !request.description().equals(problem.getDescription())) {
             problem.setDescription(request.description());
         }
-        if (request.timeLimitMs() != null) {
+        if (request.timeLimitMs() != null && !request.timeLimitMs().equals(problem.getTimeLimitMs())) {
             problem.setTimeLimitMs(request.timeLimitMs());
         }
-        if (request.memoryLimitMb() != null) {
+        if (request.memoryLimitMb() != null && !request.memoryLimitMb().equals(problem.getMemoryLimitMb())) {
             problem.setMemoryLimitMb(request.memoryLimitMb());
         }
-        if (request.difficulty() != null) {
+        if (request.difficulty() != null && !request.difficulty().equals(problem.getDifficulty())) {
             problem.setDifficulty(request.difficulty());
         }
-        problem.setUpdatedAt(OffsetDateTime.now());
-        return ProblemResponse.from(problemRepository.saveAndFlush(problem));
+
+        try {
+            return ProblemResponse.from(
+                    problemRepository.saveAndFlush(problem));
+        } catch (DataIntegrityViolationException exception) {
+            if (isSlugConstraintViolation(exception)) {
+                throw new ProblemAlreadyExistsException(request.slug());
+            }
+            throw exception;
+        }
     }
 }

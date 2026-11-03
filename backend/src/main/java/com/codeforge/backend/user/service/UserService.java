@@ -2,6 +2,7 @@ package com.codeforge.backend.user.service;
 
 import com.codeforge.backend.submission.repository.SubmissionRepository;
 import com.codeforge.backend.user.dto.AdminUpdateUserRequest;
+import com.codeforge.backend.user.dto.UserListResponse;
 import com.codeforge.backend.user.dto.UserProfileResponse;
 import com.codeforge.backend.user.enums.UserRole;
 import com.codeforge.backend.user.model.User;
@@ -12,6 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import static com.codeforge.backend.common.error.ErrorCode.*;
@@ -86,5 +89,14 @@ public class UserService {
 
         user.setRole(nextRole);
         user.setEnabled(nextEnabled);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<UserListResponse> getAll(
+            UserRole role,
+            Boolean enabled,
+            Pageable pageable) {
+
+        return userRepository.findSummaries(role, enabled, pageable);
     }
 }

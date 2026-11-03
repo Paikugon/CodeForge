@@ -16,9 +16,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.FieldError;
 
 import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -35,7 +37,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleIllegalArgument(
             IllegalArgumentException exception,
             HttpServletRequest request) {
-
+        log.error(
+                "Illegal argument at {}",
+                request.getRequestURI(),
+                exception);
         return error(
                 HttpStatus.BAD_REQUEST,
                 responseCode(exception.getMessage(), INVALID_VALUE),
@@ -46,6 +51,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleAuthorizationDenied(
             AuthorizationDeniedException exception,
             HttpServletRequest request) {
+        log.error(
+                "Authorization denied at {}",
+                request.getRequestURI(),
+                exception);
         return error(
                 HttpStatus.FORBIDDEN,
                 FORBIDDEN,
@@ -56,7 +65,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleInvalidSort(
             PropertyReferenceException exception,
             HttpServletRequest request) {
-
+        log.error(
+                "Invalid sort property at {}",
+                request.getRequestURI(),
+                exception);
         return error(
                 HttpStatus.BAD_REQUEST,
                 INVALID_SORT_PROPERTY,
@@ -67,7 +79,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleTypeMismatch(
             MethodArgumentTypeMismatchException exception,
             HttpServletRequest request) {
-
+        log.error(
+                "Type mismatch at {}",
+                request.getRequestURI(),
+                exception);
         return error(
                 HttpStatus.BAD_REQUEST,
                 INVALID_VALUE,
@@ -78,6 +93,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleProblemNotFound(
             ProblemNotFoundException exception,
             HttpServletRequest request) {
+        log.error(
+                "Problem not found at {}",
+                request.getRequestURI(),
+                exception);
         return error(HttpStatus.NOT_FOUND, PROBLEM_NOT_FOUND, request);
     }
 
@@ -85,6 +104,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleProblemAlreadyExists(
             ProblemAlreadyExistsException exception,
             HttpServletRequest request) {
+        log.error(
+                "Problem already exists at {}",
+                request.getRequestURI(),
+                exception);
         return error(HttpStatus.CONFLICT, PROBLEM_ALREADY_EXISTS, request);
     }
 
@@ -92,11 +115,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleValidation(
             MethodArgumentNotValidException exception,
             HttpServletRequest request) {
+        log.error(
+                "Validation failed at {}",
+                request.getRequestURI(),
+                exception);
         Map<String, String> fieldErrors = new LinkedHashMap<>();
         exception.getBindingResult().getFieldErrors()
                 .forEach(fieldError -> fieldErrors.putIfAbsent(
                         fieldError.getField(),
-                        REQUEST_VALIDATION_FAILED));
+                        validationCode(fieldError)));
 
         return error(HttpStatus.BAD_REQUEST, REQUEST_VALIDATION_FAILED, request, fieldErrors);
     }
@@ -105,15 +132,25 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleConstraintViolation(
             ConstraintViolationException exception,
             HttpServletRequest request) {
-
+        log.error(
+                "Constraint violation at {}",
+                request.getRequestURI(),
+                exception);
         Map<String, String> fieldErrors = new LinkedHashMap<>();
 
         exception.getConstraintViolations().forEach(violation -> {
             String field = violation.getPropertyPath().toString();
+            int lastPathSeparator = field.lastIndexOf('.');
+            if (lastPathSeparator >= 0) {
+                field = field.substring(lastPathSeparator + 1);
+            }
 
             fieldErrors.putIfAbsent(
                     field,
-                    REQUEST_VALIDATION_FAILED);
+                    validationCode(field, violation.getConstraintDescriptor()
+                            .getAnnotation()
+                            .annotationType()
+                            .getSimpleName()));
         });
 
         return error(
@@ -127,6 +164,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleMalformedRequest(
             HttpMessageNotReadableException exception,
             HttpServletRequest request) {
+        log.error(
+                "Malformed request at {}",
+                request.getRequestURI(),
+                exception);
         return error(HttpStatus.BAD_REQUEST, INVALID_REQUEST_BODY, request);
     }
 
@@ -134,6 +175,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleResponseStatus(
             ResponseStatusException exception,
             HttpServletRequest request) {
+        log.error(
+                "Response status error at {}",
+                request.getRequestURI(),
+                exception);
         return error(
                 HttpStatus.valueOf(exception.getStatusCode().value()),
                 responseCode(exception.getReason(), INVALID_VALUE),
@@ -192,5 +237,38 @@ public class GlobalExceptionHandler {
         return message != null && message.startsWith("CODE_")
                 ? message
                 : fallback;
+    }
+
+    private String validationCode(FieldError fieldError) {
+        String constraint = fieldError.getCode();
+
+        return validationCode(
+                fieldError.getField(),
+                constraint == null ? "" : constraint);
+    }
+
+    private String validationCode(String field, String constraint) {
+        String fieldCode = field.replaceAll("([a-z])([A-Z])", "$1_$2")
+                .replace('-', '_')
+                .toUpperCase(Locale.ROOT);
+
+        if (constraint.contains("NotBlank") || constraint.contains("NotNull")) {
+            return "CODE_" + fieldCode + "_REQUIRED";
+        }
+        if (constraint.contains("Email")) {
+            return "CODE_" + fieldCode + "_INVALID_EMAIL";
+        }
+        if (constraint.contains("Pattern")) {
+            return "CODE_" + fieldCode + "_INVALID_FORMAT";
+        }
+        if (constraint.contains("Size")) {
+            return "CODE_" + fieldCode + "_INVALID_LENGTH";
+        }
+        if (constraint.contains("Positive")
+                || constraint.contains("Min")
+                || constraint.contains("Max")) {
+            return "CODE_" + fieldCode + "_INVALID_VALUE";
+        }
+        return "CODE_" + fieldCode + "_INVALID";
     }
 }

@@ -27,6 +27,7 @@ public record SubmissionResponse(
 
         String compileOutput,
         String errorMessage,
+        String failedOutput,
 
         FailedTestCaseResponse failedTestCase,
 

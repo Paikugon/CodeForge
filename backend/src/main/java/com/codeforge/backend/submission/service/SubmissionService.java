@@ -19,8 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.core.task.TaskRejectedException;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+
+
 import static com.codeforge.backend.common.error.ErrorCode.*;
 
 @Service
@@ -78,7 +81,14 @@ public class SubmissionService {
 
         Submission saved = submissionRepository.saveAndFlush(submission);
 
-        submissionJudgeService.judge(saved.getId());
+        try {
+            submissionJudgeService.judge(saved.getId());
+        } catch (TaskRejectedException exception) {
+            saved.setStatus(SubmissionStatus.FAILED);
+            saved.setErrorMessage(JUDGE_QUEUE_FULL);
+
+            saved = submissionRepository.saveAndFlush(saved);
+        }
 
         return toResponse(saved);
     }
@@ -130,6 +140,7 @@ public class SubmissionService {
                 submission.getTotalTestCases(),
                 submission.getCompileOutput(),
                 includePrivateInfo ? submission.getErrorMessage() : null,
+                includePrivateInfo ? submission.getFailedOutput() : null,
                 includePrivateInfo ? toFailedTestCaseResponse(submission) : null,
                 submission.getCreatedAt(),
                 submission.getUpdatedAt());
