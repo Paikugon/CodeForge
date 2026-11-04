@@ -57,7 +57,9 @@ public class SubmissionJudgeService {
                     submission.getSourceCode(),
                     testCaseId,
                     problem.getTimeLimitMs(),
-                    problem.getMemoryLimitMb());
+                    problem.getMemoryLimitMb(),
+                    problem.isSpjEnabled() ? problem.getSpjSource() : null
+            );
 
             submission.setVerdict(result.verdict());
             submission.setExecutionTimeMs(result.executionTimeMs());

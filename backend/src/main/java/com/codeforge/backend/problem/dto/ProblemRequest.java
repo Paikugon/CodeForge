@@ -2,6 +2,7 @@ package com.codeforge.backend.problem.dto;
 
 import com.codeforge.backend.problem.enums.ProblemDifficulty;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
@@ -18,5 +19,14 @@ public record ProblemRequest(
 
 		@Positive Integer timeLimitMs,
 
-		@Positive Integer memoryLimitMb) {
+		@Positive Integer memoryLimitMb,
+
+		boolean spjEnabled,
+
+		String spjSource) {
+	@AssertTrue(message = "CODE_SPJ_SOURCE_REQUIRED")
+	public boolean isSpjSourceValid() {
+		return !Boolean.TRUE.equals(spjEnabled)
+				|| (spjSource != null && !spjSource.isBlank());
+	}
 }

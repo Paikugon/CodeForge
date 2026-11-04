@@ -27,6 +27,7 @@ public class JudgeService {
 	private final JsonNode cpp20Config;
 	private final JsonNode java21Config;
 	private final JsonNode python3Config;
+	private final JsonNode spjCConfig;
 
 	public JudgeService(JudgeClient judgeClient, ObjectMapper objectMapper)
 			throws IOException {
@@ -65,6 +66,17 @@ public class JudgeService {
 
 			this.python3Config = objectMapper.readTree(input);
 		}
+
+		try (InputStream input = getClass().getResourceAsStream(
+				"/judge/spj-c.json")) {
+
+			if (input == null) {
+				throw new IllegalStateException(
+						"Missing judge/spj_c.json");
+			}
+
+			this.spjCConfig = objectMapper.readTree(input);
+		}
 	}
 
 	public JudgeResult judge(
@@ -72,9 +84,11 @@ public class JudgeService {
 			String sourceCode,
 			String testCaseId,
 			int timeLimitMs,
-			int memoryLimitMb) {
+			int memoryLimitMb,
+			String spjSource) {
 
 		JsonNode languageConfig = getLanguageConfig(language);
+		boolean useSpj = spjSource != null && !spjSource.isBlank();
 
 		JudgeRequest request = new JudgeRequest(
 				sourceCode,
@@ -82,7 +96,13 @@ public class JudgeService {
 				timeLimitMs,
 				(long) memoryLimitMb * 1024 * 1024,
 				testCaseId,
-				true);
+				true,
+				useSpj ? getSpjVersion(spjSource) : null,
+				useSpj ? spjCConfig.get("run") : null,
+				useSpj ? spjCConfig.get("compile") : null,
+				useSpj ? spjSource : null
+
+		);
 
 		JudgeResponse response = judgeClient.judge(request);
 
@@ -254,5 +274,21 @@ public class JudgeService {
 			default -> throw new IllegalArgumentException(
 					INVALID_VALUE);
 		};
+	}
+
+	private String getSpjVersion(String source) {
+		try {
+			String versionedSource = "codeforge-spj-c-v1\n" + source;
+
+			byte[] hash = java.security.MessageDigest
+					.getInstance("SHA-256")
+					.digest(versionedSource.getBytes(
+							java.nio.charset.StandardCharsets.UTF_8));
+
+			return java.util.HexFormat.of().formatHex(hash);
+		} catch (java.security.NoSuchAlgorithmException exception) {
+			throw new IllegalStateException(
+					"SHA-256 unavailable", exception);
+		}
 	}
 }

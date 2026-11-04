@@ -99,7 +99,8 @@ public class TestCaseStorageService {
 
     public void writeInfo(
             Long problemId,
-            Map<Long, String> expectedOutputs) throws IOException {
+            Map<Long, String> expectedOutputs,
+            boolean spjEnabled) throws IOException {
 
         Path directory = getProblemDirectory(problemId);
         ensureDirectory(directory);
@@ -120,7 +121,8 @@ public class TestCaseStorageService {
         }
 
         Map<String, Object> info = new LinkedHashMap<>();
-        info.put("spj", false);
+        info.put("spj", spjEnabled);
+        info.put("test_case_number", expectedOutputs.size());
         info.put("test_cases", testCases);
 
         writeAtomically(

@@ -42,6 +42,12 @@ public class Problem {
     @Column(name = "difficulty", nullable = false, length = 20)
     private ProblemDifficulty difficulty;
 
+    @Column(name = "spj_enabled", nullable = false)
+    private boolean spjEnabled = false;
+
+    @Column(name = "spj_source", columnDefinition = "TEXT")
+    private String spjSource;
+
     protected Problem() {
     }
 
@@ -132,5 +138,21 @@ public class Problem {
     
     public void setDifficulty(ProblemDifficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public boolean isSpjEnabled() {
+        return spjEnabled;
+    }
+
+    public void setSpjEnabled(boolean spjEnabled) {
+        this.spjEnabled = spjEnabled;
+    }
+
+    public String getSpjSource() {
+        return spjSource;
+    }
+
+    public void setSpjSource(String spjSource) {
+        this.spjSource = spjSource;
     }
 }

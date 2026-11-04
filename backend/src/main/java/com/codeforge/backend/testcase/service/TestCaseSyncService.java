@@ -1,10 +1,13 @@
 package com.codeforge.backend.testcase.service;
 
 import com.codeforge.backend.judge.service.TestCaseStorageService;
+import com.codeforge.backend.problem.model.Problem;
+import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -19,18 +22,24 @@ public class TestCaseSyncService {
 
     private final TestCaseRepository repository;
     private final TestCaseStorageService storageService;
+    private final ProblemRepository problemRepository;
 
     public TestCaseSyncService(
             TestCaseRepository repository,
-            TestCaseStorageService storageService) {
+            TestCaseStorageService storageService,
+            ProblemRepository problemRepository) {
 
         this.repository = repository;
         this.storageService = storageService;
+        this.problemRepository = problemRepository;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
     public void syncProblem(Long problemId) throws IOException {
 
+        Problem problem = problemRepository.findById(problemId)
+        .orElseThrow(() -> new IllegalStateException(
+                "Problem not found: " + problemId));
         List<TestCase> testCases =
                 repository.findByProblemIdOrderByOrderIndexAscIdAsc(problemId);
 
@@ -55,6 +64,10 @@ public class TestCaseSyncService {
             );
         }
 
-        storageService.writeInfo(problemId, expectedOutputs);
+        storageService.writeInfo(
+                problemId,
+                expectedOutputs,
+                problem.isSpjEnabled()
+        );
     }
 }

@@ -7,12 +7,14 @@ import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
+import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
 import java.time.OffsetDateTime;
 
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,12 +26,15 @@ public class ProblemService {
 
     private final ProblemRepository problemRepository;
     private final TestCaseRepository testCaseRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public ProblemService(
             ProblemRepository problemRepository,
-            TestCaseRepository testCaseRepository) {
+            TestCaseRepository testCaseRepository,
+            ApplicationEventPublisher eventPublisher) {
         this.problemRepository = problemRepository;
         this.testCaseRepository = testCaseRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -45,6 +50,7 @@ public class ProblemService {
                 request.timeLimitMs() == null ? 1000 : request.timeLimitMs(),
                 request.memoryLimitMb() == null ? 256 : request.memoryLimitMb(),
                 request.difficulty() == null ? ProblemDifficulty.EASY : request.difficulty());
+        applySpj(problem, request);
 
         try {
             return ProblemResponse.from(problemRepository.saveAndFlush(problem));
@@ -150,8 +156,11 @@ public class ProblemService {
         if (request.difficulty() != null && !request.difficulty().equals(problem.getDifficulty())) {
             problem.setDifficulty(request.difficulty());
         }
+        applySpj(problem, request);
 
         try {
+            eventPublisher.publishEvent(
+                    new TestCasesChangedEvent(problem.getId()));
             return ProblemResponse.from(
                     problemRepository.saveAndFlush(problem));
         } catch (DataIntegrityViolationException exception) {
@@ -160,5 +169,15 @@ public class ProblemService {
             }
             throw exception;
         }
+    }
+
+    private void applySpj(
+            Problem problem,
+            ProblemRequest request) {
+
+        boolean enabled = Boolean.TRUE.equals(request.spjEnabled());
+
+        problem.setSpjEnabled(enabled);
+        problem.setSpjSource(enabled ? request.spjSource() : null);
     }
 }

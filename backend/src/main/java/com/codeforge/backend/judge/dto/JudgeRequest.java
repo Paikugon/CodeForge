@@ -2,6 +2,8 @@ package com.codeforge.backend.judge.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import tools.jackson.databind.JsonNode;
+
 public record JudgeRequest(
 		String src,
 
@@ -13,5 +15,16 @@ public record JudgeRequest(
 
 		@JsonProperty("test_case_id") String testCaseId,
 
-		boolean output) {
+		boolean output,
+		@JsonProperty("spj_version")
+        String spjVersion,
+
+        @JsonProperty("spj_config")
+        JsonNode spjConfig,
+
+        @JsonProperty("spj_compile_config")
+        JsonNode spjCompileConfig,
+
+        @JsonProperty("spj_src")
+        String spjSrc){
 }
