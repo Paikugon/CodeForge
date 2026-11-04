@@ -72,7 +72,7 @@ public class JudgeService {
 
 			if (input == null) {
 				throw new IllegalStateException(
-						"Missing judge/spj_c.json");
+						"Missing judge/spj-c.json");
 			}
 
 			this.spjCConfig = objectMapper.readTree(input);

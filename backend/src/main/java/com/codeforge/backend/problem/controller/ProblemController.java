@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 @RestController
@@ -75,8 +76,15 @@ public class ProblemController {
     }
 
     @GetMapping("/{id}")
-    public ProblemResponse findById(@PathVariable Long id) {
-        return problemService.findById(id);
+    public ProblemResponse findById(
+            @PathVariable Long id,
+            Authentication authentication) {
+        boolean isAdmin = authentication != null
+                && authentication.getAuthorities().stream()
+                        .anyMatch(authority -> "ROLE_ADMIN".equals(
+                                authority.getAuthority()));
+
+        return problemService.findById(id, isAdmin);
     }
 
     @GetMapping("/me/solved")

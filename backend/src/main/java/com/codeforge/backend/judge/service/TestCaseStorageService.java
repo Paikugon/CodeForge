@@ -12,6 +12,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermission;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -81,6 +82,19 @@ public class TestCaseStorageService {
         Files.deleteIfExists(directory.resolve(testCaseId + ".out"));
     }
 
+    public void deleteProblemDirectory(Long problemId) throws IOException {
+        Path directory = getProblemDirectory(problemId);
+
+        if (!Files.isDirectory(directory)) {
+            return;
+        }
+
+        try (var paths = Files.walk(directory)) {
+            paths.sorted(Comparator.reverseOrder())
+                    .forEach(path -> deletePath(path, directory));
+        }
+    }
+
     public void deleteTestCasesNotIn(
             Long problemId,
             Set<Long> testCaseIds) throws IOException {
@@ -138,6 +152,7 @@ public class TestCaseStorageService {
             throw new IllegalStateException(
                     "Unexpected test case file name: " + fileName);
         }
+
         String idPart = fileName.substring(0, lastDotIndex);
 
         try {
@@ -220,6 +235,16 @@ public class TestCaseStorageService {
                             PosixFilePermission.OTHERS_READ));
         } catch (UnsupportedOperationException ignored) {
             // Filesystem không hỗ trợ POSIX permissions
+        }
+    }
+
+    private void deletePath(Path path, Path directory) {
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                    "Failed to delete test case storage: " + directory,
+                    exception);
         }
     }
 }

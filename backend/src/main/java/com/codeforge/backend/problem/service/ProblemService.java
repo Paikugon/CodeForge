@@ -6,12 +6,14 @@ import com.codeforge.backend.problem.dto.ProblemResponse;
 import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
+import com.codeforge.backend.judge.service.TestCaseStorageService;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
-import java.time.OffsetDateTime;
+import java.io.IOException;
+import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.ApplicationEventPublisher;
@@ -27,14 +29,17 @@ public class ProblemService {
     private final ProblemRepository problemRepository;
     private final TestCaseRepository testCaseRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final TestCaseStorageService testCaseStorageService;
 
     public ProblemService(
             ProblemRepository problemRepository,
             TestCaseRepository testCaseRepository,
-            ApplicationEventPublisher eventPublisher) {
+            ApplicationEventPublisher eventPublisher,
+            TestCaseStorageService testCaseStorageService) {
         this.problemRepository = problemRepository;
         this.testCaseRepository = testCaseRepository;
         this.eventPublisher = eventPublisher;
+        this.testCaseStorageService = testCaseStorageService;
     }
 
     @Transactional
@@ -53,7 +58,10 @@ public class ProblemService {
         applySpj(problem, request);
 
         try {
-            return ProblemResponse.from(problemRepository.saveAndFlush(problem));
+            return ProblemResponse.from(
+                    problemRepository.saveAndFlush(problem),
+                    List.of(),
+                    true);
         } catch (DataIntegrityViolationException ex) {
             if (isSlugConstraintViolation(ex)) {
                 throw new ProblemAlreadyExistsException(request.slug());
@@ -99,14 +107,17 @@ public class ProblemService {
     }
 
     @Transactional(readOnly = true)
-    public ProblemResponse findById(Long id) {
+    public ProblemResponse findById(
+            Long id,
+            boolean includeSpecialJudgeDetails) {
         return problemRepository.findById(id)
                 .map(problem -> ProblemResponse.from(
                         problem,
                         testCaseRepository.findSampleByProblemId(problem.getId())
                                 .stream()
                                 .map(this::toResponse)
-                                .toList()))
+                                .toList(),
+                        includeSpecialJudgeDetails))
                 .orElseThrow(() -> new ProblemNotFoundException(id));
     }
 
@@ -128,6 +139,13 @@ public class ProblemService {
                 .orElseThrow(() -> new ProblemNotFoundException(id));
 
         problemRepository.delete(problem);
+        try {
+            testCaseStorageService.deleteProblemDirectory(id);
+        } catch (IOException exception) {
+            throw new IllegalStateException(
+                    "Failed to clean up test cases for problem " + id,
+                    exception);
+        }
     }
 
     @Transactional
@@ -162,7 +180,9 @@ public class ProblemService {
             eventPublisher.publishEvent(
                     new TestCasesChangedEvent(problem.getId()));
             return ProblemResponse.from(
-                    problemRepository.saveAndFlush(problem));
+                    problemRepository.saveAndFlush(problem),
+                    List.of(),
+                    true);
         } catch (DataIntegrityViolationException exception) {
             if (isSlugConstraintViolation(exception)) {
                 throw new ProblemAlreadyExistsException(request.slug());
