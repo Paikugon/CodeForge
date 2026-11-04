@@ -7,13 +7,12 @@ import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.submission.repository.SubmissionRepository;
-import com.codeforge.backend.judge.service.TestCaseStorageService;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
+import com.codeforge.backend.problem.event.ProblemDeletedEvent;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -32,19 +31,16 @@ public class ProblemService {
     private final ProblemRepository problemRepository;
     private final TestCaseRepository testCaseRepository;
     private final ApplicationEventPublisher eventPublisher;
-    private final TestCaseStorageService testCaseStorageService;
     private final SubmissionRepository submissionRepository;
 
     public ProblemService(
             ProblemRepository problemRepository,
             TestCaseRepository testCaseRepository,
             ApplicationEventPublisher eventPublisher,
-            TestCaseStorageService testCaseStorageService,
             SubmissionRepository submissionRepository) {
         this.problemRepository = problemRepository;
         this.testCaseRepository = testCaseRepository;
         this.eventPublisher = eventPublisher;
-        this.testCaseStorageService = testCaseStorageService;
         this.submissionRepository = submissionRepository;
     }
 
@@ -174,13 +170,7 @@ public class ProblemService {
         }
 
         problemRepository.delete(problem);
-        try {
-            testCaseStorageService.deleteProblemDirectory(id);
-        } catch (IOException exception) {
-            throw new IllegalStateException(
-                    "Failed to clean up test cases for problem " + id,
-                    exception);
-        }
+        eventPublisher.publishEvent(new ProblemDeletedEvent(id));
     }
 
     @Transactional
