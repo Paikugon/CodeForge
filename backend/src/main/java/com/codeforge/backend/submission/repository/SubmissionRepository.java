@@ -24,6 +24,9 @@ public interface SubmissionRepository
 			Long problemId,
 			Pageable pageable);
 
+	@Transactional(readOnly = true)
+	boolean existsByProblemId(long problemId);
+
 	@Query("""
 			select new com.codeforge.backend.submission.dto.SubmissionListResponse(
 			    s.id, s.userId, u.username, s.problemId, s.language, s.status, s.verdict,

@@ -12,6 +12,7 @@ public record ProblemListResponse(
         Integer timeLimitMs,
         Integer memoryLimitMb,
         ProblemDifficulty difficulty,
+        boolean enabled,
         OffsetDateTime createdAt,
         OffsetDateTime updatedAt) {
 
@@ -23,6 +24,7 @@ public record ProblemListResponse(
                 problem.getTimeLimitMs(),
                 problem.getMemoryLimitMb(),
                 problem.getDifficulty(),
+                problem.isEnabled(),
                 problem.getCreatedAt(),
                 problem.getUpdatedAt());
     }

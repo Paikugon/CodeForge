@@ -22,11 +22,15 @@ public record ProblemRequest(
 		@Positive Integer memoryLimitMb,
 
 		boolean spjEnabled,
+		String spjSource,
+		
+		Boolean enabled
+	) {
 
-		String spjSource) {
 	@AssertTrue(message = "CODE_SPJ_SOURCE_REQUIRED")
 	public boolean isSpjSourceValid() {
 		return !Boolean.TRUE.equals(spjEnabled)
 				|| (spjSource != null && !spjSource.isBlank());
 	}
+
 }

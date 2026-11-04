@@ -50,12 +50,15 @@ public class SubmissionService {
     }
 
     public SubmissionResponse create(SubmissionRequest request, long userId) {
+        return create(request, userId, false);
+    }
 
-        if (!problemRepository.existsById(request.problemId())) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    PROBLEM_NOT_FOUND);
-        }
+    public SubmissionResponse create(SubmissionRequest request, long userId, boolean isAdmin) {
+        problemRepository.findById(request.problemId())
+                .filter(problem -> isAdmin || problem.isEnabled())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        PROBLEM_NOT_FOUND));
 
         if (!request.language().equalsIgnoreCase("cpp")
                 && !request.language().equalsIgnoreCase("java")

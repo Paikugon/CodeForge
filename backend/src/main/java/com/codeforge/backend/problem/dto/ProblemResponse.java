@@ -20,6 +20,7 @@ public record ProblemResponse(
     Boolean spjEnabled,
     @JsonInclude(JsonInclude.Include.NON_NULL)
     String spjSource,
+    boolean enabled,
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt,
     List<TestCaseResponse> testCases
@@ -51,6 +52,7 @@ public record ProblemResponse(
             problem.getMemoryLimitMb(),
             includeSpecialJudgeDetails ? problem.isSpjEnabled() : null,
             includeSpecialJudgeDetails ? problem.getSpjSource() : null,
+            problem.isEnabled(),
             problem.getCreatedAt(),
             problem.getUpdatedAt(),
             testCases

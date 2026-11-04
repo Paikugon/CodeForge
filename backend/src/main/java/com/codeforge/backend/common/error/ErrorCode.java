@@ -23,6 +23,7 @@ public final class ErrorCode {
     public static final String PASSWORD_LENGTH_INVALID = "CODE_PASSWORD_LENGTH_INVALID";
     public static final String PROBLEM_ALREADY_EXISTS = "CODE_PROBLEM_ALREADY_EXISTS";
     public static final String PROBLEM_HAS_NO_TEST_CASES = "CODE_PROBLEM_HAS_NO_TEST_CASES";
+    public static final String PROBLEM_HAS_SUBMISSIONS = "CODE_PROBLEM_HAS_SUBMISSIONS";
     public static final String PROBLEM_NOT_FOUND = "CODE_PROBLEM_NOT_FOUND";
     public static final String REQUEST_VALIDATION_FAILED = "CODE_REQUEST_VALIDATION_FAILED";
     public static final String SUBMISSION_NOT_FOUND = "CODE_SUBMISSION_NOT_FOUND";

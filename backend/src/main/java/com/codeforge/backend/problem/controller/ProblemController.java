@@ -68,23 +68,21 @@ public class ProblemController {
     public Page<ProblemListResponse> findAll(
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
+            @RequestParam(required = false) Boolean enabled,
+            Authentication authentication,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
         PaginationValidator.validate(page, size, 100);
 
-        return problemService.findAll(pageable);
+        return problemService.findAll(pageable, enabled, isAdmin(authentication));
     }
 
     @GetMapping("/{id}")
     public ProblemResponse findById(
             @PathVariable Long id,
             Authentication authentication) {
-        boolean isAdmin = authentication != null
-                && authentication.getAuthorities().stream()
-                        .anyMatch(authority -> "ROLE_ADMIN".equals(
-                                authority.getAuthority()));
-
-        return problemService.findById(id, isAdmin);
+        boolean isAdmin = isAdmin(authentication);
+        return problemService.findById(id, isAdmin, isAdmin);
     }
 
     @GetMapping("/me/solved")
@@ -92,10 +90,11 @@ public class ProblemController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
+            Authentication authentication,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         PaginationValidator.validate(page, size, 100);
         return problemService.findSolvedByUserId(
-                Long.parseLong(jwt.getSubject()), pageable);
+                Long.parseLong(jwt.getSubject()), pageable, isAdmin(authentication));
     }
 
     @GetMapping("/me/unsolved")
@@ -103,10 +102,11 @@ public class ProblemController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
+            Authentication authentication,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         PaginationValidator.validate(page, size, 100);
         return problemService.findUnsolvedByUserId(
-                Long.parseLong(jwt.getSubject()), pageable);
+                Long.parseLong(jwt.getSubject()), pageable, isAdmin(authentication));
     }
 
     @GetMapping("/{userId}/solved")
@@ -117,7 +117,7 @@ public class ProblemController {
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         PaginationValidator.validate(page, size, 100);
-        return problemService.findSolvedByUserId(userId, pageable);
+        return problemService.findSolvedByUserId(userId, pageable, false);
     }
 
     @GetMapping("/{userId}/unsolved")
@@ -128,15 +128,22 @@ public class ProblemController {
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         PaginationValidator.validate(page, size, 100);
-        return problemService.findUnsolvedByUserId(userId, pageable);
+        return problemService.findUnsolvedByUserId(userId, pageable, false);
     }
     
     @PostMapping("/{id}/run")
     public ResponseEntity<RunCodeResponse> run(
             @PathVariable Long id,
-            @Valid @RequestBody RunCodeRequest request) {
+            @Valid @RequestBody RunCodeRequest request,
+            Authentication authentication) {
 
         return ResponseEntity.ok(
-                runCodeService.run(id, request));
+                runCodeService.run(id, request, isAdmin(authentication)));
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+        return authentication != null
+                && authentication.getAuthorities().stream()
+                        .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
     }
 }

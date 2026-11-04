@@ -28,10 +28,14 @@ public class RunCodeService {
     }
 
     public RunCodeResponse run(Long problemId, RunCodeRequest request) {
+        return run(problemId, request, false);
+    }
+
+    public RunCodeResponse run(Long problemId, RunCodeRequest request, boolean isAdmin) {
         Problem problem = problemRepository.findById(problemId)
+                .filter(problemEntity -> isAdmin || problemEntity.isEnabled())
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        PROBLEM_NOT_FOUND));
+                        HttpStatus.NOT_FOUND, PROBLEM_NOT_FOUND));
 
         String language = request.language().toLowerCase();
 

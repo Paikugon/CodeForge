@@ -48,6 +48,9 @@ public class Problem {
     @Column(name = "spj_source", columnDefinition = "TEXT")
     private String spjSource;
 
+    @Column(name = "enabled", nullable = false)
+    private boolean enabled = true;
+
     protected Problem() {
     }
 
@@ -154,5 +157,13 @@ public class Problem {
 
     public void setSpjSource(String spjSource) {
         this.spjSource = spjSource;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

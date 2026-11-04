@@ -15,20 +15,24 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
     @Query("""
             select new com.codeforge.backend.problem.dto.ProblemListResponse(
                 p.id, p.title, p.slug, p.timeLimitMs, p.memoryLimitMb,
-                p.difficulty, p.createdAt, p.updatedAt)
+                p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
+            where (:enabled is null or p.enabled = :enabled)
             """)
-    Page<ProblemListResponse> findAllSummaries(Pageable pageable);
+    Page<ProblemListResponse> findAllSummaries(
+            @Param("enabled") Boolean enabled,
+            Pageable pageable);
 
     @Query(value = """
             select distinct new com.codeforge.backend.problem.dto.ProblemListResponse(
                 p.id, p.title, p.slug, p.timeLimitMs, p.memoryLimitMb,
-                p.difficulty, p.createdAt, p.updatedAt)
+                p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
             join com.codeforge.backend.submission.model.Submission s
                 on s.problemId = p.id
             where s.userId = :userId
               and s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
+              and (:enabled is null or p.enabled = :enabled)
             """, countQuery = """
             select count(distinct p.id)
             from Problem p
@@ -36,15 +40,17 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
                 on s.problemId = p.id
             where s.userId = :userId
               and s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
+              and (:enabled is null or p.enabled = :enabled)
             """)
     Page<ProblemListResponse> findSolvedByUserId(
             @Param("userId") Long userId,
+            @Param("enabled") Boolean enabled,
             Pageable pageable);
 
     @Query(value = """
             select new com.codeforge.backend.problem.dto.ProblemListResponse(
                 p.id, p.title, p.slug, p.timeLimitMs, p.memoryLimitMb,
-                p.difficulty, p.createdAt, p.updatedAt)
+                p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
             where exists (
                 select 1
@@ -60,6 +66,7 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
                   and s.userId = :userId
                   and s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
             )
+            and (:enabled is null or p.enabled = :enabled)
             """, countQuery = """
             select count(p.id)
             from Problem p
@@ -77,8 +84,10 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
                   and s.userId = :userId
                   and s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
             )
+            and (:enabled is null or p.enabled = :enabled)
             """)
     Page<ProblemListResponse> findUnsolvedByUserId(
             @Param("userId") Long userId,
+            @Param("enabled") Boolean enabled,
             Pageable pageable);
 }

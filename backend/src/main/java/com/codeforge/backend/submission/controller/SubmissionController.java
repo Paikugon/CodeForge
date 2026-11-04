@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/submissions")
@@ -31,9 +32,13 @@ public class SubmissionController {
     @ResponseStatus(HttpStatus.CREATED)
     public SubmissionResponse create(
             @Valid @RequestBody SubmissionRequest request,
-            @AuthenticationPrincipal Jwt jwt) {
+            @AuthenticationPrincipal Jwt jwt,
+            Authentication authentication) {
         long userId = Long.parseLong(jwt.getSubject());
-        return submissionService.create(request, userId);
+        boolean isAdmin = authentication != null
+                && authentication.getAuthorities().stream()
+                        .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+        return submissionService.create(request, userId, isAdmin);
     }
 
     @GetMapping("/{id}")

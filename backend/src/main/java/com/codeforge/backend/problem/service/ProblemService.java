@@ -6,6 +6,7 @@ import com.codeforge.backend.problem.dto.ProblemResponse;
 import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
+import com.codeforge.backend.submission.repository.SubmissionRepository;
 import com.codeforge.backend.judge.service.TestCaseStorageService;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
@@ -20,8 +21,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ProblemService {
@@ -30,16 +33,19 @@ public class ProblemService {
     private final TestCaseRepository testCaseRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final TestCaseStorageService testCaseStorageService;
+    private final SubmissionRepository submissionRepository;
 
     public ProblemService(
             ProblemRepository problemRepository,
             TestCaseRepository testCaseRepository,
             ApplicationEventPublisher eventPublisher,
-            TestCaseStorageService testCaseStorageService) {
+            TestCaseStorageService testCaseStorageService,
+            SubmissionRepository submissionRepository) {
         this.problemRepository = problemRepository;
         this.testCaseRepository = testCaseRepository;
         this.eventPublisher = eventPublisher;
         this.testCaseStorageService = testCaseStorageService;
+        this.submissionRepository = submissionRepository;
     }
 
     @Transactional
@@ -56,7 +62,7 @@ public class ProblemService {
                 request.memoryLimitMb() == null ? 256 : request.memoryLimitMb(),
                 request.difficulty() == null ? ProblemDifficulty.EASY : request.difficulty());
         applySpj(problem, request);
-
+        problem.setEnabled(request.enabled() == null || request.enabled());
         try {
             return ProblemResponse.from(
                     problemRepository.saveAndFlush(problem),
@@ -88,29 +94,48 @@ public class ProblemService {
     }
 
     @Transactional(readOnly = true)
+    public Page<ProblemListResponse> findAll(Pageable pageable, Boolean enabled, boolean isAdmin) {
+        return problemRepository.findAllSummaries(isAdmin ? enabled : true, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Page<ProblemListResponse> findAll(Pageable pageable) {
-        return problemRepository.findAllSummaries(pageable);
+        return findAll(pageable, true, false);
     }
 
     @Transactional(readOnly = true)
     public Page<ProblemListResponse> findSolvedByUserId(
             long userId,
-            Pageable pageable) {
-        return problemRepository.findSolvedByUserId(userId, pageable);
+            Pageable pageable,
+            boolean isAdmin) {
+        return problemRepository.findSolvedByUserId(userId, isAdmin ? null : true, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProblemListResponse> findSolvedByUserId(long userId, Pageable pageable) {
+        return findSolvedByUserId(userId, pageable, false);
     }
 
     @Transactional(readOnly = true)
     public Page<ProblemListResponse> findUnsolvedByUserId(
             long userId,
-            Pageable pageable) {
-        return problemRepository.findUnsolvedByUserId(userId, pageable);
+            Pageable pageable,
+            boolean isAdmin) {
+        return problemRepository.findUnsolvedByUserId(userId, isAdmin ? null : true, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProblemListResponse> findUnsolvedByUserId(long userId, Pageable pageable) {
+        return findUnsolvedByUserId(userId, pageable, false);
     }
 
     @Transactional(readOnly = true)
     public ProblemResponse findById(
             Long id,
-            boolean includeSpecialJudgeDetails) {
+            boolean includeSpecialJudgeDetails,
+            boolean isAdmin) {
         return problemRepository.findById(id)
+                .filter(problem -> isAdmin || problem.isEnabled())
                 .map(problem -> ProblemResponse.from(
                         problem,
                         testCaseRepository.findSampleByProblemId(problem.getId())
@@ -119,6 +144,11 @@ public class ProblemService {
                                 .toList(),
                         includeSpecialJudgeDetails))
                 .orElseThrow(() -> new ProblemNotFoundException(id));
+    }
+
+    @Transactional(readOnly = true)
+    public ProblemResponse findById(Long id, boolean includeSpecialJudgeDetails) {
+        return findById(id, includeSpecialJudgeDetails, false);
     }
 
     private TestCaseResponse toResponse(TestCase testCase) {
@@ -137,6 +167,11 @@ public class ProblemService {
     public void delete(Long id) {
         Problem problem = problemRepository.findById(id)
                 .orElseThrow(() -> new ProblemNotFoundException(id));
+        if (submissionRepository.existsByProblemId(id)) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    com.codeforge.backend.common.error.ErrorCode.PROBLEM_HAS_SUBMISSIONS);
+        }
 
         problemRepository.delete(problem);
         try {
@@ -175,6 +210,9 @@ public class ProblemService {
             problem.setDifficulty(request.difficulty());
         }
         applySpj(problem, request);
+        if (request.enabled() != null) {
+            problem.setEnabled(request.enabled());
+        }
 
         try {
             eventPublisher.publishEvent(
