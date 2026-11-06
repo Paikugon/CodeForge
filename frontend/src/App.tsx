@@ -1,26 +1,28 @@
-import { useTranslation } from "react-i18next";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import ProblemList from "./components/ProblemList";
+import ProblemDetailPage from "./pages/ProblemDetailPage";
 
 export default function App() {
-  const { t, i18n } = useTranslation();
-
   return (
-    <main>
-      <label>
-        {t("app.language")}
+    <>
+      <Header />
 
-        <select
-          value={i18n.resolvedLanguage}
-          onChange={(event) =>
-            void i18n.changeLanguage(event.target.value)
-          }
-        >
-          <option value="vi">Tiếng Việt</option>
-          <option value="en">English</option>
-        </select>
-      </label>
+      <main className="page-content">
+        <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="/problems" replace />}
+          />
 
-      <h1>{t("app.title")}</h1>
-      <p>{t("app.tagline")}</p>
-    </main>
+          <Route path="/problems" element={<ProblemList />} />
+
+          <Route
+            path="/problems/:id"
+            element={<ProblemDetailPage />}
+          />
+        </Routes>
+      </main>
+    </>
   );
 }

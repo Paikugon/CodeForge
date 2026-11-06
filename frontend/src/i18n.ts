@@ -1,6 +1,9 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
+const savedLanguage = localStorage.getItem("language");
+const initialLanguage = savedLanguage === "en" ? "en" : "vi";
+
 i18n.use(initReactI18next).init({
   resources: {
     vi: {
@@ -9,6 +12,26 @@ i18n.use(initReactI18next).init({
           language: "Ngôn ngữ",
           title: "CodeForge",
           tagline: "Mỗi bài toán, một bước tiến.",
+        },
+        problems: {
+          title: "Danh sách bài tập",
+          id: "Mã bài",
+          name: "Tên bài",
+          difficulty: "Độ khó",
+          tags: "Thẻ",
+          loading: "Đang tải...",
+          error: "Đã xảy ra lỗi khi tải danh sách bài tập.",
+          empty: "Không có bài tập nào được tìm thấy.",
+          previous: "Trước",
+          next: "Tiếp",
+          pageInfo: "Trang {{current}}/{{total}}",
+        },
+        problemDetail: {
+          title: "Chi tiết bài tập",
+          loading: "Đang tải bài tập...",
+          error: "Không thể tải bài tập.",
+          timeLimit: "Giới hạn thời gian",
+          memoryLimit: "Giới hạn bộ nhớ",
         },
       },
     },
@@ -19,14 +42,39 @@ i18n.use(initReactI18next).init({
           title: "CodeForge",
           tagline: "One problem, one step forward.",
         },
+        problems: {
+          title: "Problem List",
+          id: "Problem ID",
+          name: "Problem Name",
+          difficulty: "Difficulty",
+          tags: "Tags",
+          loading: "Loading...",
+          error: "An error occurred while loading the problem list.",
+          empty: "No problems found.",
+          previous: "Previous",
+          next: "Next",
+          pageInfo: "Page {{current}}/{{total}}",
+        },
+        problemDetail: {
+          title: "Problem Detail",
+          loading: "Loading problem...",
+          error: "Unable to load the problem.",
+          timeLimit: "Time Limit",
+          memoryLimit: "Memory Limit",
+        },
       },
     },
   },
-  lng: "vi",
+  lng: initialLanguage,
   fallbackLng: "en",
   interpolation: {
     escapeValue: false,
   },
+});
+
+i18n.on("languageChanged", (lng) => {
+  localStorage.setItem("language", lng);
+  document.documentElement.lang = lng;
 });
 
 export default i18n;
