@@ -25,6 +25,12 @@ i18n.use(initReactI18next).init({
           previous: "Trước",
           next: "Tiếp",
           pageInfo: "Trang {{current}}/{{total}}",
+          // funny, I know
+          difficultyness: { // If you're reading this and wondering why there's a "ness", it's to distinguish it from "difficulty" key
+            easy: "Dễ",
+            medium: "Trung bình",
+            hard: "Khó",
+          },
         },
         problemDetail: {
           title: "Chi tiết bài tập",
@@ -54,6 +60,11 @@ i18n.use(initReactI18next).init({
           previous: "Previous",
           next: "Next",
           pageInfo: "Page {{current}}/{{total}}",
+          difficultyness: { 
+            easy: "Easy",
+            medium: "Medium",
+            hard: "Hard",
+          },
         },
         problemDetail: {
           title: "Problem Detail",
