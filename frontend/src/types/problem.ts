@@ -1,3 +1,5 @@
+import type { TestCase } from "./testcase";
+
 export type Problem = {
   id: number;
   title: string;
@@ -26,4 +28,5 @@ export type ProblemDetail = {
   enabled: boolean;
   createdAt: string;
   updatedAt: string;
+  testCases: TestCase[];
 };

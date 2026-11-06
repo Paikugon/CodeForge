@@ -77,3 +77,15 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.sample-case {
+  margin-bottom: 24px;
+}
+
+.sample-case pre {
+  margin: 8px 0 16px;
+  padding: 16px;
+  overflow-x: auto;
+  background-color: #edf2e9;
+  border-radius: 6px;
+}

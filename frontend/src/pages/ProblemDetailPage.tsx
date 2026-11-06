@@ -27,6 +27,10 @@ export default function ProblemDetailPage() {
     return <p role="status">{t("problemDetail.loading")}</p>;
   }
 
+  const samples = problem.testCases
+    .filter((testCase) => testCase.isSample === true)
+    .sort((a, b) => a.orderIndex - b.orderIndex || a.id - b.id);
+
   return (
     <section>
       <Link to="/problems">{t("problems.title")}</Link>
@@ -44,6 +48,26 @@ export default function ProblemDetailPage() {
       <div style={{ whiteSpace: "pre-wrap" }}>
         {problem.description}
       </div>
+
+      {samples.length > 0 && (
+        <section>
+          <h2>{t("problemDetail.examples")}</h2>
+
+          {samples.map((sample, index) => (
+            <article className="sample-case" key={sample.id}>
+              <h3>
+                {t("problemDetail.example", { number: index + 1 })}
+              </h3>
+
+              <h4>{t("problemDetail.input")}</h4>
+              <pre><code>{sample.input}</code></pre>
+
+              <h4>{t("problemDetail.output")}</h4>
+              <pre><code>{sample.expectedOutput}</code></pre>
+            </article>
+          ))}
+        </section>
+      )}
     </section>
   );
 }
