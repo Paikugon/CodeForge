@@ -1,11 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getProblemById } from "../api/problems";
+import { getProblemById, runCode } from "../api/problems";
+import type { Language } from "../components/CodeEditor";
+import { useState } from "react";
+import CodeEditor from "../components/CodeEditor";
+import type { RunCodeRequest, RunCodeResponse } from "../types/run";
 
 export default function ProblemDetailPage() {
   const { id } = useParams();
   const { t } = useTranslation();
+  const [language, setLanguage] = useState<Language>("cpp");
+  const [sourceCode, setSourceCode] = useState("");
+  const [input, setInput] = useState("");
 
   const { data: problem, isPending, isError } = useQuery({
     queryKey: ["problem", id],
@@ -17,6 +24,15 @@ export default function ProblemDetailPage() {
       return getProblemById(id, signal);
     },
     enabled: Boolean(id),
+  });
+
+  const runMutation = useMutation({
+    mutationFn: (request: RunCodeRequest) => {
+      if (!id) {
+        throw new Error("Missing problem ID");
+      }
+      return runCode(id, request);
+    },
   });
 
   if (!id || isError) {
@@ -68,6 +84,79 @@ export default function ProblemDetailPage() {
           ))}
         </section>
       )}
+
+      <section>
+        <h2>{t("problemDetail.codeEditor.code")}</h2>
+
+        <label>
+          {t("problemDetail.codeEditor.language")}{" "}
+          <select
+            value={language}
+            onChange={(event) =>
+              setLanguage(event.target.value as Language)
+            }
+          >
+            <option value="cpp">C++ 20</option>
+            <option value="java">Java 21</option>
+            <option value="python">Python 3</option>
+          </select>
+        </label>
+
+        <CodeEditor
+          language={language}
+          value={sourceCode}
+          onChange={setSourceCode}
+        />
+
+        <label>
+          {t("problemDetail.codeEditor.customInput")}
+
+          <textarea
+            rows={4}
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+          />
+        </label>
+
+        <button
+          disabled={runMutation.isPending || !sourceCode.trim()}
+          onClick={() =>
+            runMutation.mutate({
+              language,
+              sourceCode,
+              input,
+            })
+          }
+        >
+          {t(
+            runMutation.isPending
+              ? "problemDetail.codeEditor.running"
+              : "problemDetail.codeEditor.run",
+          )}
+        </button>
+
+        {runMutation.isError && (
+          <p role="alert">{t("problemDetail.codeEditor.runError")}</p>
+        )}
+
+        {runMutation.isSuccess && (
+          <section aria-live="polite">
+            <h3>{t("problemDetail.codeEditor.runResult")}</h3>
+
+            <p>
+              {t("problemDetail.codeEditor.resultCode", {
+                code: runMutation.data.resultCode,
+              })}
+            </p>
+
+            <pre>
+              {runMutation.data.compileOutput ||
+                runMutation.data.stdout ||
+                t("problemDetail.codeEditor.noOutput")}
+            </pre>
+          </section>
+        )}
+      </section>
     </section>
   );
-}
+} 
