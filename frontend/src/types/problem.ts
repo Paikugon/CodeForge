@@ -1,19 +1,19 @@
 import type { TestCase } from "./testcase";
+import type { Page } from "./page";
 
 export type Problem = {
   id: number;
   title: string;
-  difficulty: string;
+  slug: string;
+  timeLimitMs: number;
+  memoryLimitMb: number;
+  difficulty: "EASY" | "MEDIUM" | "HARD";
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
-export type ProblemPage = {
-  content: Problem[];
-  number: number;
-  totalPages: number;
-  totalElements: number;
-  first: boolean;
-  last: boolean;
-};
+export type ProblemPage = Page<Problem>;
 
 export type ProblemDetail = {
   id: number;

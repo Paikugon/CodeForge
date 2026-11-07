@@ -5,7 +5,7 @@ import { getProblemById, runCode } from "../api/problems";
 import type { Language } from "../components/CodeEditor";
 import { useState } from "react";
 import CodeEditor from "../components/CodeEditor";
-import type { RunCodeRequest, RunCodeResponse } from "../types/run";
+import type { RunCodeRequest } from "../types/run";
 
 export default function ProblemDetailPage() {
   const { id } = useParams();

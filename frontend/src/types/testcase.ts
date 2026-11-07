@@ -8,3 +8,10 @@ export type TestCase = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TestCaseRequest = {
+  input: string;
+  expectedOutput: string;
+  isSample?: boolean | null;
+  orderIndex?: number;
+};
