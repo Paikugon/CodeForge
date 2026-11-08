@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
+import com.codeforge.backend.problem.enums.ProblemDifficulty;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/problems")
@@ -69,12 +71,14 @@ public class ProblemController {
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
             @RequestParam(required = false) Boolean enabled,
+            @RequestParam(required = false) List<Long> tagIds,
+            @RequestParam(required = false) ProblemDifficulty difficulty,
             Authentication authentication,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
         PaginationValidator.validate(page, size, 100);
 
-        return problemService.findAll(pageable, enabled, isAdmin(authentication));
+        return problemService.findAll(pageable, enabled, difficulty, tagIds, isAdmin(authentication));
     }
 
     @GetMapping("/{id}")
@@ -90,11 +94,13 @@ public class ProblemController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
+            @RequestParam(required = false) List<Long> tagIds,
+            @RequestParam(required = false) ProblemDifficulty difficulty,
             Authentication authentication,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         PaginationValidator.validate(page, size, 100);
         return problemService.findSolvedByUserId(
-                Long.parseLong(jwt.getSubject()), pageable, isAdmin(authentication));
+                Long.parseLong(jwt.getSubject()), pageable, difficulty, tagIds, isAdmin(authentication));
     }
 
     @GetMapping("/me/unsolved")
@@ -102,11 +108,13 @@ public class ProblemController {
             @AuthenticationPrincipal Jwt jwt,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
+            @RequestParam(required = false) List<Long> tagIds,
+            @RequestParam(required = false) ProblemDifficulty difficulty,
             Authentication authentication,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         PaginationValidator.validate(page, size, 100);
         return problemService.findUnsolvedByUserId(
-                Long.parseLong(jwt.getSubject()), pageable, isAdmin(authentication));
+                Long.parseLong(jwt.getSubject()), pageable, difficulty, tagIds, isAdmin(authentication));
     }
 
     @GetMapping("/{userId}/solved")
@@ -114,10 +122,12 @@ public class ProblemController {
             @PathVariable Long userId,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
+            @RequestParam(required = false) List<Long> tagIds,
+            @RequestParam(required = false) ProblemDifficulty difficulty,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         PaginationValidator.validate(page, size, 100);
-        return problemService.findSolvedByUserId(userId, pageable, false);
+        return problemService.findSolvedByUserId(userId, pageable, difficulty, tagIds, false);
     }
 
     @GetMapping("/{userId}/unsolved")
@@ -125,10 +135,12 @@ public class ProblemController {
             @PathVariable Long userId,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
+            @RequestParam(required = false) List<Long> tagIds,
+            @RequestParam(required = false) ProblemDifficulty difficulty,
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         PaginationValidator.validate(page, size, 100);
-        return problemService.findUnsolvedByUserId(userId, pageable, false);
+        return problemService.findUnsolvedByUserId(userId, pageable, difficulty, tagIds, false);
     }
     
     @PostMapping("/{id}/run")

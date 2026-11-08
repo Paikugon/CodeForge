@@ -4,6 +4,7 @@ import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.submission.dto.ProblemSubmissionStats;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
+import com.codeforge.backend.tag.dto.TagResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ public record ProblemResponse(
     boolean enabled,
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt,
+    List<TagResponse> tags,
     List<TestCaseResponse> testCases,
     long acceptedSubmissionCount,
     long judgedSubmissionCount,
@@ -60,6 +62,7 @@ public record ProblemResponse(
             problem.isEnabled(),
             problem.getCreatedAt(),
             problem.getUpdatedAt(),
+            problem.getTags().stream().map(TagResponse::from).toList(),
             testCases,
             0,
             0,
@@ -74,7 +77,7 @@ public record ProblemResponse(
 
         return new ProblemResponse(
             id, title, slug, difficulty, description, timeLimitMs, memoryLimitMb,
-            spjEnabled, spjSource, enabled, createdAt, updatedAt, testCases,
+            spjEnabled, spjSource, enabled, createdAt, updatedAt, tags, testCases,
             stats.acceptedSubmissionCount(), stats.judgedSubmissionCount(),
             stats.acceptanceRate()
         );

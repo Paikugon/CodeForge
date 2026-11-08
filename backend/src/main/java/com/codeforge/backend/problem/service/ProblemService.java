@@ -13,9 +13,15 @@ import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
 import com.codeforge.backend.problem.event.ProblemDeletedEvent;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
+import com.codeforge.backend.tag.model.Tag;
+import com.codeforge.backend.tag.repository.TagRepository;
+import com.codeforge.backend.tag.dto.TagResponse;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.LinkedHashSet;
+import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -29,6 +35,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import static com.codeforge.backend.common.error.ErrorCode.TAG_NOT_FOUND;
+
 @Service
 public class ProblemService {
 
@@ -36,16 +44,19 @@ public class ProblemService {
     private final TestCaseRepository testCaseRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final SubmissionRepository submissionRepository;
+    private final TagRepository tagRepository;
 
     public ProblemService(
             ProblemRepository problemRepository,
             TestCaseRepository testCaseRepository,
             ApplicationEventPublisher eventPublisher,
-            SubmissionRepository submissionRepository) {
+            SubmissionRepository submissionRepository,
+            TagRepository tagRepository) {
         this.problemRepository = problemRepository;
         this.testCaseRepository = testCaseRepository;
         this.eventPublisher = eventPublisher;
         this.submissionRepository = submissionRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Transactional
@@ -63,6 +74,7 @@ public class ProblemService {
                 request.difficulty() == null ? ProblemDifficulty.EASY : request.difficulty());
         applySpj(problem, request);
         problem.setEnabled(request.enabled() == null || request.enabled());
+        replaceTags(problem, request.tagIds());
         try {
             return ProblemResponse.from(
                     problemRepository.saveAndFlush(problem),
@@ -94,42 +106,86 @@ public class ProblemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProblemListResponse> findAll(Pageable pageable, Boolean enabled, boolean isAdmin) {
+    public Page<ProblemListResponse> findAll(
+            Pageable pageable,
+            Boolean enabled,
+            ProblemDifficulty difficulty,
+            List<Long> tagIds,
+            boolean isAdmin) {
+        List<Long> normalizedTagIds = normalizeTagIds(tagIds);
         return withSubmissionStats(
-                problemRepository.findAllSummaries(isAdmin ? enabled : Boolean.TRUE, pageable));
+                problemRepository.findAllSummaries(
+                        isAdmin ? enabled : Boolean.TRUE,
+                        difficulty,
+                        normalizedTagIds,
+                        normalizedTagIds == null ? 0 : normalizedTagIds.size(),
+                        pageable));
     }
 
     @Transactional(readOnly = true)
     public Page<ProblemListResponse> findAll(Pageable pageable) {
-        return findAll(pageable, true, false);
+        return findAll(pageable, true, null, null, false);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProblemListResponse> findAll(
+            Pageable pageable,
+            Boolean enabled,
+            boolean isAdmin) {
+        return findAll(pageable, enabled, null, null, isAdmin);
     }
 
     @Transactional(readOnly = true)
     public Page<ProblemListResponse> findSolvedByUserId(
             long userId,
             Pageable pageable,
+            ProblemDifficulty difficulty,
+            List<Long> tagIds,
             boolean isAdmin) {
+        List<Long> normalizedTagIds = normalizeTagIds(tagIds);
         return withSubmissionStats(
-                problemRepository.findSolvedByUserId(userId, isAdmin ? null : Boolean.TRUE, pageable));
+                problemRepository.findSolvedByUserId(
+                        userId,
+                        isAdmin ? null : Boolean.TRUE,
+                        difficulty,
+                        normalizedTagIds,
+                        normalizedTagIds == null ? 0 : normalizedTagIds.size(),
+                        pageable));
     }
 
     @Transactional(readOnly = true)
     public Page<ProblemListResponse> findSolvedByUserId(long userId, Pageable pageable) {
-        return findSolvedByUserId(userId, pageable, false);
+        return findSolvedByUserId(userId, pageable, null, null, false);
     }
 
     @Transactional(readOnly = true)
     public Page<ProblemListResponse> findUnsolvedByUserId(
             long userId,
             Pageable pageable,
+            ProblemDifficulty difficulty,
+            List<Long> tagIds,
             boolean isAdmin) {
+        List<Long> normalizedTagIds = normalizeTagIds(tagIds);
         return withSubmissionStats(
-                problemRepository.findUnsolvedByUserId(userId, isAdmin ? null : Boolean.TRUE, pageable));
+                problemRepository.findUnsolvedByUserId(
+                        userId,
+                        isAdmin ? null : Boolean.TRUE,
+                        difficulty,
+                        normalizedTagIds,
+                        normalizedTagIds == null ? 0 : normalizedTagIds.size(),
+                        pageable));
     }
 
     @Transactional(readOnly = true)
     public Page<ProblemListResponse> findUnsolvedByUserId(long userId, Pageable pageable) {
-        return findUnsolvedByUserId(userId, pageable, false);
+        return findUnsolvedByUserId(userId, pageable, null, null, false);
+    }
+
+    private List<Long> normalizeTagIds(List<Long> tagIds) {
+        if (tagIds == null || tagIds.isEmpty()) {
+            return null;
+        }
+        return tagIds.stream().distinct().toList();
     }
 
     @Transactional(readOnly = true)
@@ -163,12 +219,20 @@ public class ProblemService {
         List<Long> problemIds = page.getContent().stream()
                 .map(ProblemListResponse::id)
                 .toList();
+        Map<Long, List<TagResponse>> tagsByProblemId = problemRepository
+                .findAllWithTagsByIdIn(problemIds)
+                .stream()
+                .collect(Collectors.toMap(
+                        Problem::getId,
+                        problem -> problem.getTags().stream().map(TagResponse::from).toList()));
         Map<Long, ProblemSubmissionStats> statsByProblemId = submissionRepository
                 .findProblemSubmissionStats(problemIds)
                 .stream()
                 .collect(Collectors.toMap(ProblemSubmissionStats::problemId, Function.identity()));
 
-        return page.map(problem -> problem.withSubmissionStats(statsByProblemId.get(problem.id())));
+        return page.map(problem -> problem
+                .withTags(tagsByProblemId.getOrDefault(problem.id(), List.of()))
+                .withSubmissionStats(statsByProblemId.get(problem.id())));
     }
 
     private ProblemSubmissionStats findSubmissionStats(Long problemId) {
@@ -234,6 +298,9 @@ public class ProblemService {
         if (request.enabled() != null) {
             problem.setEnabled(request.enabled());
         }
+        if (request.tagIds() != null) {
+            replaceTags(problem, request.tagIds());
+        }
 
         try {
             eventPublisher.publishEvent(
@@ -259,5 +326,15 @@ public class ProblemService {
 
         problem.setSpjEnabled(enabled);
         problem.setSpjSource(enabled ? request.spjSource() : null);
+    }
+
+    private void replaceTags(Problem problem, Set<Long> tagIds) {
+        Set<Long> requestedIds = tagIds == null ? Set.of() : new LinkedHashSet<>(tagIds);
+        List<Tag> tags = tagRepository.findAllById(requestedIds);
+        if (tags.size() != requestedIds.size()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, TAG_NOT_FOUND);
+        }
+        problem.getTags().clear();
+        problem.getTags().addAll(tags);
     }
 }

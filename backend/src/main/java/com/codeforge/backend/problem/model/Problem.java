@@ -2,10 +2,14 @@ package com.codeforge.backend.problem.model;
 
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 import org.hibernate.annotations.Generated;
 import org.hibernate.generator.EventType;
 
 import com.codeforge.backend.problem.enums.ProblemDifficulty;
+import com.codeforge.backend.tag.model.Tag;
 
 @Entity
 @Table(name = "problems")
@@ -50,6 +54,13 @@ public class Problem {
 
     @Column(name = "enabled", nullable = false)
     private boolean enabled = true;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "problem_tags",
+            joinColumns = @JoinColumn(name = "problem_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new LinkedHashSet<>();
 
     protected Problem() {
     }
@@ -166,4 +177,17 @@ public class Problem {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(Objects.requireNonNull(tag));
+    }
+
+    public void removeTag(Tag tag) {
+        tags.remove(tag);
+    }
+
 }

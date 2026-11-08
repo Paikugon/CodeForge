@@ -2,6 +2,7 @@ package com.codeforge.backend.problem;
 
 import com.codeforge.backend.problem.dto.ProblemListResponse;
 import com.codeforge.backend.problem.dto.ProblemResponse;
+import com.codeforge.backend.problem.dto.ProblemRequest;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.problem.service.ProblemNotFoundException;
@@ -11,10 +12,13 @@ import com.codeforge.backend.submission.enums.SubmissionStatus;
 import com.codeforge.backend.submission.enums.SubmissionVerdict;
 import com.codeforge.backend.submission.model.Submission;
 import com.codeforge.backend.submission.repository.SubmissionRepository;
+import com.codeforge.backend.tag.model.Tag;
+import com.codeforge.backend.tag.repository.TagRepository;
 import jakarta.persistence.EntityManagerFactory;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +41,9 @@ class ProblemSubmissionStatisticsTests {
 
     @Autowired
     private SubmissionRepository submissionRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @Autowired
     private ProblemService problemService;
@@ -145,6 +152,25 @@ class ProblemSubmissionStatisticsTests {
         assertEquals(summary.judgedSubmissionCount(), detail.judgedSubmissionCount());
         assertEquals(summary.acceptanceRate(), detail.acceptanceRate());
         assertNull(detail.spjSource());
+    }
+
+    @Test
+    void createsAndEditsProblemTagsById() {
+        Tag arrays = tagRepository.saveAndFlush(new Tag("Arrays"));
+        Tag graphs = tagRepository.saveAndFlush(new Tag("Graphs"));
+        ProblemRequest request = new ProblemRequest(
+                "Tagged problem", "tagged-problem", "Description",
+                null, null, null, false, null, true, Set.of(arrays.getId()));
+
+        ProblemResponse created = problemService.create(request);
+
+        assertEquals(List.of(arrays.getId()), created.tags().stream().map(tag -> tag.id()).toList());
+
+        ProblemResponse edited = problemService.edit(created.id(), new ProblemRequest(
+                "Tagged problem", "tagged-problem", "Description",
+                null, null, null, false, null, true, Set.of(graphs.getId())));
+
+        assertEquals(List.of(graphs.getId()), edited.tags().stream().map(tag -> tag.id()).toList());
     }
 
     @Test

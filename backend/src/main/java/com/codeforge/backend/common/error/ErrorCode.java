@@ -27,6 +27,7 @@ public final class ErrorCode {
     public static final String PROBLEM_NOT_FOUND = "CODE_PROBLEM_NOT_FOUND";
     public static final String REQUEST_VALIDATION_FAILED = "CODE_REQUEST_VALIDATION_FAILED";
     public static final String SUBMISSION_NOT_FOUND = "CODE_SUBMISSION_NOT_FOUND";
+    public static final String TAG_NOT_FOUND = "CODE_TAG_NOT_FOUND";
     public static final String TEST_CASE_NOT_FOUND = "CODE_TEST_CASE_NOT_FOUND";
     public static final String UNEXPECTED_ERROR = "CODE_UNEXPECTED_ERROR";
     public static final String UNSUPPORTED_LANGUAGE = "CODE_UNSUPPORTED_LANGUAGE";

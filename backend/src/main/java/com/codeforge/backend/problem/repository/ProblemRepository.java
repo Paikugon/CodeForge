@@ -2,15 +2,26 @@ package com.codeforge.backend.problem.repository;
 
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.dto.ProblemListResponse;
+import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.util.Collection;
+import java.util.List;
 
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     boolean existsBySlug(String slug);
+
+    @Query("""
+            select distinct p
+            from Problem p
+            left join fetch p.tags
+            where p.id in :ids
+            """)
+    List<Problem> findAllWithTagsByIdIn(@Param("ids") Collection<Long> ids);
 
     @Query("""
             select new com.codeforge.backend.problem.dto.ProblemListResponse(
@@ -18,9 +29,16 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
                 p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
             where (:enabled is null or p.enabled = :enabled)
+              and (:difficulty is null or p.difficulty = :difficulty)
+              and (:tagIds is null or (
+                  select count(distinct tag.id) from p.tags tag where tag.id in :tagIds
+              ) = :tagCount)
             """)
     Page<ProblemListResponse> findAllSummaries(
             @Param("enabled") Boolean enabled,
+            @Param("difficulty") ProblemDifficulty difficulty,
+            @Param("tagIds") Collection<Long> tagIds,
+            @Param("tagCount") long tagCount,
             Pageable pageable);
 
     @Query(value = """
@@ -33,6 +51,10 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
             where s.userId = :userId
               and s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
               and (:enabled is null or p.enabled = :enabled)
+              and (:difficulty is null or p.difficulty = :difficulty)
+              and (:tagIds is null or (
+                  select count(distinct tag.id) from p.tags tag where tag.id in :tagIds
+              ) = :tagCount)
             """, countQuery = """
             select count(distinct p.id)
             from Problem p
@@ -41,10 +63,17 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
             where s.userId = :userId
               and s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
               and (:enabled is null or p.enabled = :enabled)
+              and (:difficulty is null or p.difficulty = :difficulty)
+              and (:tagIds is null or (
+                  select count(distinct tag.id) from p.tags tag where tag.id in :tagIds
+              ) = :tagCount)
             """)
     Page<ProblemListResponse> findSolvedByUserId(
             @Param("userId") Long userId,
             @Param("enabled") Boolean enabled,
+            @Param("difficulty") ProblemDifficulty difficulty,
+            @Param("tagIds") Collection<Long> tagIds,
+            @Param("tagCount") long tagCount,
             Pageable pageable);
 
     @Query(value = """
@@ -67,6 +96,10 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
                   and s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
             )
             and (:enabled is null or p.enabled = :enabled)
+            and (:difficulty is null or p.difficulty = :difficulty)
+            and (:tagIds is null or (
+                select count(distinct tag.id) from p.tags tag where tag.id in :tagIds
+            ) = :tagCount)
             """, countQuery = """
             select count(p.id)
             from Problem p
@@ -85,9 +118,16 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
                   and s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
             )
             and (:enabled is null or p.enabled = :enabled)
+            and (:difficulty is null or p.difficulty = :difficulty)
+            and (:tagIds is null or (
+                select count(distinct tag.id) from p.tags tag where tag.id in :tagIds
+            ) = :tagCount)
             """)
     Page<ProblemListResponse> findUnsolvedByUserId(
             @Param("userId") Long userId,
             @Param("enabled") Boolean enabled,
+            @Param("difficulty") ProblemDifficulty difficulty,
+            @Param("tagIds") Collection<Long> tagIds,
+            @Param("tagCount") long tagCount,
             Pageable pageable);
 }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import java.util.Set;
 
 public record ProblemRequest(
 		@NotBlank @Size(max = 255) String title,
@@ -21,10 +22,12 @@ public record ProblemRequest(
 
 		@Positive Integer memoryLimitMb,
 
-		boolean spjEnabled,
+		Boolean spjEnabled,
 		String spjSource,
 		
-		Boolean enabled
+		Boolean enabled,
+
+		Set<Long> tagIds
 	) {
 
 	@AssertTrue(message = "CODE_SPJ_SOURCE_REQUIRED")

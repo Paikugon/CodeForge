@@ -138,6 +138,10 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/profile/*")
                         .permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/tags", "/api/tags/*")
+                        .permitAll()
+                        .requestMatchers("/api/tags", "/api/tags/**")
+                        .hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth
                         .authenticationEntryPoint((request, response, exception) -> {
