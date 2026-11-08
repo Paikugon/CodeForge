@@ -202,4 +202,14 @@ public class SubmissionService {
         return submissionRepository.findSummariesByUserId(
                 userId, problemId, verdict, pageable);
     }
+
+    @Transactional (readOnly = true)
+    public Page<SubmissionListResponse> getByUserId(
+            long userId,
+            Long problemId,
+            SubmissionVerdict verdict,
+            Pageable pageable) {
+        return submissionRepository.findSummariesByUserId(
+                userId, problemId, verdict, pageable);
+    }
 }
