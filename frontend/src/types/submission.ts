@@ -36,7 +36,7 @@ export type Submission = {
   language: string;
   sourceCode?: string;
   status: SubmissionStatus;
-  verdict: SubmissionVerdict;
+  verdict: SubmissionVerdict | null;
   executionTimeMs: number | null;
   memoryUsedKb: number | null;
   passedTestCases: number | null;

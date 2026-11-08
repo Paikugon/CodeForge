@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.codeforge.backend.submission.dto.SubmissionListResponse;
+import com.codeforge.backend.submission.dto.ProblemSubmissionStats;
 import com.codeforge.backend.submission.enums.SubmissionStatus;
 import com.codeforge.backend.submission.enums.SubmissionVerdict;
 import com.codeforge.backend.submission.model.Submission;
@@ -66,6 +68,27 @@ public interface SubmissionRepository
 			@Param("problemId") Long problemId,
 			@Param("verdict") SubmissionVerdict verdict,
 			Pageable pageable);
+
+	@Query("""
+            select new com.codeforge.backend.submission.dto.ProblemSubmissionStats(
+                s.problemId,
+                count(s),
+                sum(case when s.verdict = com.codeforge.backend.submission.enums.SubmissionVerdict.AC
+                         then 1 else 0 end))
+            from Submission s
+            where s.problemId in :problemIds
+              and s.status = com.codeforge.backend.submission.enums.SubmissionStatus.COMPLETED
+              and s.verdict in (
+                  com.codeforge.backend.submission.enums.SubmissionVerdict.AC,
+                  com.codeforge.backend.submission.enums.SubmissionVerdict.WA,
+                  com.codeforge.backend.submission.enums.SubmissionVerdict.TLE,
+                  com.codeforge.backend.submission.enums.SubmissionVerdict.MLE,
+                  com.codeforge.backend.submission.enums.SubmissionVerdict.RE,
+                  com.codeforge.backend.submission.enums.SubmissionVerdict.CE)
+            group by s.problemId
+            """)
+    List<ProblemSubmissionStats> findProblemSubmissionStats(
+            @Param("problemIds") Collection<Long> problemIds);
 
 	long countByUserId(Long userId);
 

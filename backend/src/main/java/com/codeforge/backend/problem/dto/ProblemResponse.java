@@ -2,9 +2,11 @@ package com.codeforge.backend.problem.dto;
 
 import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
+import com.codeforge.backend.submission.dto.ProblemSubmissionStats;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -23,7 +25,10 @@ public record ProblemResponse(
     boolean enabled,
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt,
-    List<TestCaseResponse> testCases
+    List<TestCaseResponse> testCases,
+    long acceptedSubmissionCount,
+    long judgedSubmissionCount,
+    BigDecimal acceptanceRate
 ) {
 
     public static ProblemResponse from(Problem problem) {
@@ -55,7 +60,24 @@ public record ProblemResponse(
             problem.isEnabled(),
             problem.getCreatedAt(),
             problem.getUpdatedAt(),
-            testCases
+            testCases,
+            0,
+            0,
+            null
         );
     }
+
+    public ProblemResponse withSubmissionStats(ProblemSubmissionStats stats) {
+        if (stats == null) {
+            return this;
+        }
+
+        return new ProblemResponse(
+            id, title, slug, difficulty, description, timeLimitMs, memoryLimitMb,
+            spjEnabled, spjSource, enabled, createdAt, updatedAt, testCases,
+            stats.acceptedSubmissionCount(), stats.judgedSubmissionCount(),
+            stats.acceptanceRate()
+        );
+    }
+
 }

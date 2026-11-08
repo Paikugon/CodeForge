@@ -3,8 +3,8 @@ export type UserRole = "USER" | "ADMIN";
 export type UserProfile = {
   id: number;
   username: string;
-  email: string;
-  role: string;
+  email: string | null;
+  role: UserRole | null;
   solvedCount: number;
   acceptedSubmissionCount: number;
   submissionCount: number;
@@ -17,8 +17,8 @@ export type UserProfile = {
 export type UserListItem = {
   id: number;
   username: string;
-  email: string;
-  role: UserRole;
+  email: string | null;
+  role: UserRole | null;
   enabled: boolean;
   createdAt: string;
   updatedAt: string;

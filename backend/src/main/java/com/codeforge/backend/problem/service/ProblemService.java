@@ -7,6 +7,7 @@ import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.submission.repository.SubmissionRepository;
+import com.codeforge.backend.submission.dto.ProblemSubmissionStats;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
 import com.codeforge.backend.problem.event.ProblemDeletedEvent;
@@ -14,6 +15,9 @@ import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.ApplicationEventPublisher;
@@ -91,7 +95,8 @@ public class ProblemService {
 
     @Transactional(readOnly = true)
     public Page<ProblemListResponse> findAll(Pageable pageable, Boolean enabled, boolean isAdmin) {
-        return problemRepository.findAllSummaries(isAdmin ? enabled : true, pageable);
+        return withSubmissionStats(
+                problemRepository.findAllSummaries(isAdmin ? enabled : Boolean.TRUE, pageable));
     }
 
     @Transactional(readOnly = true)
@@ -104,7 +109,8 @@ public class ProblemService {
             long userId,
             Pageable pageable,
             boolean isAdmin) {
-        return problemRepository.findSolvedByUserId(userId, isAdmin ? null : true, pageable);
+        return withSubmissionStats(
+                problemRepository.findSolvedByUserId(userId, isAdmin ? null : Boolean.TRUE, pageable));
     }
 
     @Transactional(readOnly = true)
@@ -117,7 +123,8 @@ public class ProblemService {
             long userId,
             Pageable pageable,
             boolean isAdmin) {
-        return problemRepository.findUnsolvedByUserId(userId, isAdmin ? null : true, pageable);
+        return withSubmissionStats(
+                problemRepository.findUnsolvedByUserId(userId, isAdmin ? null : Boolean.TRUE, pageable));
     }
 
     @Transactional(readOnly = true)
@@ -138,13 +145,37 @@ public class ProblemService {
                                 .stream()
                                 .map(this::toResponse)
                                 .toList(),
-                        includeSpecialJudgeDetails))
+                        includeSpecialJudgeDetails)
+                        .withSubmissionStats(findSubmissionStats(problem.getId())))
                 .orElseThrow(() -> new ProblemNotFoundException(id));
     }
 
     @Transactional(readOnly = true)
     public ProblemResponse findById(Long id, boolean includeSpecialJudgeDetails) {
         return findById(id, includeSpecialJudgeDetails, false);
+    }
+
+    private Page<ProblemListResponse> withSubmissionStats(Page<ProblemListResponse> page) {
+        if (page.isEmpty()) {
+            return page;
+        }
+
+        List<Long> problemIds = page.getContent().stream()
+                .map(ProblemListResponse::id)
+                .toList();
+        Map<Long, ProblemSubmissionStats> statsByProblemId = submissionRepository
+                .findProblemSubmissionStats(problemIds)
+                .stream()
+                .collect(Collectors.toMap(ProblemSubmissionStats::problemId, Function.identity()));
+
+        return page.map(problem -> problem.withSubmissionStats(statsByProblemId.get(problem.id())));
+    }
+
+    private ProblemSubmissionStats findSubmissionStats(Long problemId) {
+        return submissionRepository.findProblemSubmissionStats(List.of(problemId))
+                .stream()
+                .findFirst()
+                .orElse(null);
     }
 
     private TestCaseResponse toResponse(TestCase testCase) {
@@ -210,7 +241,8 @@ public class ProblemService {
             return ProblemResponse.from(
                     problemRepository.saveAndFlush(problem),
                     List.of(),
-                    true);
+                    true)
+                    .withSubmissionStats(findSubmissionStats(problem.getId()));
         } catch (DataIntegrityViolationException exception) {
             if (isSlugConstraintViolation(exception)) {
                 throw new ProblemAlreadyExistsException(request.slug());
