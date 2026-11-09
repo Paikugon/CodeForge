@@ -8,20 +8,13 @@ import {
   Sun,
 } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { useTheme } from "../context/ThemeContext";
 
 export default function AppLayout() {
   const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    try {
-      return localStorage.getItem("codeforge-theme") === "dark"
-        ? "dark"
-        : "light";
-    } catch {
-      return "dark";
-    }
-  });
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -123,7 +116,7 @@ export default function AppLayout() {
               className="icon-button theme-toggle"
               aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
               onClick={() =>
-                setTheme((current) => current === "light" ? "dark" : "light")
+                toggleTheme()
               }
             >
               {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
