@@ -1,5 +1,6 @@
 import type { TestCase } from "./testcase";
 import type { Page } from "./page";
+import type { Tag } from "./tag";
 
 export type Problem = {
   id: number;
@@ -8,6 +9,10 @@ export type Problem = {
   timeLimitMs: number;
   memoryLimitMb: number;
   difficulty: "EASY" | "MEDIUM" | "HARD";
+  tags: Tag[];
+  acceptedSubmissionCount: number;
+  judgedSubmissionCount: number;
+  acceptanceRate: number | null;
   enabled: boolean;
   createdAt: string;
   updatedAt: string;
@@ -21,6 +26,7 @@ export type ProblemDetail = {
   slug: string;
   difficulty: "EASY" | "MEDIUM" | "HARD";
   description: string;
+  tags: Tag[];
   timeLimitMs: number;
   memoryLimitMb: number;
   spjEnabled?: boolean;

@@ -1,4 +1,4 @@
-import type { ProblemPage, ProblemDetail } from "../types/problem";
+import type { Problem, ProblemPage, ProblemDetail } from "../types/problem";
 import type { RunCodeRequest, RunCodeResponse } from "../types/run";
 import { apiRequest, createQuery } from "./http";
 
@@ -14,21 +14,39 @@ export type ProblemRequest = {
   enabled?: boolean | null;
 };
 
-type GetProblemsParams = {
+export type GetProblemsParams = {
   page?: number;
   size?: number;
   sort?: string;
   enabled?: boolean;
+  difficulty?: Problem["difficulty"];
+  tagIds?: number[];
 };
 
 export async function getProblems(
   params: GetProblemsParams = {},
   signal?: AbortSignal,
 ): Promise<ProblemPage> {
-  const { page = 0, size = 20, sort = "createdAt,desc", enabled } = params;
+  const {
+    page = 0,
+    size = 20,
+    sort = "createdAt,desc",
+    enabled,
+    difficulty,
+    tagIds = [],
+  } = params;
+
+  const query = createQuery({
+    page,
+    size,
+    sort,
+    enabled,
+    difficulty,
+    tagIds: tagIds.length > 0 ? tagIds.join(",") : undefined,
+  });
 
   return apiRequest<ProblemPage>(
-    `/api/problems${createQuery({ page, size, sort, enabled })}`,
+    `/api/problems${query}`,
     { signal },
   );
 }
