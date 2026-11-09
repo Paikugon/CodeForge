@@ -1,0 +1,123 @@
+.profile-solved-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain
+}
+
+.profile-solved-scroll:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: -3px
+}
+
+.profile-solved-scroll .profile-solved-table {
+  width: 100%;
+  min-width: 640px;
+  table-layout: fixed
+}
+
+.profile-solved-table .solved-problem-col {
+  width: 46%
+}
+
+.profile-solved-table .solved-difficulty-col {
+  width: 16%
+}
+
+.profile-solved-table .solved-count-col {
+  width: 14%
+}
+
+.profile-solved-table .solved-date-col {
+  width: 24%
+}
+
+.profile-solved-table th {
+  padding: 13px 18px;
+  font-size: 13px
+}
+
+.profile-solved-table td {
+  padding: 17px 18px;
+  font-size: 15px
+}
+
+.profile-solved-table .profile-solved-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  color: var(--text)
+}
+
+.profile-solved-table .profile-solved-link:hover {
+  color: var(--orange)
+}
+
+.profile-solved-table .profile-solved-link>svg {
+  flex: none;
+  color: var(--muted)
+}
+
+.profile-solved-table .profile-solved-link>svg:first-child {
+  color: #6fae96
+}
+
+.profile-solved-table .profile-problem-id {
+  font: 12px monospace;
+  color: var(--muted);
+  flex: none
+}
+
+.profile-solved-table .profile-solved-link>strong {
+  font-size: 15px;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+  line-height: 1.6
+}
+
+.profile-solved-table .profile-solved-link>svg:last-child {
+  margin-left: auto
+}
+
+.profile-solved-table .solved-count-cell {
+  text-align: center
+}
+
+.profile-solved-table th.solved-count-cell {
+  padding-left: 8px;
+  padding-right: 8px;
+  font-size: 12px
+}
+
+.profile-solved-table .profile-submission-count {
+  font-size: 15px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+  color: var(--text)
+}
+
+.profile-solved-table .profile-last-submitted {
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--text);
+  font-variant-numeric: tabular-nums
+}
+
+.profile-solved-table .profile-last-submitted small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px
+}
+
+@media(max-width:1100px) {
+
+  .profile-solved-table th,
+  .profile-solved-table td {
+    padding-left: 13px;
+    padding-right: 13px
+  }
+
+  .profile-solved-table .profile-solved-link {
+    gap: 8px
+  }
+}

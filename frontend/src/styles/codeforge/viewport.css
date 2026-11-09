@@ -1,0 +1,163 @@
+/* Keep every navigation item reachable in short browser windows and at larger zoom. */
+.sidebar {
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent
+}
+
+.sidebar>* {
+  flex-shrink: 0
+}
+
+.sidebar .sidebar-bottom {
+  flex-shrink: 0
+}
+
+.filters.problem-filters {
+  --problem-filter-height: 44px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px
+}
+
+.problem-filters .find-problems {
+  flex: none;
+  height: var(--problem-filter-height);
+  min-height: var(--problem-filter-height);
+  max-height: var(--problem-filter-height);
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap
+}
+
+.problem-filters .search-field {
+  flex: 1 1 180px;
+  height: var(--problem-filter-height);
+  min-height: var(--problem-filter-height);
+  max-height: var(--problem-filter-height);
+  padding: 0 12px;
+  border-radius: 8px
+}
+
+.problem-filters .search-field input {
+  height: 100%;
+  min-height: 0;
+  padding: 0;
+  font-size: 12px
+}
+
+.problem-filters .select-field {
+  height: var(--problem-filter-height);
+  min-height: var(--problem-filter-height)
+}
+
+.problem-filters .select-field select {
+  height: var(--problem-filter-height);
+  min-height: var(--problem-filter-height);
+  max-height: var(--problem-filter-height);
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 8px;
+  font-size: 12px
+}
+
+.problem-filters .tag-picker {
+  --tag-field-height: var(--problem-filter-height)
+}
+
+.problem-filters .compact-picker {
+  flex: 0 1 230px;
+  min-width: 160px
+}
+
+.filter-feedback {
+  min-height: 25px;
+  padding: 5px 0;
+  font-size: 10px;
+  line-height: 15px;
+  color: var(--muted)
+}
+
+@media(max-width:680px) {
+  .problem-filters .find-problems {
+    width: 100%
+  }
+
+  .problem-filters .compact-picker {
+    flex: 0 0 100%;
+    min-width: 0
+  }
+
+  .problem-filters .search-field {
+    flex-basis: 100%
+  }
+}
+
+@media(max-height:820px) {
+  .sidebar .brand {
+    margin-bottom: 24px
+  }
+
+  .sidebar .nav-divider {
+    margin: 14px
+  }
+
+  .sidebar .sidebar-bottom {
+    padding-top: 18px
+  }
+
+  .sidebar .build-card {
+    padding: 12px
+  }
+
+  .sidebar .build-card .mini-logo,
+  .sidebar .build-card p {
+    display: none
+  }
+
+  .sidebar .build-card strong {
+    margin-bottom: 8px
+  }
+}
+
+@media(max-height:780px) {
+  .sidebar .build-card {
+    display: none
+  }
+}
+
+@media(max-height:680px) {
+  .sidebar .brand {
+    margin-bottom: 18px
+  }
+
+  .sidebar .nav-item {
+    min-height: 38px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 2px
+  }
+
+  .sidebar .workspace-label {
+    margin-bottom: 8px
+  }
+
+  .sidebar .nav-divider {
+    margin: 10px 14px
+  }
+
+  .sidebar .sidebar-bottom {
+    padding-top: 14px
+  }
+
+  .sidebar .build-card {
+    display: none
+  }
+}

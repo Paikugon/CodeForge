@@ -2,7 +2,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./i18n";
 import App from "./App";
-import "./styles.css";
+import "./styles/codeforge/globals.css";
+import "./styles/live.css";
 import {
   QueryClient,
   QueryClientProvider,

@@ -1,0 +1,596 @@
+/* Shared type sizes for the practice, profile, submission, and admin screens. */
+.app-shell {
+  font-size: 15px;
+  line-height: 1.6
+}
+
+.app-shell h3 {
+  font-size: 17px
+}
+
+.app-shell p {
+  font-size: 15px
+}
+
+.app-shell .page-heading h1 {
+  font-size: 32px;
+  line-height: 1.25
+}
+
+.app-shell .page-heading p:not(.eyebrow) {
+  font-size: 15px;
+  line-height: 1.65
+}
+
+.app-shell .eyebrow,
+.app-shell .page-heading .eyebrow {
+  font-size: 11px
+}
+
+.app-shell .nav-item {
+  font-size: 14px
+}
+
+.app-shell .workspace-label,
+.app-shell .sidebar-caption {
+  font-size: 11px
+}
+
+.app-shell .nav-count {
+  font-size: 12px
+}
+
+.app-shell .build-card strong,
+.app-shell .build-card p,
+.app-shell .build-card button,
+.app-shell .data-status {
+  font-size: 12px
+}
+
+.app-shell .breadcrumb,
+.app-shell .breadcrumb strong {
+  font-size: 13px
+}
+
+.app-shell .private-tag {
+  font-size: 12px
+}
+
+.app-shell .demo-label {
+  font-size: 10px
+}
+
+.app-shell .identity-select select {
+  font-size: 13px
+}
+
+.app-shell .avatar.small {
+  font-size: 12px
+}
+
+.app-shell button.button,
+.app-shell .text-button {
+  font-size: 14px
+}
+
+.app-shell .list-tabs>button,
+.app-shell .panel-tabs>button,
+.app-shell .profile-main .list-tabs>button {
+  font-size: 14px
+}
+
+.app-shell .list-tabs>button>span {
+  font-size: 12px
+}
+
+.app-shell .sort-label select {
+  font-size: 13px;
+  max-width: 140px
+}
+
+.app-shell .search-field input,
+.app-shell .select-field select {
+  font-size: 14px
+}
+
+.app-shell .problem-filters .search-field input,
+.app-shell .problem-filters .select-field select,
+.app-shell .problem-filters .find-problems {
+  font-size: 14px
+}
+
+.app-shell .filter-feedback {
+  font-size: 12px
+}
+
+.app-shell .tag-picker-placeholder,
+.app-shell .tag-picker .tag-option {
+  font-size: 14px
+}
+
+.app-shell .tag-picker .tag-picker-panel .tag-search input {
+  font-size: 14px
+}
+
+.app-shell .tag-picker-heading {
+  font-size: 14px
+}
+
+.app-shell .tag-picker-heading>span,
+.app-shell .tag-picker-footer .text-button {
+  font-size: 12px
+}
+
+.app-shell .tag-picker-chip {
+  font-size: 13px
+}
+
+.app-shell .tag-picker-count {
+  font-size: 12px
+}
+
+.app-shell .tag-picker-footer .button {
+  font-size: 13px
+}
+
+.app-shell .tag-options-empty,
+.app-shell .tag-count-caption {
+  font-size: 13px
+}
+
+.app-shell .tag-usage-link,
+.app-shell .managed-tag-name {
+  font-size: 15px
+}
+
+.app-shell .tag-form-meta {
+  font-size: 12px
+}
+
+.app-shell table,
+.app-shell td {
+  font-size: 15px
+}
+
+.app-shell th {
+  font-size: 13px
+}
+
+.app-shell .problem-title,
+.app-shell .strong-link,
+.app-shell .user-link,
+.app-shell .id-link,
+.app-shell .member-cell strong {
+  font-size: 15px
+}
+
+.app-shell .problem-title>span,
+.app-shell .cell-sub,
+.app-shell .date-cell,
+.app-shell .mono,
+.app-shell .member-cell small,
+.app-shell .slug {
+  font-size: 13px
+}
+
+.app-shell .badge {
+  font-size: 12px
+}
+
+.app-shell .table-hint,
+.app-shell .table-bottom,
+.app-shell .pagination,
+.app-shell .pagination button {
+  font-size: 13px
+}
+
+.app-shell .table-hint {
+  white-space: normal
+}
+
+.app-shell .practice-layout .problem-table th {
+  font-size: 13px
+}
+
+.app-shell .practice-layout .problem-table td,
+.app-shell .practice-layout .problem-table .problem-title {
+  font-size: 16px
+}
+
+.app-shell .practice-layout .problem-table .problem-title>span {
+  font-size: 13px
+}
+
+.app-shell .practice-layout .problem-table .problem-tags {
+  margin-left: 34px
+}
+
+.app-shell .practice-layout .problem-table .problem-tags button,
+.app-shell .practice-layout .problem-table .badge {
+  font-size: 12px
+}
+
+.app-shell .practice-layout .problem-table .acceptance {
+  font-size: 14px
+}
+
+.app-shell .practice-layout .problem-table .acceptance>span {
+  font-size: 12px
+}
+
+.app-shell .practice-layout .pagination,
+.app-shell .practice-layout .pagination button {
+  font-size: 13px
+}
+
+.app-shell .list-note {
+  font-size: 12px
+}
+
+.app-shell .card-header .eyebrow,
+.app-shell .right-rail .card-header .eyebrow,
+.app-shell .challenge-number {
+  font-size: 11px
+}
+
+.app-shell .challenge-card h3 {
+  font-size: 19px
+}
+
+.app-shell .challenge-card p,
+.app-shell .rail-quote p {
+  font-size: 14px
+}
+
+.app-shell .challenge-meta>span:last-child,
+.app-shell .rail-quote small {
+  font-size: 12px
+}
+
+.app-shell .activity-item strong {
+  font-size: 14px
+}
+
+.app-shell .activity-item>div>span,
+.app-shell .rail-link {
+  font-size: 12px
+}
+
+.app-shell .small-copy,
+.app-shell .timezone-note,
+.app-shell .back-link {
+  font-size: 13px
+}
+
+.app-shell .empty h3 {
+  font-size: 20px
+}
+
+.app-shell .empty p,
+.app-shell .loading,
+.app-shell .toast,
+.app-shell .notice,
+.app-shell .account-banner {
+  font-size: 14px
+}
+
+.app-shell .modal-title h2 {
+  font-size: 22px
+}
+
+.app-shell .modal-description,
+.app-shell .info-grid p {
+  font-size: 15px;
+  line-height: 1.65
+}
+
+.app-shell .info-grid strong {
+  font-size: 16px
+}
+
+.app-shell .api-list,
+.app-shell .api-list strong,
+.app-shell .api-list code {
+  font-size: 12px
+}
+
+.app-shell .form-field,
+.app-shell .form-grid.three .form-field,
+.app-shell .checkbox-field {
+  font-size: 14px
+}
+
+.app-shell .form-field input,
+.app-shell .form-field textarea,
+.app-shell .form-field select {
+  font-size: 15px
+}
+
+.app-shell .checkbox-field small,
+.app-shell .modal .notice,
+.app-shell .form-field>small {
+  font-size: 13px
+}
+
+.app-shell .success-message h3 {
+  font-size: 22px
+}
+
+.app-shell .success-message p,
+.app-shell .guard>p:not(.eyebrow) {
+  font-size: 15px
+}
+
+.app-shell .detail-top,
+.app-shell .detail-top>span,
+.app-shell .limits,
+.app-shell .solved-label {
+  font-size: 13px
+}
+
+.app-shell .statement-title h1 {
+  font-size: 29px;
+  line-height: 1.3
+}
+
+.app-shell .statement-body,
+.app-shell .statement-body p {
+  font-size: 15px;
+  line-height: 1.8
+}
+
+.app-shell .statement-body h3 {
+  font-size: 17px
+}
+
+.app-shell .constraint,
+.app-shell .sample-block pre,
+.app-shell .source-code,
+.app-shell .compiler-output pre {
+  font-size: 14px;
+  line-height: 1.7
+}
+
+.app-shell .sample-title>span,
+.app-shell .sample-block>div,
+.app-shell .topic-pills>span {
+  font-size: 12px
+}
+
+.app-shell .editor-header,
+.app-shell .editor-header select {
+  font-size: 14px
+}
+
+.app-shell .editor-file,
+.app-shell .editor-file>span:last-child,
+.app-shell .editor-status {
+  font-size: 12px
+}
+
+.app-shell .code-editor textarea {
+  font-size: 14px;
+  line-height: 24px
+}
+
+.app-shell .line-numbers {
+  font-size: 13px;
+  line-height: 24px
+}
+
+.app-shell .run-panel-title>span:first-child,
+.app-shell .run-content>label {
+  font-size: 14px
+}
+
+.app-shell .demo-pill {
+  font-size: 11px
+}
+
+.app-shell .run-content textarea,
+.app-shell .console-placeholder,
+.app-shell .run-result,
+.app-shell .run-result p {
+  font-size: 14px
+}
+
+.app-shell .console-placeholder small,
+.app-shell .run-result small {
+  font-size: 12px
+}
+
+.app-shell .judge-scenario label,
+.app-shell .judge-scenario select,
+.app-shell .judge-scenario>span {
+  font-size: 12px
+}
+
+.app-shell .history-summary strong {
+  font-size: 28px
+}
+
+.app-shell .history-summary>div>div>span {
+  font-size: 13px
+}
+
+.app-shell .verdict-banner h2 {
+  font-size: 24px
+}
+
+.app-shell .verdict-banner p {
+  font-size: 15px
+}
+
+.app-shell .submission-metrics>div>span {
+  font-size: 13px
+}
+
+.app-shell .submission-metrics strong {
+  font-size: 22px
+}
+
+.app-shell .card-title h3,
+.app-shell .detail-meta h3 {
+  font-size: 16px
+}
+
+.app-shell .card-title>span {
+  font-size: 12px
+}
+
+.app-shell .source-locked h3 {
+  font-size: 21px
+}
+
+.app-shell .source-locked p {
+  font-size: 15px
+}
+
+.app-shell .source-locked small,
+.app-shell .detail-meta dt,
+.app-shell .detail-meta p,
+.app-shell .detail-meta dd small {
+  font-size: 13px
+}
+
+.app-shell .detail-meta dd {
+  font-size: 15px;
+  overflow-wrap: anywhere
+}
+
+.app-shell .compiler-output,
+.app-shell .failed-grid span,
+.app-shell .compiler-output small {
+  font-size: 13px
+}
+
+.app-shell .profile-card-body h2 {
+  font-size: 24px
+}
+
+.app-shell .handle,
+.app-shell .profile-joined {
+  font-size: 13px
+}
+
+.app-shell .profile-card-body>p {
+  font-size: 15px
+}
+
+.app-shell .private-info-title {
+  font-size: 11px
+}
+
+.app-shell .private-info>label {
+  font-size: 13px
+}
+
+.app-shell .private-info strong {
+  font-size: 15px;
+  overflow-wrap: anywhere
+}
+
+.app-shell .solved-row>strong,
+.app-shell .compact-submission {
+  font-size: 15px
+}
+
+.app-shell .compact-submission small,
+.app-shell .compact-submission .small-copy {
+  font-size: 13px
+}
+
+.app-shell .privacy-note strong {
+  font-size: 15px
+}
+
+.app-shell .privacy-note p {
+  font-size: 14px
+}
+
+.app-shell .admin-session,
+.app-shell .admin-overview span,
+.app-shell .visibility-toggle {
+  font-size: 13px
+}
+
+.app-shell .admin-overview strong {
+  font-size: 30px
+}
+
+.app-shell .member-preview strong {
+  font-size: 16px
+}
+
+.app-shell .member-preview>div>span {
+  font-size: 14px
+}
+
+.app-shell .footer {
+  font-size: 11px
+}
+
+@media(max-width:680px) {
+  .app-shell .page-heading h1 {
+    font-size: 28px
+  }
+
+  .app-shell .page-heading p:not(.eyebrow) {
+    font-size: 14px
+  }
+
+  .app-shell .identity-select select {
+    font-size: 12px
+  }
+
+  .app-shell .practice-layout .problem-table th {
+    font-size: 12px
+  }
+
+  .app-shell .practice-layout .problem-table .problem-title {
+    font-size: 15px;
+    gap: 8px
+  }
+
+  .app-shell .practice-layout .problem-table .problem-title>span {
+    font-size: 12px
+  }
+
+  .app-shell .practice-layout .problem-table .problem-tags {
+    margin-left: 30px
+  }
+
+  .app-shell .practice-layout .problem-table .problem-tags button {
+    font-size: 11px
+  }
+
+  .app-shell .practice-layout .problem-table .badge {
+    font-size: 11px
+  }
+
+  .app-shell .practice-layout .problem-table th:nth-child(3) {
+    width: 86px
+  }
+
+  .app-shell .statement-title h1 {
+    font-size: 26px
+  }
+
+  .app-shell .modal-title h2 {
+    font-size: 20px
+  }
+
+  .app-shell .compact-submission {
+    gap: 10px;
+    flex-wrap: wrap
+  }
+
+  .app-shell .solved-row {
+    gap: 9px
+  }
+
+  .app-shell .solved-row>strong {
+    min-width: 0;
+    overflow-wrap: anywhere
+  }
+}

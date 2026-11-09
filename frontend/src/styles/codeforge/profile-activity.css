@@ -1,0 +1,114 @@
+.profile-activity {
+  min-width: 0
+}
+
+.profile-activity-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border)
+}
+
+.profile-activity-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 22px;
+  min-width: 0
+}
+
+.profile-activity-tabs>button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 52px;
+  margin-bottom: -1px;
+  padding: 10px 0 13px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap
+}
+
+.profile-activity-tabs>button.selected {
+  color: var(--orange);
+  border-bottom-color: var(--orange)
+}
+
+.profile-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 25px;
+  padding: 0 7px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums
+}
+
+.selected>.profile-tab-count {
+  background: var(--orange-soft);
+  border-color: transparent;
+  color: var(--orange)
+}
+
+.profile-activity-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  color: var(--muted);
+  font-size: 13px;
+  flex-wrap: wrap
+}
+
+.profile-activity-summary strong {
+  color: var(--text);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums
+}
+
+.profile-activity-panel:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px
+}
+
+@media(max-width:680px) {
+  .profile-activity-toolbar {
+    gap: 0;
+    margin-bottom: 12px
+  }
+
+  .profile-activity-tabs {
+    width: 100%;
+    gap: 18px
+  }
+
+  .profile-activity-tabs>button {
+    font-size: 14px;
+    gap: 7px
+  }
+
+  .profile-activity-summary {
+    padding-top: 2px;
+    padding-bottom: 12px;
+    font-size: 12px
+  }
+
+  .profile-tab-count {
+    min-width: 25px;
+    height: 23px;
+    font-size: 12px
+  }
+}

@@ -1,0 +1,98 @@
+.page-heading.practice-page-heading {
+  margin-bottom: 12px
+}
+
+.practice-page-heading p:not(.eyebrow) {
+  margin-bottom: 0
+}
+
+.practice-layout .practice-main>.list-tabs:first-child {
+  margin-top: 0;
+  margin-bottom: 14px
+}
+
+.practice-layout .problem-table th {
+  font-size: 12px;
+  line-height: 1.5
+}
+
+.practice-layout .problem-table td {
+  font-size: 14px
+}
+
+.practice-layout .problem-table .problem-title {
+  font-size: 14px;
+  line-height: 1.5;
+  gap: 10px;
+  white-space: normal
+}
+
+.practice-layout .problem-table .problem-title>span {
+  flex: none;
+  font-size: 12px
+}
+
+.practice-layout .problem-table .problem-tags {
+  margin-left: 32px;
+  gap: 5px
+}
+
+.practice-layout .problem-table .problem-tags button {
+  font-size: 11px;
+  line-height: 1.5;
+  padding: 2px 6px
+}
+
+.practice-layout .problem-table .badge {
+  font-size: 11px;
+  line-height: 1.4
+}
+
+.practice-layout .problem-table .acceptance {
+  font-size: 13px
+}
+
+.practice-layout .problem-table .acceptance>span {
+  font-size: 11px
+}
+
+.practice-layout .pagination,
+.practice-layout .pagination button {
+  font-size: 11px
+}
+
+.practice-layout .pagination button {
+  min-width: 26px;
+  height: 28px
+}
+
+@media(max-width:680px) {
+  .page-heading.practice-page-heading {
+    margin-bottom: 10px
+  }
+
+  .practice-layout .problem-table .problem-title {
+    font-size: 13px;
+    gap: 8px
+  }
+
+  .practice-layout .problem-table .problem-title>span {
+    font-size: 11px
+  }
+
+  .practice-layout .problem-table .problem-tags {
+    margin-left: 28px
+  }
+
+  .practice-layout .problem-table .problem-tags button {
+    font-size: 10px
+  }
+
+  .practice-layout .problem-table .badge {
+    font-size: 10px
+  }
+
+  .practice-layout .problem-table th:nth-child(3) {
+    width: 82px
+  }
+}
