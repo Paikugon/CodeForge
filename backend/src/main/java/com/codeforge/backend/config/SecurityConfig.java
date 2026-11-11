@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.oauth2.server.resource.authentication.*;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
@@ -105,7 +106,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            JwtAuthenticationConverter converter) throws Exception {
+            JwtAuthenticationConverter converter,
+            JwtDecoder jwtDecoder) throws Exception {
 
         return http
                 .csrf(csrf -> csrf.disable())
@@ -167,6 +169,9 @@ public class SecurityConfig {
                                             """);
                         })
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(converter)))
+                        .addFilterBefore(
+                                new ExpiredTokenPublicAccessFilter(jwtDecoder),
+                                BearerTokenAuthenticationFilter.class)
                         .addFilterAfter(new PasswordChangeRequiredFilter(), BearerTokenAuthenticationFilter.class)
                 .build();
     }
