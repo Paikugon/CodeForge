@@ -62,6 +62,9 @@ public class Problem {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new LinkedHashSet<>();
 
+    @Column(name = "test_cases_synced", nullable = false)
+    private boolean testCasesSynced = false;
+
     protected Problem() {
     }
 
@@ -190,4 +193,11 @@ public class Problem {
         tags.remove(tag);
     }
 
+    public boolean isTestCasesSynced() {
+        return testCasesSynced;
+    }
+
+    public void setTestCasesSynced(boolean testCasesSynced) {
+        this.testCasesSynced = testCasesSynced;
+    }
 }

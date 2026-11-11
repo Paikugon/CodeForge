@@ -34,14 +34,13 @@ public class TestCaseSyncService {
         this.problemRepository = problemRepository;
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void syncProblem(Long problemId) throws IOException {
 
-        Problem problem = problemRepository.findById(problemId)
-        .orElseThrow(() -> new IllegalStateException(
-                "Problem not found: " + problemId));
-        List<TestCase> testCases =
-                repository.findByProblemIdOrderByOrderIndexAscIdAsc(problemId);
+        Problem problem = problemRepository.findByIdForTestCaseUpdate(problemId)
+                .orElseThrow(() -> new IllegalStateException(
+                        "Problem not found: " + problemId));
+        List<TestCase> testCases = repository.findByProblemIdOrderByOrderIndexAscIdAsc(problemId);
 
         Set<Long> testCaseIds = testCases.stream()
                 .map(TestCase::getId)
@@ -55,19 +54,17 @@ public class TestCaseSyncService {
                     problemId,
                     testCase.getId(),
                     testCase.getInput(),
-                    testCase.getExpectedOutput()
-            );
+                    testCase.getExpectedOutput());
 
             expectedOutputs.put(
                     testCase.getId(),
-                    testCase.getExpectedOutput()
-            );
+                    testCase.getExpectedOutput());
         }
 
         storageService.writeInfo(
                 problemId,
                 expectedOutputs,
-                problem.isSpjEnabled()
-        );
+                problem.isSpjEnabled());
+        problem.setTestCasesSynced(true);
     }
 }

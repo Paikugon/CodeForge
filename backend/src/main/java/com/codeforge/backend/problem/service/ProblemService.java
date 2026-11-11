@@ -281,7 +281,7 @@ public class ProblemService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     com.codeforge.backend.common.error.ErrorCode.TEST_CASES_CREATE_ONLY);
         }
-        Problem problem = problemRepository.findById(id)
+        Problem problem = problemRepository.findByIdForTestCaseUpdate(id)
                 .orElseThrow(() -> new ProblemNotFoundException(id));
         if (request.slug() != null && !request.slug().equals(problem.getSlug())) {
             if (problemRepository.existsBySlug(request.slug())) {
@@ -314,6 +314,7 @@ public class ProblemService {
         }
 
         try {
+            problem.setTestCasesSynced(false);
             eventPublisher.publishEvent(
                     new TestCasesChangedEvent(problem.getId()));
             return ProblemResponse.from(

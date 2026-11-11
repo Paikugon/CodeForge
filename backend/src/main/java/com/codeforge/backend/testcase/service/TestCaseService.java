@@ -1,5 +1,6 @@
 package com.codeforge.backend.testcase.service;
 
+import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.testcase.dto.TestCaseRequest;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
@@ -41,10 +42,11 @@ public class TestCaseService {
 
     @Transactional
     public List<TestCaseResponse> createBatch(Long problemId, List<TestCaseRequest> requests) {
-        lockProblem(problemId);
+        markTestCasesUnsynced(problemId);
         Integer largestExistingIndex = testCaseRepository.findMaxOrderIndexByProblemId(problemId);
         long nextIndex = largestExistingIndex == null ? 0 : (long) largestExistingIndex + 1;
-        // Reserve explicit indexes before assigning omitted ones, regardless of array order.
+        // Reserve explicit indexes before assigning omitted ones, regardless of array
+        // order.
         for (TestCaseRequest request : requests) {
             if (request.orderIndex() != null) {
                 nextIndex = Math.max(nextIndex, (long) request.orderIndex() + 1);
@@ -85,7 +87,7 @@ public class TestCaseService {
             Long testCaseId,
             TestCaseRequest request) {
 
-        lockProblem(problemId);
+        markTestCasesUnsynced(problemId);
 
         TestCase testCase = testCaseRepository
                 .findByIdAndProblemId(testCaseId, problemId)
@@ -107,7 +109,7 @@ public class TestCaseService {
 
     @Transactional
     public void delete(Long problemId, Long testCaseId) {
-        lockProblem(problemId);
+        markTestCasesUnsynced(problemId);
 
         TestCase testCase = testCaseRepository
                 .findByIdAndProblemId(testCaseId, problemId)
@@ -128,9 +130,14 @@ public class TestCaseService {
         }
     }
 
-    private void lockProblem(Long problemId) {
-        problemRepository.findByIdForTestCaseUpdate(problemId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, PROBLEM_NOT_FOUND));
+    private void markTestCasesUnsynced(Long problemId) {
+        Problem problem = problemRepository
+                .findByIdForTestCaseUpdate(problemId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        PROBLEM_NOT_FOUND));
+
+        problem.setTestCasesSynced(false);
     }
 
     private TestCaseResponse toResponse(TestCase testCase) {

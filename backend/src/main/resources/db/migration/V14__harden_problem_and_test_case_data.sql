@@ -1,3 +1,5 @@
+-- Keep V1-V13 unchanged so existing Flyway history remains valid.
+-- Existing invalid rows must be corrected before upgrading an existing database.
 ALTER TABLE problems DROP CONSTRAINT ck_problems_spj_source;
 
 ALTER TABLE problems
