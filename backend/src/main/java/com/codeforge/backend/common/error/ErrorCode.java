@@ -29,6 +29,8 @@ public final class ErrorCode {
     public static final String SUBMISSION_NOT_FOUND = "CODE_SUBMISSION_NOT_FOUND";
     public static final String TAG_NOT_FOUND = "CODE_TAG_NOT_FOUND";
     public static final String TEST_CASE_NOT_FOUND = "CODE_TEST_CASE_NOT_FOUND";
+    public static final String TEST_CASES_CREATE_ONLY = "CODE_TEST_CASES_CREATE_ONLY";
+    public static final String TEST_CASE_ORDER_EXHAUSTED = "CODE_TEST_CASE_ORDER_EXHAUSTED";
     public static final String UNEXPECTED_ERROR = "CODE_UNEXPECTED_ERROR";
     public static final String UNSUPPORTED_LANGUAGE = "CODE_UNSUPPORTED_LANGUAGE";
     public static final String USER_NOT_FOUND = "CODE_USER_NOT_FOUND";

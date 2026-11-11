@@ -38,7 +38,7 @@ public class Problem {
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Generated(event = EventType.UPDATE)
+    @Generated(event = {EventType.INSERT, EventType.UPDATE})
     @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
 

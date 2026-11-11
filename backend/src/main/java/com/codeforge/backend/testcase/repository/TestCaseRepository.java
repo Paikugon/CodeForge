@@ -33,4 +33,7 @@ public interface TestCaseRepository
 			Long problemId);
 
 	long countByProblemId(Long problemId);
+
+	@Query("select max(t.orderIndex) from TestCase t where t.problemId = :problemId")
+	Integer findMaxOrderIndexByProblemId(@Param("problemId") Long problemId);
 }

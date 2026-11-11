@@ -14,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import static com.codeforge.backend.common.error.ErrorCode.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TestCaseService {
@@ -34,21 +36,39 @@ public class TestCaseService {
 
     @Transactional
     public TestCaseResponse create(Long problemId, TestCaseRequest request) {
-        validateProblemExists(problemId);
+        return createBatch(problemId, List.of(request)).getFirst();
+    }
 
-        TestCase testCase = new TestCase(
-                problemId,
-                request.input(),
-                request.expectedOutput(),
-                request.isSample() != null ? request.isSample() : false,
-                request.orderIndex() != null ? request.orderIndex() : 0);
+    @Transactional
+    public List<TestCaseResponse> createBatch(Long problemId, List<TestCaseRequest> requests) {
+        lockProblem(problemId);
+        Integer largestExistingIndex = testCaseRepository.findMaxOrderIndexByProblemId(problemId);
+        long nextIndex = largestExistingIndex == null ? 0 : (long) largestExistingIndex + 1;
+        // Reserve explicit indexes before assigning omitted ones, regardless of array order.
+        for (TestCaseRequest request : requests) {
+            if (request.orderIndex() != null) {
+                nextIndex = Math.max(nextIndex, (long) request.orderIndex() + 1);
+            }
+        }
 
-        TestCase saved = testCaseRepository.saveAndFlush(testCase);
+        List<TestCase> testCases = new ArrayList<>();
+        for (TestCaseRequest request : requests) {
+            int orderIndex;
+            if (request.orderIndex() != null) {
+                orderIndex = request.orderIndex();
+            } else {
+                if (nextIndex > Integer.MAX_VALUE) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, TEST_CASE_ORDER_EXHAUSTED);
+                }
+                orderIndex = (int) nextIndex++;
+            }
+            testCases.add(new TestCase(problemId, request.input(), request.expectedOutput(),
+                    Boolean.TRUE.equals(request.isSample()), orderIndex));
+        }
 
-        eventPublisher.publishEvent(
-                new TestCasesChangedEvent(problemId));
-
-        return toResponse(saved);
+        List<TestCase> saved = testCaseRepository.saveAllAndFlush(testCases);
+        eventPublisher.publishEvent(new TestCasesChangedEvent(problemId));
+        return saved.stream().map(this::toResponse).toList();
     }
 
     @Transactional(readOnly = true)
@@ -65,7 +85,7 @@ public class TestCaseService {
             Long testCaseId,
             TestCaseRequest request) {
 
-        validateProblemExists(problemId);
+        lockProblem(problemId);
 
         TestCase testCase = testCaseRepository
                 .findByIdAndProblemId(testCaseId, problemId)
@@ -76,8 +96,8 @@ public class TestCaseService {
         testCase.update(
                 request.input(),
                 request.expectedOutput(),
-                request.isSample() != null ? request.isSample() : false,
-                request.orderIndex() != null ? request.orderIndex() : 0);
+                request.isSample() != null ? request.isSample() : testCase.getIsSample(),
+                request.orderIndex() != null ? request.orderIndex() : testCase.getOrderIndex());
 
         TestCase saved = testCaseRepository.saveAndFlush(testCase);
         eventPublisher.publishEvent(new TestCasesChangedEvent(problemId));
@@ -87,7 +107,7 @@ public class TestCaseService {
 
     @Transactional
     public void delete(Long problemId, Long testCaseId) {
-        validateProblemExists(problemId);
+        lockProblem(problemId);
 
         TestCase testCase = testCaseRepository
                 .findByIdAndProblemId(testCaseId, problemId)
@@ -106,6 +126,11 @@ public class TestCaseService {
                     HttpStatus.NOT_FOUND,
                     PROBLEM_NOT_FOUND);
         }
+    }
+
+    private void lockProblem(Long problemId) {
+        problemRepository.findByIdForTestCaseUpdate(problemId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, PROBLEM_NOT_FOUND));
     }
 
     private TestCaseResponse toResponse(TestCase testCase) {

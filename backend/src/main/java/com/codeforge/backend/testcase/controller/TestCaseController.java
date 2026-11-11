@@ -2,10 +2,12 @@ package com.codeforge.backend.testcase.controller;
 
 import com.codeforge.backend.common.pagination.PaginationValidator;
 import com.codeforge.backend.testcase.dto.TestCaseRequest;
+import com.codeforge.backend.testcase.dto.TestCaseBatchRequest;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.codeforge.backend.testcase.service.TestCaseService;
 
 import jakarta.validation.Valid;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,6 +51,14 @@ public class TestCaseController {
         PaginationValidator.validate(page, size, 500);
 
         return testCaseService.findAll(problemId, pageable);
+    }
+
+    @PostMapping("/batch")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<TestCaseResponse> createBatch(
+            @PathVariable Long problemId,
+            @Valid @RequestBody TestCaseBatchRequest request) {
+        return testCaseService.createBatch(problemId, request.testCases());
     }
 
     @PutMapping("/{testCaseId}")
