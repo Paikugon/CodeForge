@@ -8,6 +8,7 @@ import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.submission.enums.SubmissionStatus;
 import com.codeforge.backend.submission.model.Submission;
 import com.codeforge.backend.submission.repository.SubmissionRepository;
+import com.codeforge.backend.testcase.service.SnapshotCleanupService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,19 +24,22 @@ public class SubmissionJudgeService {
 
     private final SubmissionRepository submissionRepository;
     private final JudgeService judgeService;
-    private final ProblemRepository problemRepository;
+    private final SubmissionStartService submissionStartService;
+    private final SnapshotCleanupService cleanupService;
     private static final Logger log = LoggerFactory.getLogger(SubmissionJudgeService.class);
     private final TestCaseStorageService storageService;
 
     public SubmissionJudgeService(
             SubmissionRepository submissionRepository,
             JudgeService judgeService,
-            ProblemRepository problemRepository,
+            SubmissionStartService submissionStartService,
+            SnapshotCleanupService cleanupService,
             TestCaseStorageService storageService) {
 
         this.submissionRepository = submissionRepository;
         this.judgeService = judgeService;
-        this.problemRepository = problemRepository;
+        this.submissionStartService = submissionStartService;
+        this.cleanupService = cleanupService;
         this.storageService = storageService;
     }
 
@@ -50,19 +54,20 @@ public class SubmissionJudgeService {
         }
 
         try {
-            Problem problem = problemRepository.findById(submission.getProblemId())
-                    .orElseThrow(() -> new IllegalStateException(
-                            PROBLEM_NOT_FOUND));
+            Problem problem = submissionStartService.start(submission);
 
-            String testCaseId = problem.getActiveTestCaseDirectoryId();
+            String testCaseId = submission.getTestCaseDirectoryId();
             if (testCaseId == null || testCaseId.isBlank()) {
                 throw new IllegalStateException(
-                        "Problem has no active test case set");
+                        PROBLEM_TEST_CASES_NOT_READY);
             }
 
-            submission.setTestCaseDirectoryId(testCaseId);
-            submission.setStatus(SubmissionStatus.JUDGING);
-            submissionRepository.saveAndFlush(submission);
+            // Note to myself if I happen to read this in the future and find it confusing:
+            // The following lines are commented out because they are already handled in
+            // SubmissionStartService.start(submission).
+            // submission.setTestCaseDirectoryId(testCaseId);
+            // submission.setStatus(SubmissionStatus.JUDGING);
+            // submissionRepository.saveAndFlush(submission);
 
             JudgeResult result = judgeService.judge(
                     submission.getLanguage().toString(),
@@ -114,10 +119,24 @@ public class SubmissionJudgeService {
         } catch (Exception e) {
             log.error("Error occurred while judging submission {}", submissionId, e);
             submission.setStatus(SubmissionStatus.FAILED);
-            submission.setErrorMessage(JUDGE_FAILED);
+            submission.setErrorMessage(JUDGE_FAILED + ": " + e.getMessage());
         }
 
         submissionRepository.saveAndFlush(submission);
+        if (submission.getStatus() == SubmissionStatus.COMPLETED) {
+            try {
+                cleanupService.cleanupUnused(
+                        submission.getProblemId(),
+                        submission.getTestCaseDirectoryId());
+
+            } catch (IOException | RuntimeException exception) {
+                log.warn(
+                        "Failed to clean snapshot {} after submission {}",
+                        submission.getTestCaseDirectoryId(),
+                        submissionId,
+                        exception);
+            }
+        }
     }
 
     private Long parseTestCaseId(String testCase) {

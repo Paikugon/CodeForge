@@ -311,4 +311,26 @@ public class TestCaseStorageService {
 
         return new StoredTestCase(input, expectedOutput);
     }
+
+    public void deleteSnapshotDirectory(String directoryId)
+            throws IOException {
+
+        Path directory = getSnapshotDirectory(directoryId);
+
+        if (Files.notExists(directory)) {
+            return;
+        }
+        try (var paths = Files.walk(directory)) {
+            for (Path path : paths
+                    .sorted(Comparator.reverseOrder())
+                    .toList()) {
+
+                Files.deleteIfExists(path);
+            }
+        } catch (IOException e) {
+            throw new IOException(
+                    "Failed to delete snapshot directory: " + directory,
+                    e);
+        }
+    }
 }
