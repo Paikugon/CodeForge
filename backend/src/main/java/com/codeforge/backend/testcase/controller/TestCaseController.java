@@ -5,8 +5,11 @@ import com.codeforge.backend.testcase.dto.TestCaseRequest;
 import com.codeforge.backend.testcase.dto.TestCaseBatchRequest;
 import com.codeforge.backend.testcase.dto.TestCaseResponse;
 import com.codeforge.backend.testcase.service.TestCaseService;
+import com.codeforge.backend.testcase.service.TestCaseSyncService;
 
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -17,6 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import static com.codeforge.backend.common.error.ErrorCode.TEST_CASE_SYNC_FAILED;
 
 @RestController
 @RequestMapping("/api/problems/{problemId}/test-cases")
@@ -24,9 +30,12 @@ import org.springframework.web.bind.annotation.*;
 public class TestCaseController {
 
     private final TestCaseService testCaseService;
+    private final TestCaseSyncService syncService;
 
-    public TestCaseController(TestCaseService testCaseService) {
+    public TestCaseController(TestCaseService testCaseService,
+            TestCaseSyncService syncService) {
         this.testCaseService = testCaseService;
+        this.syncService = syncService;
     }
 
     @PostMapping
@@ -35,8 +44,8 @@ public class TestCaseController {
             @Valid @RequestBody TestCaseRequest request) {
 
         return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(testCaseService.create(problemId, request));
+                .status(HttpStatus.CREATED)
+                .body(testCaseService.create(problemId, request));
     }
 
     @GetMapping
@@ -44,10 +53,8 @@ public class TestCaseController {
             @PathVariable Long problemId,
             @RequestParam(required = false) String page,
             @RequestParam(required = false) String size,
-            @PageableDefault(
-                    size = 100,
-                    sort = {"orderIndex", "id"},
-                    direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 100, sort = { "orderIndex",
+                    "id" }, direction = Sort.Direction.ASC) Pageable pageable) {
         PaginationValidator.validate(page, size, 500);
 
         return testCaseService.findAll(problemId, pageable);
@@ -77,5 +84,18 @@ public class TestCaseController {
             @PathVariable Long testCaseId) {
 
         testCaseService.delete(problemId, testCaseId);
+    }
+
+    @PostMapping("/sync")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void sync(@PathVariable Long problemId) {
+        try {
+            syncService.syncProblem(problemId);
+        } catch (IOException exception) {
+            throw new ResponseStatusException(
+                    HttpStatus.SERVICE_UNAVAILABLE,
+                    TEST_CASE_SYNC_FAILED,
+                    exception);
+        }
     }
 }
