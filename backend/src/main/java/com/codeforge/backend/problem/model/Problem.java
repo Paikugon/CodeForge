@@ -38,7 +38,7 @@ public class Problem {
     @Column(name = "created_at", insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Generated(event = EventType.UPDATE)
+    @Generated(event = { EventType.INSERT, EventType.UPDATE })
     @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
 
@@ -56,11 +56,17 @@ public class Problem {
     private boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "problem_tags",
-            joinColumns = @JoinColumn(name = "problem_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JoinTable(name = "problem_tags", joinColumns = @JoinColumn(name = "problem_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new LinkedHashSet<>();
+
+    @Column(name = "test_cases_synced", nullable = false)
+    private boolean testCasesSynced = false;
+
+    @Column(name = "active_test_case_directory_id")
+    private String activeTestCaseDirectoryId;
+
+    @Column(name = "active_spj_source", columnDefinition = "TEXT")
+    private String activeSpjSource;
 
     protected Problem() {
     }
@@ -129,27 +135,26 @@ public class Problem {
         return difficulty;
     }
 
-    
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     public void setSlug(String slug) {
         this.slug = slug;
     }
-    
+
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public void setTimeLimitMs(Integer timeLimitMs) {
         this.timeLimitMs = timeLimitMs;
     }
-    
+
     public void setMemoryLimitMb(Integer memoryLimitMb) {
         this.memoryLimitMb = memoryLimitMb;
     }
-    
+
     public void setDifficulty(ProblemDifficulty difficulty) {
         this.difficulty = difficulty;
     }
@@ -190,4 +195,27 @@ public class Problem {
         tags.remove(tag);
     }
 
+    public boolean isTestCasesSynced() {
+        return testCasesSynced;
+    }
+
+    public void setTestCasesSynced(boolean testCasesSynced) {
+        this.testCasesSynced = testCasesSynced;
+    }
+
+    public String getActiveTestCaseDirectoryId() {
+        return activeTestCaseDirectoryId;
+    }
+
+    public void setActiveTestCaseDirectoryId(String activeTestCaseDirectoryId) {
+        this.activeTestCaseDirectoryId = activeTestCaseDirectoryId;
+    }
+
+    public String getActiveSpjSource() {
+        return activeSpjSource;
+    }
+
+    public void setActiveSpjSource(String activeSpjSource) {
+        this.activeSpjSource = activeSpjSource;
+    }
 }

@@ -63,6 +63,20 @@ class TagApiTests {
     }
 
     @Test
+    void expiredTokenUsesPublicAccessOnlyOnPublicEndpoints() throws Exception {
+        Tag tag = repository.saveAndFlush(new Tag("Graphs"));
+        String expiredToken = token("expired", "USER", Instant.now().minusSeconds(600));
+
+        var publicResponse = send("GET", "/api/tags/" + tag.getId(), null, expiredToken);
+        assertEquals(200, publicResponse.statusCode());
+        assertEquals("expired", publicResponse.headers().firstValue("X-Auth-Status").orElseThrow());
+
+        var protectedResponse = send("GET", "/api/users/profile/me", null, expiredToken);
+        assertEquals(401, protectedResponse.statusCode());
+        assertTrue(protectedResponse.headers().firstValue("X-Auth-Status").isEmpty());
+    }
+
+    @Test
     void adminCanCreateUpdateAndDeleteTags() throws Exception {
         var created = send("POST", "/api/tags", "{\"name\":\"  Arrays  \"}", adminToken);
         assertEquals(201, created.statusCode());
@@ -142,12 +156,16 @@ class TagApiTests {
     }
 
     private String token(String username, String role) {
+        return token(username, role, Instant.now().plusSeconds(600));
+    }
+
+    private String token(String username, String role, Instant expiresAt) {
         jdbc.update("insert into users(username,email,password_hash,role,enabled,must_change_password,token_version,created_at,updated_at) values (?,?,?,?,true,false,0,current_timestamp,current_timestamp)",
                 username, username + "@example.com", "test-only", role);
         Long id = jdbc.queryForObject("select id from users where username=?", Long.class, username);
-        Instant now = Instant.now();
+        Instant issuedAt = expiresAt.minusSeconds(600);
         return encoder.encode(JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(),
-                JwtClaimsSet.builder().subject(id.toString()).issuedAt(now).expiresAt(now.plusSeconds(600))
+                JwtClaimsSet.builder().subject(id.toString()).issuedAt(issuedAt).expiresAt(expiresAt)
                         .claim("token_version", 0).build())).getTokenValue();
     }
 

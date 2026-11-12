@@ -137,4 +137,9 @@ public interface SubmissionRepository
 			@Param("failedStatus") SubmissionStatus failedStatus,
 			@Param("errorMessage") String errorMessage,
 			@Param("updatedAt") OffsetDateTime updatedAt);
+
+	// check if any submission exists with the given testCaseDirectoryId and judging
+	boolean existsByTestCaseDirectoryIdAndStatusNot(
+        String testCaseDirectoryId,
+        SubmissionStatus status);
 }
