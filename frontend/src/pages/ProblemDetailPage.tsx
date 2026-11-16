@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getProblemById, runCode } from "../api/problems";
 import type { Language } from "../components/CodeEditor";
@@ -13,10 +13,12 @@ import {
   LoaderCircle,
   Play,
   RotateCcw,
-  Send,
   Terminal,
 } from "lucide-react";
 import RunResult from "../components/RunResult";
+import { createSubmission } from "../api/submissions";
+import { ApiError } from "../api/http";
+import type { SubmissionRequest } from "../types/submission";
 
 export default function ProblemDetailPage() {
   const { id } = useParams();
@@ -24,6 +26,18 @@ export default function ProblemDetailPage() {
   const [language, setLanguage] = useState<Language>("cpp");
   const [sourceCode, setSourceCode] = useState("");
   const [input, setInput] = useState("");
+  const navigate = useNavigate();
+
+  const submitMutation = useMutation({
+    mutationFn: (request: SubmissionRequest) =>
+      createSubmission(request),
+
+    retry: false,
+
+    onSuccess: (submission) => {
+      navigate(`/submissions/${submission.id}`);
+    },
+  });
 
   const fileName = {
     cpp: "solution.cpp",
@@ -190,13 +204,32 @@ export default function ProblemDetailPage() {
                 <Play size={16} aria-hidden="true" />
               )}
 
-              {runMutation.isPending ? "Running…" : "Run code"}
+              {runMutation.isPending ? t("problemDetail.codeEditor.running") : t("problemDetail.codeEditor.run")}
             </button>
 
-            <button type="button" className="button primary" disabled>
-              <Send size={16} aria-hidden="true" />
-              Submit solution
+            <button
+              type="button"
+              className="button primary"
+              disabled={submitMutation.isPending || !sourceCode.trim()}
+              onClick={() =>
+                submitMutation.mutate({
+                  problemId: problem.id,
+                  language,
+                  sourceCode,
+                })
+              }
+            >
+              {submitMutation.isPending ? t("problemDetail.codeEditor.submitting") : t("problemDetail.codeEditor.submit")}
             </button>
+
+            {submitMutation.isError && (
+              <p role="alert">
+                {submitMutation.error instanceof ApiError &&
+                  submitMutation.error.status === 401
+                  ? t("auth.loginRequired")
+                  : t("problemDetail.submitError")}
+              </p>
+            )}
           </div>
         </section>
       </div>

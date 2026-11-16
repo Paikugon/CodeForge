@@ -9,12 +9,15 @@ import {
 } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTheme } from "../context/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 export default function AppLayout() {
   const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { theme, toggleTheme } = useTheme();
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -125,6 +128,14 @@ export default function AppLayout() {
             <div className="live-language">
               <LanguageSwitcher />
             </div>
+
+            <Link
+              to="/login"
+              state={{ from: pathname }}
+              className="button"
+            >
+              {t("auth.login")}
+            </Link>
           </div>
         </header>
 
