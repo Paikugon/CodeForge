@@ -2,8 +2,17 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./i18n";
 import App from "./App";
-import "./styles/codeforge/globals.css";
-import "./styles/live.css";
+import "./styles/globals.css";
+import "./styles/components/tags.css";
+import "./styles/pages/profile.css";
+import "./styles/pages/problems.css";
+import "./styles/components/table.css";
+import "./styles/pages/problem-detail.css";
+import "./styles/pages/auth.css";
+import "./styles/pages/submissions.css";
+import "./styles/app-layout.css";
+import "./styles/components/button.css";
+import "./styles/theme.css";
 import {
   QueryClient,
   QueryClientProvider,

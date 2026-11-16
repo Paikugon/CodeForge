@@ -1,0 +1,33 @@
+html[data-theme="dark"] .live-problem-tag {
+  color: #8dccff;
+}
+html[data-theme="dark"] .live-submission-detail {
+  --result-bg: #18283c;
+  --result-border: #2d435e;
+  --result-text: #a1bddf;
+}
+
+html[data-theme="dark"] .live-submission-detail[data-tone="success"] {
+  --result-bg: #17332f;
+  --result-border: #245046;
+  --result-text: #9ed7bd;
+}
+
+html[data-theme="dark"] .live-submission-detail[data-tone="warning"] {
+  --result-bg: #322f29;
+  --result-border: #4e4536;
+  --result-text: #e0bf87;
+}
+
+html[data-theme="dark"] .live-submission-detail[data-tone="danger"] {
+  --result-bg: #35262e;
+  --result-border: #593943;
+  --result-text: #efa6b2;
+}
+
+html[data-theme="dark"] .live-submission-detail[data-tone="pending"] {
+  --result-bg: #182f4a;
+  --result-border: #2c4a6e;
+  --result-text: #8bb9f0;
+}
+

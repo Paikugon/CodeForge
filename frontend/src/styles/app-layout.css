@@ -160,4 +160,28 @@
   .sidebar .build-card {
     display: none
   }
+}@media (max-width: 900px) {
+  .app-shell .sidebar:not(.open) {
+    visibility: hidden;
+  }
 }
+
+@media (max-width: 680px) {
+  .live-language label {
+    display: none;
+  }
+}
+
+.header-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-account > span {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+

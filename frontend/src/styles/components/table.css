@@ -1,0 +1,85 @@
+.table-scroll[tabindex]:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: -3px;
+}
+
+.app-shell .data-table th {
+  padding: 14px 18px;
+  font-size: 13px;
+}
+
+.app-shell .data-table td {
+  padding: 16px 18px;
+  font-size: 15px;
+}
+
+.app-shell .table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 16px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.table-pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-shell .table-pagination-controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--white);
+  color: var(--text);
+}
+
+.table-pagination-controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.table-link-row {
+  position: relative;
+}
+
+.table-link-row .row-link {
+  position: static;
+}
+
+.table-link-row .row-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.table-link-row .row-link:focus-visible {
+  outline: none;
+}
+
+.table-link-row .row-link:focus-visible::after {
+  outline: 2px solid var(--orange);
+  outline-offset: -2px;
+}
+
+/* Dành cho nút, checkbox hoặc nhóm thao tác trên hàng. */
+.table-link-row .row-action {
+  position: relative;
+  z-index: 2;
+}
+
