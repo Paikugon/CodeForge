@@ -120,8 +120,8 @@ class ProblemSubmissionStatisticsTests {
         assertEquals(0, page.getContent().get(1).acceptedSubmissionCount());
         assertNull(page.getContent().get(1).acceptanceRate());
         assertEquals(1, aggregateQueryExecutions());
-        assertEquals(3, statistics.getQueryExecutionCount(),
-                "Expected the page query, pagination count, and one statistics query.");
+        assertEquals(4, statistics.getQueryExecutionCount(),
+                "Expected page, pagination count, bulk tags, and one statistics query.");
     }
 
     @Test
@@ -160,7 +160,7 @@ class ProblemSubmissionStatisticsTests {
         Tag graphs = tagRepository.saveAndFlush(new Tag("Graphs"));
         ProblemRequest request = new ProblemRequest(
                 "Tagged problem", "tagged-problem", "Description",
-                null, null, null, false, null, true, Set.of(arrays.getId()));
+                null, null, null, false, null, true, Set.of(arrays.getId()), null);
 
         ProblemResponse created = problemService.create(request);
 
@@ -168,7 +168,7 @@ class ProblemSubmissionStatisticsTests {
 
         ProblemResponse edited = problemService.edit(created.id(), new ProblemRequest(
                 "Tagged problem", "tagged-problem", "Description",
-                null, null, null, false, null, true, Set.of(graphs.getId())));
+                null, null, null, false, null, true, Set.of(graphs.getId()), null));
 
         assertEquals(List.of(graphs.getId()), edited.tags().stream().map(tag -> tag.id()).toList());
     }

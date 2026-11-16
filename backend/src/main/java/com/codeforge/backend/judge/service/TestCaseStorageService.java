@@ -61,7 +61,20 @@ public class TestCaseStorageService {
             String input,
             String expectedOutput) throws IOException {
 
-        Path directory = getProblemDirectory(problemId);
+        writeTestCase(
+                getTestCaseDirectoryId(problemId),
+                testCaseId,
+                input,
+                expectedOutput);
+    }
+
+    public void writeTestCase(
+            String directoryId,
+            Long testCaseId,
+            String input,
+            String expectedOutput) throws IOException {
+
+        Path directory = getSnapshotDirectory(directoryId);
         ensureDirectory(directory);
 
         writeAtomically(
@@ -116,7 +129,18 @@ public class TestCaseStorageService {
             Map<Long, String> expectedOutputs,
             boolean spjEnabled) throws IOException {
 
-        Path directory = getProblemDirectory(problemId);
+        writeInfo(
+                getTestCaseDirectoryId(problemId),
+                expectedOutputs,
+                spjEnabled);
+    }
+
+    public void writeInfo(
+            String directoryId,
+            Map<Long, String> expectedOutputs,
+            boolean spjEnabled) throws IOException {
+
+        Path directory = getSnapshotDirectory(directoryId);
         ensureDirectory(directory);
 
         Map<String, Object> testCases = new LinkedHashMap<>();
@@ -245,6 +269,68 @@ public class TestCaseStorageService {
             throw new IllegalStateException(
                     "Failed to delete test case storage: " + directory,
                     exception);
+        }
+    }
+
+    private Path getSnapshotDirectory(String directoryId) {
+        if (directoryId == null || directoryId.isBlank()) {
+            throw new IllegalArgumentException(INVALID_VALUE);
+        }
+
+        Path directory = storageRoot.resolve(directoryId).normalize();
+
+        if (!storageRoot.equals(directory.getParent())) {
+            throw new IllegalArgumentException(INVALID_VALUE);
+        }
+
+        return directory;
+    }
+
+    public record StoredTestCase(
+            String input,
+            String expectedOutput) {
+    }
+
+    public StoredTestCase readTestCase(
+            String directoryId,
+            Long testCaseId) throws IOException {
+
+        if (testCaseId == null || testCaseId <= 0) {
+            throw new IllegalArgumentException(INVALID_VALUE);
+        }
+
+        Path directory = getSnapshotDirectory(directoryId);
+
+        String input = Files.readString(
+                directory.resolve(testCaseId + ".in"),
+                StandardCharsets.UTF_8);
+
+        String expectedOutput = Files.readString(
+                directory.resolve(testCaseId + ".out"),
+                StandardCharsets.UTF_8);
+
+        return new StoredTestCase(input, expectedOutput);
+    }
+
+    public void deleteSnapshotDirectory(String directoryId)
+            throws IOException {
+
+        Path directory = getSnapshotDirectory(directoryId);
+
+        if (Files.notExists(directory)) {
+            return;
+        }
+        try (var paths = Files.walk(directory)) {
+            for (Path path : paths
+                    .sorted(Comparator.reverseOrder())
+                    .toList()) {
+
+                Files.deleteIfExists(path);
+            }
+        } catch (IOException e) {
+            throw new IOException(
+                    "Failed to delete snapshot directory: " + directory,
+                    e);
         }
     }
 }

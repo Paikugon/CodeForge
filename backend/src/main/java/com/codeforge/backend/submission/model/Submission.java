@@ -26,7 +26,7 @@ public class Submission {
     @Column(name = "problem_id", nullable = false)
     private Long problemId;
 
-    @Column (name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Column(nullable = false, length = 30)
@@ -61,8 +61,15 @@ public class Submission {
     @Column(name = "error_message", columnDefinition = "TEXT")
     private String errorMessage;
 
+    @Column(name = "test_case_directory_id")
+    private String testCaseDirectoryId;
     @Column(name = "failed_test_case")
     private String failedTestCase;
+    @Column(name = "failed_input", columnDefinition = "TEXT")
+    private String failedInput;
+
+    @Column(name = "failed_expected_output", columnDefinition = "TEXT")
+    private String failedExpectedOutput;
 
     @Column(name = "failed_output", columnDefinition = "TEXT")
     private String failedOutput;
@@ -207,5 +214,29 @@ public class Submission {
 
     public void setFailedOutput(String failedOutput) {
         this.failedOutput = failedOutput;
+    }
+
+    public String getFailedInput() {
+        return failedInput;
+    }
+
+    public void setFailedInput(String failedInput) {
+        this.failedInput = failedInput;
+    }
+
+    public String getFailedExpectedOutput() {
+        return failedExpectedOutput;
+    }
+
+    public void setFailedExpectedOutput(String failedExpectedOutput) {
+        this.failedExpectedOutput = failedExpectedOutput;
+    }
+
+    public String getTestCaseDirectoryId() {
+        return testCaseDirectoryId;
+    }
+
+    public void setTestCaseDirectoryId(String testCaseDirectoryId) {
+        this.testCaseDirectoryId = testCaseDirectoryId;
     }
 }

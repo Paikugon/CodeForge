@@ -1,12 +1,15 @@
 package com.codeforge.backend.judge.client;
 
+import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.HexFormat;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -21,9 +24,26 @@ public class JudgeClient {
 
     public JudgeClient(
             @Value("${judge.server.url}") String serverUrl,
-            @Value("${judge.server.token}") String token) {
+            @Value("${judge.server.token}") String token,
+            @Value("${judge.server.connect-timeout-ms:5000}") long connectTimeoutMs,
+            @Value("${judge.server.read-timeout-ms:300000}") long readTimeoutMs) {
+
+        if (connectTimeoutMs <= 0 || readTimeoutMs <= 0) {
+            throw new IllegalArgumentException(
+                    "Judge Server timeouts must be positive");
+        }
+
+        HttpClient httpClient = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofMillis(connectTimeoutMs))
+                .build();
+
+        JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+
+        requestFactory.setReadTimeout(
+                Duration.ofMillis(readTimeoutMs));
 
         this.restClient = RestClient.builder()
+                .requestFactory(requestFactory)
                 .baseUrl(serverUrl)
                 .defaultHeader(
                         "X-Judge-Server-Token",

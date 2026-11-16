@@ -231,7 +231,6 @@ public class JudgeService {
 		}
 
 		JsonNode result = response.data().get(0);
-		System.out.println("Judge Server run result: " + result);
 
 		int resultCode = result.get("result").intValue();
 

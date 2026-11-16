@@ -13,6 +13,7 @@ import com.codeforge.backend.testcase.event.TestCasesChangedEvent;
 import com.codeforge.backend.problem.event.ProblemDeletedEvent;
 import com.codeforge.backend.testcase.model.TestCase;
 import com.codeforge.backend.testcase.repository.TestCaseRepository;
+import com.codeforge.backend.testcase.service.TestCaseService;
 import com.codeforge.backend.tag.model.Tag;
 import com.codeforge.backend.tag.repository.TagRepository;
 import com.codeforge.backend.tag.dto.TagResponse;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.LinkedHashSet;
-import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -45,18 +45,21 @@ public class ProblemService {
     private final ApplicationEventPublisher eventPublisher;
     private final SubmissionRepository submissionRepository;
     private final TagRepository tagRepository;
+    private final TestCaseService testCaseService;
 
     public ProblemService(
             ProblemRepository problemRepository,
             TestCaseRepository testCaseRepository,
             ApplicationEventPublisher eventPublisher,
             SubmissionRepository submissionRepository,
-            TagRepository tagRepository) {
+            TagRepository tagRepository,
+            TestCaseService testCaseService) {
         this.problemRepository = problemRepository;
         this.testCaseRepository = testCaseRepository;
         this.eventPublisher = eventPublisher;
         this.submissionRepository = submissionRepository;
         this.tagRepository = tagRepository;
+        this.testCaseService = testCaseService;
     }
 
     @Transactional
@@ -76,9 +79,13 @@ public class ProblemService {
         problem.setEnabled(request.enabled() == null || request.enabled());
         replaceTags(problem, request.tagIds());
         try {
+            Problem saved = problemRepository.saveAndFlush(problem);
+            List<TestCaseResponse> testCases = request.testCases() == null || request.testCases().isEmpty()
+                    ? List.of()
+                    : testCaseService.createBatch(saved.getId(), request.testCases());
             return ProblemResponse.from(
-                    problemRepository.saveAndFlush(problem),
-                    List.of(),
+                    saved,
+                    testCases,
                     true);
         } catch (DataIntegrityViolationException ex) {
             if (isSlugConstraintViolation(ex)) {
@@ -270,7 +277,11 @@ public class ProblemService {
 
     @Transactional
     public ProblemResponse edit(Long id, ProblemRequest request) {
-        Problem problem = problemRepository.findById(id)
+        if (request.testCases() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    com.codeforge.backend.common.error.ErrorCode.TEST_CASES_CREATE_ONLY);
+        }
+        Problem problem = problemRepository.findByIdForTestCaseUpdate(id)
                 .orElseThrow(() -> new ProblemNotFoundException(id));
         if (request.slug() != null && !request.slug().equals(problem.getSlug())) {
             if (problemRepository.existsBySlug(request.slug())) {
@@ -303,6 +314,7 @@ public class ProblemService {
         }
 
         try {
+            problem.setTestCasesSynced(false);
             eventPublisher.publishEvent(
                     new TestCasesChangedEvent(problem.getId()));
             return ProblemResponse.from(

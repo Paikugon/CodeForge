@@ -4,16 +4,27 @@ import com.codeforge.backend.problem.model.Problem;
 import com.codeforge.backend.problem.dto.ProblemListResponse;
 import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     boolean existsBySlug(String slug);
+
+    @Query("select p.id from Problem p order by p.id")
+    List<Long> findAllProblemIds();
+
+    // Serialize test-case mutations for the same problem while assigning order indexes.
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Problem p where p.id = :id")
+    Optional<Problem> findByIdForTestCaseUpdate(@Param("id") Long id);
 
     @Query("""
             select distinct p

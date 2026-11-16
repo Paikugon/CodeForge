@@ -1,0 +1,2 @@
+ALTER TABLE problems
+    ADD COLUMN test_cases_synced BOOLEAN NOT NULL DEFAULT FALSE;

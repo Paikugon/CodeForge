@@ -240,6 +240,9 @@ public class GlobalExceptionHandler {
     }
 
     private String validationCode(FieldError fieldError) {
+        if (fieldError.getDefaultMessage() != null && fieldError.getDefaultMessage().startsWith("CODE_")) {
+            return fieldError.getDefaultMessage();
+        }
         String constraint = fieldError.getCode();
 
         return validationCode(
@@ -248,7 +251,9 @@ public class GlobalExceptionHandler {
     }
 
     private String validationCode(String field, String constraint) {
-        String fieldCode = field.replaceAll("([a-z])([A-Z])", "$1_$2")
+        // Keep the full indexed path in fieldErrors, but use a stable code for each field.
+        String leafField = field.substring(field.lastIndexOf('.') + 1).replaceAll("\\[[^\\]]*\\]", "");
+        String fieldCode = leafField.replaceAll("([a-z])([A-Z])", "$1_$2")
                 .replace('-', '_')
                 .toUpperCase(Locale.ROOT);
 
