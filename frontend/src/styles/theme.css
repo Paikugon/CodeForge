@@ -1,33 +1,1028 @@
-html[data-theme="dark"] .live-problem-tag {
-  color: #8dccff;
+:root {
+  --bg: #f8f9fb;
+  --white: #fff;
+  --text: #252b35;
+  --muted: #818792;
+  --border: #e8eaee;
+  --orange: #1687e8;
+  --orange-dark: #0874cf;
+  --orange-soft: #eaf5ff;
+  --green: #29937a;
+  --sidebar: 224px;
+  --shadow: 0 3px 12px #18202d03
 }
-html[data-theme="dark"] .live-submission-detail {
-  --result-bg: #18283c;
-  --result-border: #2d435e;
-  --result-text: #a1bddf;
+@media(min-width:1600px) {
+  :root {
+    --sidebar: 236px
+  }
 }
-
-html[data-theme="dark"] .live-submission-detail[data-tone="success"] {
-  --result-bg: #17332f;
-  --result-border: #245046;
-  --result-text: #9ed7bd;
+@media(max-width:1250px) {
+  :root {
+    --sidebar: 200px
+  }
 }
-
-html[data-theme="dark"] .live-submission-detail[data-tone="warning"] {
-  --result-bg: #322f29;
-  --result-border: #4e4536;
-  --result-text: #e0bf87;
+@media(max-width:760px) {
+  :root {
+    --sidebar: 0px
+  }
 }
-
-html[data-theme="dark"] .live-submission-detail[data-tone="danger"] {
-  --result-bg: #35262e;
-  --result-border: #593943;
-  --result-text: #efa6b2;
+:root {
+  --muted: #748093
 }
-
-html[data-theme="dark"] .live-submission-detail[data-tone="pending"] {
-  --result-bg: #182f4a;
-  --result-border: #2c4a6e;
-  --result-text: #8bb9f0;
+:root {
+  --orange: #1687e8;
+  --orange-dark: #0874cf;
+  --orange-soft: #eaf5ff;
+  accent-color: #1687e8;
+  color-scheme: light
+}
+html[data-theme=dark] {
+  color-scheme: dark;
+  --bg: #0c1420;
+  --white: #142236;
+  --text: #dce7f4;
+  --muted: #90a5c0;
+  --border: #26374c;
+  --orange: #41a5ff;
+  --orange-dark: #258fe8;
+  --orange-soft: #17324b;
+  --shadow: 0 3px 12px #0000000a
+}
+html[data-theme=dark] body {
+  color: #dce7f4;
+  background: #0c1420
+}
+html[data-theme=dark] .sidebar,
+html[data-theme=dark] .topbar {
+  background: #101c2c;
+  border-color: #233348
+}
+html[data-theme=dark] .brand {
+  color: #edf5ff
+}
+html[data-theme=dark] .brand-icon {
+  background: #238fe9;
+  color: #fff
+}
+html[data-theme=dark] .brand-dot {
+  color: #46a7fa
+}
+html[data-theme=dark] .nav-item {
+  color: #8fa4bf
+}
+html[data-theme=dark] .nav-item:hover {
+  background: #17283d;
+  color: #d5e6fb
+}
+html[data-theme=dark] .nav-item.active {
+  background: #16334e;
+  color: #58adf7
+}
+html[data-theme=dark] .nav-count {
+  background: #1e2d42;
+  color: #8da5c4
+}
+html[data-theme=dark] .active .nav-count {
+  background: #20496b;
+  color: #79bdff
+}
+html[data-theme=dark] .workspace-label {
+  color: #667e9a
+}
+html[data-theme=dark] .nav-divider {
+  background: #213248
+}
+html[data-theme=dark] .build-card {
+  background: #132236;
+  border-color: #23374f
+}
+html[data-theme=dark] .build-card strong {
+  color: #a7bdd6
+}
+html[data-theme=dark] .build-card p {
+  color: #6983a1
+}
+html[data-theme=dark] .build-card button,
+html[data-theme=dark] .data-status {
+  color: #7e9abc
+}
+html[data-theme=dark] .sidebar-caption {
+  color: #526d8c
+}
+html[data-theme=dark] .breadcrumb-root {
+  color: #6e86a4
+}
+html[data-theme=dark] .breadcrumb strong {
+  color: #9eb6d4
+}
+html[data-theme=dark] .header-separator {
+  background: #2b3b50
+}
+html[data-theme=dark] .private-tag {
+  color: #6f89aa
+}
+html[data-theme=dark] .demo-label {
+  color: #5e7a9a
+}
+html[data-theme=dark] .identity-select select {
+  color: #b4cbe6
+}
+html[data-theme=dark] option {
+  background: #142238;
+  color: #bdd0e8
+}
+html[data-theme=dark] .orange {
+  background: #203f60;
+  color: #82bded
+}
+html[data-theme=dark] .purple {
+  background: #352c4d;
+  color: #bda2e2
+}
+html[data-theme=dark] .blue {
+  background: #273c5e;
+  color: #97b5e2
+}
+html[data-theme=dark] .green {
+  background: #1c3c37;
+  color: #8ac4a7
+}
+html[data-theme=dark] .gray {
+  background: #293549;
+  color: #98abc3
+}
+html[data-theme=dark] .theme-toggle {
+  color: #86b8e4
+}
+html[data-theme=dark] .theme-toggle:hover {
+  background: #1b354f;
+  border-color: #2a4b6e;
+  color: #a7d4ff
+}
+html[data-theme=dark] .page-heading h1 {
+  color: #e0ecfb
+}
+html[data-theme=dark] .eyebrow,
+html[data-theme=dark] .page-heading .eyebrow {
+  color: #6a86a8
+}
+html[data-theme=dark] .page-heading p:not(.eyebrow) {
+  color: #849bb9
+}
+html[data-theme=dark] .button {
+  background: #17283d;
+  border-color: #2c415b;
+  color: #a7bfdc;
+  box-shadow: none
+}
+html[data-theme=dark] .button:hover {
+  background: #1b3049;
+  border-color: #3a5a7c
+}
+html[data-theme=dark] .button.primary {
+  background: #258fe9;
+  border-color: #258fe9;
+  color: #fff
+}
+html[data-theme=dark] .button.primary:hover {
+  background: #3ca2f6;
+  border-color: #3ca2f6
+}
+html[data-theme=dark] .icon-button {
+  color: #6a86a8
+}
+html[data-theme=dark] .icon-button:hover {
+  background: #1c314b;
+  color: #a1c6f5
+}
+html[data-theme=dark] .welcome-banner {
+  background: #132d46;
+  border-color: #1f405e
+}
+html[data-theme=dark] .banner-kicker {
+  color: #679cca
+}
+html[data-theme=dark] .banner-kicker>span {
+  background: #5ca3dd
+}
+html[data-theme=dark] .welcome-banner h2 {
+  color: #bddcff
+}
+html[data-theme=dark] .welcome-banner p {
+  color: #7fa6ca
+}
+html[data-theme=dark] .welcome-banner button {
+  color: #6db6f0
+}
+html[data-theme=dark] .art-grid {
+  opacity: .4
+}
+html[data-theme=dark] .code-tile {
+  border-color: #3a6181;
+  box-shadow: 4px 9px 14px #05101c30
+}
+html[data-theme=dark] .tile-one {
+  background: #234969;
+  color: #80b5df
+}
+html[data-theme=dark] .code-tile.tile-two {
+  background: #378ed0;
+  color: #deefff
+}
+html[data-theme=dark] .tile-three {
+  background: #22445f;
+  color: #7db7e1
+}
+html[data-theme=dark] .art-line {
+  border-color: #527fa470
+}
+html[data-theme=dark] .art-spark {
+  color: #4e83ae
+}
+html[data-theme=dark] .list-tabs>button,
+html[data-theme=dark] .panel-tabs>button {
+  color: #728eaf
+}
+html[data-theme=dark] .list-tabs>button.selected,
+html[data-theme=dark] .panel-tabs>button.selected {
+  color: #4ca9f4;
+  border-color: #4ca9f4
+}
+html[data-theme=dark] .list-tabs>button>span {
+  background: #1e4263;
+  color: #74bcf6
+}
+html[data-theme=dark] .sort-label select {
+  color: #6f8bac
+}
+html[data-theme=dark] .search-field {
+  background: #132237;
+  border-color: #273c56;
+  color: #6d89ab
+}
+html[data-theme=dark] .search-field input {
+  color: #bed4f0
+}
+html[data-theme=dark] input::placeholder,
+html[data-theme=dark] textarea::placeholder {
+  color: #56718f
+}
+html[data-theme=dark] .search-field:focus-within {
+  border-color: #387eb5;
+  box-shadow: 0 0 0 2px #132b43
+}
+html[data-theme=dark] .select-field select {
+  background: #132237;
+  border-color: #273c56;
+  color: #7d9abd
+}
+html[data-theme=dark] .select-field svg {
+  color: #6082a8
+}
+html[data-theme=dark] .table-card,
+html[data-theme=dark] .right-rail section,
+html[data-theme=dark] .profile-card,
+html[data-theme=dark] .person-card,
+html[data-theme=dark] .activity-chart,
+html[data-theme=dark] .profile-stats,
+html[data-theme=dark] .history-summary,
+html[data-theme=dark] .admin-overview>div,
+html[data-theme=dark] .detail-meta,
+html[data-theme=dark] .source-card,
+html[data-theme=dark] .submission-metrics {
+  background: #132237;
+  border-color: #243950
+}
+html[data-theme=dark] thead {
+  background: #15273d
+}
+html[data-theme=dark] th {
+  color: #7997bb;
+  border-color: #273c55
+}
+html[data-theme=dark] td {
+  border-color: #20334c
+}
+html[data-theme=dark] tbody tr:hover {
+  background: #16283e
+}
+html[data-theme=dark] .problem-title {
+  color: #b2c8e4
+}
+html[data-theme=dark] .problem-title:hover {
+  color: #69b6f5
+}
+html[data-theme=dark] .problem-title>span {
+  color: #526e91
+}
+html[data-theme=dark] .problem-tags button {
+  background: #1b2f47;
+  color: #718eaf
+}
+html[data-theme=dark] .problem-tags button:hover {
+  background: #224669;
+  color: #a6d6ff
+}
+html[data-theme=dark] .badge {
+  background: #24374f;
+  color: #9cb4d2
+}
+html[data-theme=dark] .badge.easy,
+html[data-theme=dark] .badge.ac,
+html[data-theme=dark] .badge.active {
+  background: #1b3c37;
+  color: #79c6a5
+}
+html[data-theme=dark] .badge.medium,
+html[data-theme=dark] .badge.wa,
+html[data-theme=dark] .badge.tle {
+  background: #3a352a;
+  color: #d8b475
+}
+html[data-theme=dark] .badge.hard,
+html[data-theme=dark] .badge.ce,
+html[data-theme=dark] .badge.re,
+html[data-theme=dark] .badge.mle,
+html[data-theme=dark] .badge.se,
+html[data-theme=dark] .badge.disabled,
+html[data-theme=dark] .badge.failed {
+  background: #402e39;
+  color: #db9297
+}
+html[data-theme=dark] .badge.admin,
+html[data-theme=dark] .badge.special-judge {
+  background: #352d4b;
+  color: #b69bdc
+}
+html[data-theme=dark] .badge.judging,
+html[data-theme=dark] .badge.pending {
+  background: #1d3d5e;
+  color: #77b8f1
+}
+html[data-theme=dark] .badge.member {
+  background: #24364d;
+  color: #9aafca
+}
+html[data-theme=dark] .acceptance {
+  color: #829dbc
+}
+html[data-theme=dark] .acceptance>span {
+  color: #4f6c8d
+}
+html[data-theme=dark] .mini-bar {
+  background: #24364b
+}
+html[data-theme=dark] .mini-bar i {
+  background: #3d6968
+}
+html[data-theme=dark] .todo-dot {
+  background: #344c69
+}
+html[data-theme=dark] .attempt-dot {
+  border-color: #b18d5b
+}
+html[data-theme=dark] .green-text {
+  color: #77bd9d
+}
+html[data-theme=dark] .is-saved {
+  color: #6faadd !important
+}
+html[data-theme=dark] .pagination {
+  color: #6484a8
+}
+html[data-theme=dark] .pagination button {
+  color: #7999c0
+}
+html[data-theme=dark] .pagination button.current {
+  background: #1b3b59;
+  border-color: #29577f;
+  color: #8ecaff
+}
+html[data-theme=dark] .pagination button:not(:disabled):hover {
+  background: #213e5b
+}
+html[data-theme=dark] .list-note {
+  color: #506e92
+}
+html[data-theme=dark] .list-note svg {
+  color: #529d80
+}
+html[data-theme=dark] .card-header .eyebrow {
+  color: #6c8aad
+}
+html[data-theme=dark] .card-header>svg {
+  color: #48688d
+}
+html[data-theme=dark] .progress-ring {
+  background: conic-gradient(#419ee9 var(--progress), #243c54 0)
+}
+html[data-theme=dark] .progress-ring>div {
+  background: #132237
+}
+html[data-theme=dark] .progress-ring strong {
+  color: #bdd5f1
+}
+html[data-theme=dark] .progress-ring span {
+  color: #6b89ac
+}
+html[data-theme=dark] .goal-main h3 {
+  color: #94adcd
+}
+html[data-theme=dark] .goal-main p {
+  color: #5f7d9f
+}
+html[data-theme=dark] .goal-stats,
+html[data-theme=dark] .rail-link {
+  border-color: #243950
+}
+html[data-theme=dark] .goal-stats strong {
+  color: #a0bad9
+}
+html[data-theme=dark] .goal-stats span {
+  color: #627fa2
+}
+html[data-theme=dark] .rail-link {
+  color: #7497c2
+}
+html[data-theme=dark] .rail-link:hover {
+  color: #a3d5ff
+}
+html[data-theme=dark] .challenge-card {
+  background: #13263a !important
+}
+html[data-theme=dark] .challenge-symbol {
+  background: #213c56;
+  color: #7ca7cc
+}
+html[data-theme=dark] .challenge-number {
+  color: #527695
+}
+html[data-theme=dark] .challenge-card h3 {
+  color: #a6c2df
+}
+html[data-theme=dark] .challenge-card p {
+  color: #6e91b4
+}
+html[data-theme=dark] .challenge-meta>span:last-child {
+  color: #6085aa
+}
+html[data-theme=dark] .challenge-card .button {
+  background: #1a344e;
+  border-color: #2b4d6b;
+  color: #8db9de
+}
+html[data-theme=dark] .activity-icon {
+  background: #1d3b38;
+  color: #70a88c
+}
+html[data-theme=dark] .activity-icon.warning {
+  background: #3c382f;
+  color: #bfa573
+}
+html[data-theme=dark] .activity-item strong {
+  color: #94afd1
+}
+html[data-theme=dark] .activity-item>div>span {
+  color: #5b7a9e
+}
+html[data-theme=dark] .activity-item>svg {
+  color: #41638b
+}
+html[data-theme=dark] .rail-quote>span {
+  color: #2f4765
+}
+html[data-theme=dark] .rail-quote p {
+  color: #557499
+}
+html[data-theme=dark] .rail-quote small {
+  color: #3b5c84
+}
+html[data-theme=dark] .footer {
+  border-color: #22334b;
+  color: #3d5e85
+}
+html[data-theme=dark] .footer>span:first-child {
+  color: #53759e
+}
+html[data-theme=dark] .footer>span:first-child>span {
+  color: #304b6e
+}
+html[data-theme=dark] .muted,
+html[data-theme=dark] .small-copy {
+  color: #7693b6
+}
+html[data-theme=dark] .guard-icon {
+  background: #183a59;
+  color: #69b4f1
+}
+html[data-theme=dark] .guard>p:not(.eyebrow) {
+  color: #7998bf
+}
+html[data-theme=dark] .empty {
+  color: #526f94
+}
+html[data-theme=dark] .empty h3 {
+  color: #8daaca
+}
+html[data-theme=dark] .empty p {
+  color: #6484ac
+}
+html[data-theme=dark] .notice,
+html[data-theme=dark] .privacy-note {
+  background: #142a42;
+  border-color: #244361;
+  color: #7da4cc
+}
+html[data-theme=dark] .notice.warning,
+html[data-theme=dark] .account-banner {
+  background: #302c25;
+  border-color: #494131;
+  color: #bdab85
+}
+html[data-theme=dark] .privacy-note strong {
+  color: #8dadd1
+}
+html[data-theme=dark] .privacy-note p {
+  color: #5e82ad
+}
+html[data-theme=dark] .statement-panel,
+html[data-theme=dark] .editor-panel {
+  background: #132237;
+  border-color: #243b56
+}
+html[data-theme=dark] .statement-title h1 {
+  color: #c3d8f3
+}
+html[data-theme=dark] .limits {
+  color: #6e8cb1
+}
+html[data-theme=dark] .limits>span {
+  color: #436285
+}
+html[data-theme=dark] .statement-body {
+  color: #95aed0
+}
+html[data-theme=dark] .statement-body h3 {
+  color: #b0c7e7
+}
+html[data-theme=dark] .constraint {
+  background: #192d44;
+  border-color: #27435f;
+  color: #81a1c7
+}
+html[data-theme=dark] .sample-block {
+  border-color: #27415f
+}
+html[data-theme=dark] .sample-block>div {
+  background: #192d45;
+  color: #7190b8
+}
+html[data-theme=dark] .sample-block>div:nth-child(3) {
+  border-color: #27415f
+}
+html[data-theme=dark] .sample-block pre {
+  color: #8babd3
+}
+html[data-theme=dark] .sample-title>span {
+  color: #5e7ea6
+}
+html[data-theme=dark] .topic-pills>span {
+  background: #20364f;
+  color: #7c9ac1
+}
+html[data-theme=dark] .statement-body .muted {
+  color: #6486b0
+}
+html[data-theme=dark] .editor-header {
+  border-color: #293d57;
+  color: #9cb5d5
+}
+html[data-theme=dark] .editor-header select {
+  color: #8faed4
+}
+html[data-theme=dark] .editor-file {
+  background: #142438;
+  color: #8aa8d0
+}
+html[data-theme=dark] .editor-file>span:last-child {
+  color: #4a6d98
+}
+html[data-theme=dark] .code-editor {
+  background: #0c1828;
+  color: #b6cef0
+}
+html[data-theme=dark] .code-editor textarea {
+  color: #a9c9f0
+}
+html[data-theme=dark] .line-numbers {
+  color: #36577d
+}
+html[data-theme=dark] .editor-status {
+  background: #102038;
+  border-color: #1f3654;
+  color: #496b96
+}
+html[data-theme=dark] .run-panel-title {
+  background: #162940;
+  border-color: #294260
+}
+html[data-theme=dark] .run-panel-title>span:first-child {
+  color: #83a2ca
+}
+html[data-theme=dark] .demo-pill {
+  background: #203b57;
+  color: #7098c6
+}
+html[data-theme=dark] .run-content>label {
+  color: #6c90bb
+}
+html[data-theme=dark] .run-content textarea {
+  background: #102139;
+  border-color: #244260;
+  color: #94b9e9
+}
+html[data-theme=dark] .console-placeholder {
+  color: #5277a6
+}
+html[data-theme=dark] .console-placeholder small {
+  color: #3f6089
+}
+html[data-theme=dark] .run-result small {
+  color: #567aa6
+}
+html[data-theme=dark] .judge-scenario {
+  background: #112239;
+  border-color: #29415f
+}
+html[data-theme=dark] .judge-scenario label {
+  color: #7197c6
+}
+html[data-theme=dark] .judge-scenario select {
+  background: #18314d;
+  border-color: #2c4a6a;
+  color: #8ebbee
+}
+html[data-theme=dark] .judge-scenario>span {
+  color: #456993
+}
+html[data-theme=dark] .compact-submission {
+  border-color: #263d58;
+  color: #6d94c0
+}
+html[data-theme=dark] .compact-submission:hover {
+  background: #182c45
+}
+html[data-theme=dark] .compact-submission>span:first-child {
+  color: #8cafd9
+}
+html[data-theme=dark] .compact-submission small {
+  color: #4e76a3
+}
+html[data-theme=dark] .detail-top,
+html[data-theme=dark] .back-link {
+  color: #7298c7
+}
+html[data-theme=dark] .detail-top>a {
+  color: #7da3d2
+}
+html[data-theme=dark] .detail-top>span {
+  border-color: #2e496b
+}
+html[data-theme=dark] .table-hint {
+  color: #466d9c
+}
+html[data-theme=dark] .history-summary strong {
+  color: #abc8ec
+}
+html[data-theme=dark] .history-summary>div>div>span {
+  color: #6288b7
+}
+html[data-theme=dark] .id-link {
+  color: #83b6ef
+}
+html[data-theme=dark] .strong-link {
+  color: #9dbce3
+}
+html[data-theme=dark] .user-link {
+  color: #6c9bd2
+}
+html[data-theme=dark] .cell-sub {
+  color: #4e76a7
+}
+html[data-theme=dark] .date-cell,
+html[data-theme=dark] .mono {
+  color: #6c91bf
+}
+html[data-theme=dark] .timezone-note {
+  color: #486f9f
+}
+html[data-theme=dark] .verdict-banner.success {
+  background: #17332f;
+  border-color: #245046;
+  color: #76baa0
+}
+html[data-theme=dark] .verdict-banner.success h2 {
+  color: #9ed7bd
+}
+html[data-theme=dark] .verdict-banner.success p {
+  color: #669b88
+}
+html[data-theme=dark] .verdict-banner.success>.demo-pill {
+  background: #22453d;
+  color: #71a690
+}
+html[data-theme=dark] .verdict-banner.warning {
+  background: #322f29;
+  border-color: #4e4536;
+  color: #bca072
+}
+html[data-theme=dark] .verdict-banner.warning h2 {
+  color: #d9bf94
+}
+html[data-theme=dark] .verdict-banner.warning p {
+  color: #ad9471
+}
+html[data-theme=dark] .verdict-banner.warning>.demo-pill {
+  background: #463c2d;
+  color: #baa17c
+}
+html[data-theme=dark] .verdict-banner.pending {
+  background: #182f4a;
+  border-color: #2c4a6e;
+  color: #7aaae1
+}
+html[data-theme=dark] .verdict-banner.pending h2 {
+  color: #8bb9f0
+}
+html[data-theme=dark] .verdict-banner.pending p {
+  color: #5c89bc
+}
+html[data-theme=dark] .submission-metrics>div>span {
+  color: #6c92c2
+}
+html[data-theme=dark] .submission-metrics strong {
+  color: #9fc2ef
+}
+html[data-theme=dark] .submission-metrics>div>svg {
+  color: #416a9b
+}
+html[data-theme=dark] .card-title h3 {
+  color: #8db1de
+}
+html[data-theme=dark] .card-title>span {
+  color: #567ba9
+}
+html[data-theme=dark] .source-code {
+  background: #0d1b2e;
+  color: #a1c2ec
+}
+html[data-theme=dark] .source-locked>span {
+  background: #18314c;
+  border-color: #274968;
+  color: #668fbd
+}
+html[data-theme=dark] .source-locked h3 {
+  color: #82a9d5
+}
+html[data-theme=dark] .source-locked p {
+  color: #5b83b2
+}
+html[data-theme=dark] .source-locked small {
+  color: #3d6696
+}
+html[data-theme=dark] .detail-meta h3 {
+  color: #8cb0dd
+}
+html[data-theme=dark] .detail-meta dt {
+  color: #527cac
+}
+html[data-theme=dark] .detail-meta dd {
+  color: #83b1e7
+}
+html[data-theme=dark] .detail-meta dd small {
+  color: #456d9f
+}
+html[data-theme=dark] .compiler-output {
+  background: #32292b;
+  border-color: #523b3e;
+  color: #d8a097
+}
+html[data-theme=dark] .compiler-output pre {
+  color: #d29a93
+}
+html[data-theme=dark] .failed-grid>div {
+  background: #422f31
+}
+html[data-theme=dark] .failed-grid span,
+html[data-theme=dark] .compiler-output small {
+  color: #a57876
+}
+html[data-theme=dark] .person-card:hover {
+  border-color: #3c6998
+}
+html[data-theme=dark] .person-card-top {
+  color: #416895
+}
+html[data-theme=dark] .person-card h2,
+html[data-theme=dark] .profile-card-body h2 {
+  color: #b4d0f3
+}
+html[data-theme=dark] .handle {
+  color: #5c85b5
+}
+html[data-theme=dark] .person-card p,
+html[data-theme=dark] .profile-card-body>p {
+  color: #7195c2
+}
+html[data-theme=dark] .person-stats {
+  border-color: #29425f;
+  color: #567eae
+}
+html[data-theme=dark] .person-stats strong {
+  color: #8fb6e5
+}
+html[data-theme=dark] .profile-cover {
+  background: repeating-linear-gradient(-45deg, #1a3a59 0, #1a3a59 6px, #1d3d5c 6px, #1d3d5c 7px);
+  color: #2e5578
+}
+html[data-theme=dark] .profile-card-body>.avatar {
+  border-color: #132237
+}
+html[data-theme=dark] .profile-joined {
+  color: #507aa9
+}
+html[data-theme=dark] .private-info {
+  border-color: #2a4464
+}
+html[data-theme=dark] .private-info-title {
+  color: #4f7aab
+}
+html[data-theme=dark] .private-info>label {
+  color: #517fb4
+}
+html[data-theme=dark] .private-info strong {
+  color: #91b8e7
+}
+html[data-theme=dark] .stat-overline {
+  color: #5e88b8
+}
+html[data-theme=dark] .profile-stats strong {
+  color: #b6d2f7
+}
+html[data-theme=dark] .profile-stats strong>span {
+  color: #4a76a7
+}
+html[data-theme=dark] .stat-caption {
+  color: #527eaf
+}
+html[data-theme=dark] .activity-chart h3 {
+  color: #88acd9
+}
+html[data-theme=dark] .activity-chart .card-header>span {
+  color: #436d9c
+}
+html[data-theme=dark] .level-0,
+html[data-theme=dark] .heatmap-key .level-0 {
+  background: #1c334d
+}
+html[data-theme=dark] .level-1 {
+  background: #224d72
+}
+html[data-theme=dark] .level-2 {
+  background: #2d6797
+}
+html[data-theme=dark] .level-3 {
+  background: #3387c7
+}
+html[data-theme=dark] .level-4 {
+  background: #57a8e8
+}
+html[data-theme=dark] .heatmap-days,
+html[data-theme=dark] .heatmap-key {
+  color: #3c6898
+}
+html[data-theme=dark] .solved-row {
+  border-color: #253e5c
+}
+html[data-theme=dark] .solved-row>strong {
+  color: #8db3e3
+}
+html[data-theme=dark] .solved-row>span:nth-child(2),
+html[data-theme=dark] .solved-row>svg:last-child {
+  color: #416e9f
+}
+html[data-theme=dark] .admin-overview span {
+  color: #648bb9
+}
+html[data-theme=dark] .admin-overview strong {
+  color: #accaf1
+}
+html[data-theme=dark] .admin-overview strong.green-text {
+  color: #79b99c
+}
+html[data-theme=dark] .admin-session {
+  color: #9f8ebb
+}
+html[data-theme=dark] .visibility-toggle {
+  background: #1c3e35;
+  color: #83b49c
+}
+html[data-theme=dark] .visibility-toggle.hidden {
+  background: #24354d;
+  color: #6a90bd
+}
+html[data-theme=dark] .visibility-toggle:hover {
+  border-color: #3d715d
+}
+html[data-theme=dark] .row-actions .button {
+  color: #7ea4d0;
+  border-color: #2d4969
+}
+html[data-theme=dark] .table-bottom {
+  border-color: #27405d;
+  color: #537fb3
+}
+html[data-theme=dark] .slug {
+  color: #446e9f
+}
+html[data-theme=dark] .member-cell strong {
+  color: #9bbfe9
+}
+html[data-theme=dark] .member-cell small {
+  color: #4f7caf
+}
+html[data-theme=dark] .modal {
+  background: #132238;
+  border-color: #2c4668;
+  box-shadow: 0 25px 90px #00000070
+}
+html[data-theme=dark] .modal-title h2 {
+  color: #c0daf9
+}
+html[data-theme=dark] .modal-description {
+  color: #7b9dc7
+}
+html[data-theme=dark] .form-field {
+  color: #80a3d0
+}
+html[data-theme=dark] .form-field input,
+html[data-theme=dark] .form-field textarea,
+html[data-theme=dark] .form-field select {
+  background: #102037;
+  border-color: #2b486b;
+  color: #a1c5f2
+}
+html[data-theme=dark] .form-field input::placeholder,
+html[data-theme=dark] .form-field textarea::placeholder {
+  color: #456e9f
+}
+html[data-theme=dark] .checkbox-field {
+  color: #83a8d8
+}
+html[data-theme=dark] .checkbox-field small {
+  color: #507caf
+}
+html[data-theme=dark] .member-preview {
+  background: #192e48;
+  border-color: #2b4766
+}
+html[data-theme=dark] .member-preview strong {
+  color: #9abce7
+}
+html[data-theme=dark] .member-preview>div>span {
+  color: #527caa
+}
+html[data-theme=dark] .info-grid>div {
+  background: #182e48
+}
+html[data-theme=dark] .info-grid strong {
+  color: #8eafd9
+}
+html[data-theme=dark] .info-grid p {
+  color: #527eaf
+}
+html[data-theme=dark] .api-list>div {
+  border-color: #264360
+}
+html[data-theme=dark] .api-list strong {
+  color: #7fa7d8
+}
+html[data-theme=dark] .api-list code {
+  color: #4e7bad
+}
+html[data-theme=dark] .success-message h3 {
+  color: #84b99d
+}
+html[data-theme=dark] .success-message p {
+  color: #578876
+}
+html[data-theme=dark] .toast {
+  background: #1f3a55;
+  border-color: #3b6086
+}
+@media(max-width:900px) {
+  :root {
+    --sidebar: 0px
+  }
 }
 
