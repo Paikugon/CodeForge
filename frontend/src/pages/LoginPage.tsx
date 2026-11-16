@@ -4,18 +4,20 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { login } from "../api/auth";
 import { ApiError } from "../api/http";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { signIn } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const loginMutation = useMutation({
-    mutationFn: login,
+    mutationFn: signIn,
     retry: false,
 
     onSuccess: () => {

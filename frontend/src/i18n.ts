@@ -21,6 +21,8 @@ i18n.use(initReactI18next).init({
           password: "Mật khẩu",
           invalidCredentials: "Email hoặc mật khẩu không đúng.",
           loginError: "Không thể đăng nhập. Hãy kiểm tra kết nối hoặc trạng thái tài khoản.",
+          account: "Tài khoản",
+          logout: "Đăng xuất",
         },
         problems: {
           title: "Danh sách bài tập",
@@ -152,6 +154,8 @@ i18n.use(initReactI18next).init({
           password: "Password",
           invalidCredentials: "Incorrect email or password.",
           loginError: "Unable to log in. Please check your connection or account status.",
+          account: "Account",
+          logout: "Log out",
         },
         problems: {
           title: "Problem List",

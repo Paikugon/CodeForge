@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   ChevronRight,
   Code2,
@@ -10,6 +10,7 @@ import {
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTheme } from "../context/ThemeContext";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../context/AuthContext";
 
 export default function AppLayout() {
   const { pathname } = useLocation();
@@ -18,6 +19,9 @@ export default function AppLayout() {
   const { theme, toggleTheme } = useTheme();
 
   const { t } = useTranslation();
+
+  const { hasToken, user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -129,13 +133,30 @@ export default function AppLayout() {
               <LanguageSwitcher />
             </div>
 
-            <Link
-              to="/login"
-              state={{ from: pathname }}
-              className="button"
-            >
-              {t("auth.login")}
-            </Link>
+            {hasToken ? (
+              <div className="header-account">
+                <span>{user?.username ?? t("auth.account")}</span>
+
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => {
+                    signOut();
+                    navigate("/problems", { replace: true });
+                  }}
+                >
+                  {t("auth.logout")}
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                state={{ from: pathname }}
+                className="button"
+              >
+                {t("auth.login")}
+              </Link>
+            )}
           </div>
         </header>
 
