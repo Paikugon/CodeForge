@@ -56,4 +56,7 @@ export type SubmissionListItem = Omit<
   | "errorMessage"
   | "failedOutput"
   | "failedTestCase"
->;
+> & {
+  slug: string;
+  displaySlug: string;
+};

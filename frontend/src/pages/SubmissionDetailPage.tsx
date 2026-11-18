@@ -39,8 +39,6 @@ function CopyCodeButton({ source }: { source: string }) {
   const { t } = useTranslation();
   const [state, setState] = useState<"idle" | "copied" | "error">("idle");
 
-  console.log("translation:", t("submissionDetail.copy"), t("submissionDetail.copied"), t("submissionDetail.copyFailed"));
-
   useEffect(() => {
     if (state !== "copied") return;
     const timer = window.setTimeout(() => setState("idle"), 2000);
@@ -117,7 +115,7 @@ export default function SubmissionDetailPage() {
     return (
       <section className="live-submission-detail live-detail-state">
         <AlertCircle size={32} aria-hidden="true" />
-        <h1 role="alert">{t(errorKey)}</h1>
+        <h1 role="alert">{t(`submissionDetail.${errorKey}`)}</h1>
         <div className="live-detail-actions">
           {validId && (
             <button className="button" type="button"
@@ -126,8 +124,8 @@ export default function SubmissionDetailPage() {
               <RefreshCw size={16} aria-hidden="true" />{t("submissionDetail.retry")}
             </button>
           )}
-          {status === 401 && <Link className="button primary" to="/login">{t("login")}</Link>}
-          <Link className="button" to="/problems">{t("problems")}</Link>
+          {status === 401 && <Link className="button primary" to="/login">{t("submissionDetail.login")}</Link>}
+          <Link className="button" to="/problems">{t("submissionDetail.problems")}</Link>
         </div>
       </section>
     );
@@ -162,7 +160,7 @@ export default function SubmissionDetailPage() {
   const extension = languageExtensions[languageKey as keyof typeof languageExtensions];
   const locale = i18n.resolvedLanguage?.startsWith("vi") ? "vi-VN" : "en-GB";
   const problemTitle = problemQuery.data?.title
-    ?? t("problemFallback", { id: submission.problemId });
+    ?? t("submissionDetail.problemFallback", { id: submission.problemId });
   const hasSource = submission.sourceCode != null;
   const failedCase = submission.failedTestCase;
   const testCases = submission.passedTestCases == null || submission.totalTestCases == null
@@ -255,7 +253,7 @@ export default function SubmissionDetailPage() {
                   ["input", failedCase.input], ["expectedOutput", failedCase.expectedOutput],
                   ["actualOutput", failedCase.actualOutput],
                 ] as const).map(([label, value]) => (
-                  <div key={label}><h3>{t(label)}</h3><pre>{value || t("submissionDetail.emptyOutput")}</pre></div>
+                  <div key={label}><h3>{t(`submissionDetail.${label}`)}</h3><pre>{value || t("submissionDetail.emptyOutput")}</pre></div>
                 ))}
               </div>
             </section>
@@ -271,15 +269,15 @@ export default function SubmissionDetailPage() {
         <aside className="detail-meta" aria-labelledby="submission-meta-title">
           <h2 id="submission-meta-title">{t("submissionDetail.details")}</h2>
           <dl>
-            <dt>{t("submittedBy")}</dt>
+            <dt>{t("submissionDetail.submittedBy")}</dt>
             <dd className="live-submitter"><span className="avatar small blue" aria-hidden="true">
               {submission.username.slice(0, 2).toUpperCase()}
             </span><span>{submission.username}</span></dd>
-            <dt>{t("problem")}</dt>
+            <dt>{t("submissionDetail.problem")}</dt>
             <dd><Link to={`/problems/${submission.problemId}`}>{problemTitle}</Link></dd>
-            <dt>{t("submittedAt")}</dt>
-            <dd><time dateTime={submission.createdAt}>{formatDate(submission.createdAt)}</time><small>{t("timezone")}</small></dd>
-            <dt>{t("updatedAt")}</dt>
+            <dt>{t("submissionDetail.submittedAt")}</dt>
+            <dd><time dateTime={submission.createdAt}>{formatDate(submission.createdAt)}</time><small>{t("submissionDetail.timezone")}</small></dd>
+            <dt>{t("submissionDetail.updatedAt")}</dt>
             <dd><time dateTime={submission.updatedAt}>{formatDate(submission.updatedAt)}</time></dd>
           </dl>
         </aside>

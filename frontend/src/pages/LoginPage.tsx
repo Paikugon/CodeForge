@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { login } from "../api/auth";
 import { ApiError } from "../api/http";
 import { useAuth } from "../context/AuthContext";
 
@@ -25,10 +24,12 @@ export default function LoginPage() {
       queryClient.clear();
 
       const from: unknown = location.state?.from;
+      const fromPath = typeof from === "string" ? from.split(/[?#]/)[0] : "";
 
       const destination =
         typeof from === "string" &&
-        (from === "/problems" || from.startsWith("/problems/"))
+        (fromPath === "/problems" || fromPath.startsWith("/problems/") ||
+          fromPath === "/submissions" || fromPath.startsWith("/submissions/"))
           ? from
           : "/problems";
 

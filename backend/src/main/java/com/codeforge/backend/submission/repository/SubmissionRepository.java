@@ -31,21 +31,25 @@ public interface SubmissionRepository
 
 	@Query("""
 			select new com.codeforge.backend.submission.dto.SubmissionListResponse(
-			    s.id, s.userId, u.username, s.problemId, s.language, s.status, s.verdict,
+			    s.id, s.userId, u.username, s.problemId, p.slug,
+			    concat(p.slug, ' - ', p.title), s.language, s.status, s.verdict,
 			    s.executionTimeMs, s.memoryUsedKb, s.passedTestCases,
 			    s.totalTestCases, s.createdAt, s.updatedAt)
 			from Submission s
 			left join User u on u.id = s.userId
+			left join Problem p on p.id = s.problemId
 			""")
 	Page<SubmissionListResponse> findAllSummaries(Pageable pageable);
 
 	@Query("""
 			select new com.codeforge.backend.submission.dto.SubmissionListResponse(
-			    s.id, s.userId, u.username, s.problemId, s.language, s.status, s.verdict,
+			    s.id, s.userId, u.username, s.problemId, p.slug,
+			    concat(p.slug, ' - ', p.title), s.language, s.status, s.verdict,
 			    s.executionTimeMs, s.memoryUsedKb, s.passedTestCases,
 			    s.totalTestCases, s.createdAt, s.updatedAt)
 			from Submission s
 			left join User u on u.id = s.userId
+			left join Problem p on p.id = s.problemId
 			where s.problemId = :problemId
 			""")
 	Page<SubmissionListResponse> findSummaryByProblemId(
@@ -54,11 +58,13 @@ public interface SubmissionRepository
 
 	@Query("""
 			select new com.codeforge.backend.submission.dto.SubmissionListResponse(
-			    s.id, s.userId, u.username, s.problemId, s.language, s.status, s.verdict,
+			    s.id, s.userId, u.username, s.problemId, p.slug,
+			    concat(p.slug, ' - ', p.title), s.language, s.status, s.verdict,
 			    s.executionTimeMs, s.memoryUsedKb, s.passedTestCases,
 			    s.totalTestCases, s.createdAt, s.updatedAt)
 			from Submission s
 			left join User u on u.id = s.userId
+			left join Problem p on p.id = s.problemId
 			where s.userId = :userId
 			  and (:problemId is null or s.problemId = :problemId)
 			  and (:verdict is null or s.verdict = :verdict)

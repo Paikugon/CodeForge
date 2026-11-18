@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-do
 import {
   ChevronRight,
   Code2,
+  FileClock,
   Menu,
   Moon,
   Sun,
@@ -13,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
 
 export default function AppLayout() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { theme, toggleTheme } = useTheme();
@@ -80,6 +81,12 @@ export default function AppLayout() {
             <Code2 size={19} />
             Practice
           </NavLink>
+          <NavLink to="/submissions"
+            className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+            onClick={() => setMenuOpen(false)}>
+            <FileClock size={19} />
+            {t("submissionHistory:title")}
+          </NavLink>
         </nav>
 
         <div className="sidebar-bottom">
@@ -113,7 +120,7 @@ export default function AppLayout() {
             <span className="breadcrumb-root">Workspace</span>
             <ChevronRight size={14} />
             <strong>
-              {pathname.startsWith("/problems/") ? "Problem" : "Practice"}
+              {pathname.startsWith("/submissions") ? t("submissionHistory:title") : pathname.startsWith("/problems/") ? "Problem" : "Practice"}
             </strong>
           </div>
 
@@ -151,7 +158,7 @@ export default function AppLayout() {
             ) : (
               <Link
                 to="/login"
-                state={{ from: pathname }}
+                state={{ from: pathname + search }}
                 className="button"
               >
                 {t("auth.login")}
