@@ -272,7 +272,7 @@ export default function SubmissionDetailPage() {
             <dt>{t("submissionDetail.submittedBy")}</dt>
             <dd className="live-submitter"><span className="avatar small blue" aria-hidden="true">
               {submission.username.slice(0, 2).toUpperCase()}
-            </span><span>{submission.username}</span></dd>
+            </span>{submission.userId > 0 ? <Link to={`/users/${submission.userId}`}>{submission.username}</Link> : <span>{submission.username ?? "—"}</span>}</dd>
             <dt>{t("submissionDetail.problem")}</dt>
             <dd><Link to={`/problems/${submission.problemId}`}>{problemTitle}</Link></dd>
             <dt>{t("submissionDetail.submittedAt")}</dt>

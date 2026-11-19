@@ -7,6 +7,7 @@ import {
   Menu,
   Moon,
   Sun,
+  UserRound,
 } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTheme } from "../context/ThemeContext";
@@ -87,6 +88,9 @@ export default function AppLayout() {
             <FileClock size={19} />
             {t("submissionHistory:title")}
           </NavLink>
+          <NavLink to="/profile" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} onClick={() => setMenuOpen(false)}>
+            <UserRound size={19} />{t("profile:mine")}
+          </NavLink>
         </nav>
 
         <div className="sidebar-bottom">
@@ -120,7 +124,7 @@ export default function AppLayout() {
             <span className="breadcrumb-root">Workspace</span>
             <ChevronRight size={14} />
             <strong>
-              {pathname.startsWith("/submissions") ? t("submissionHistory:title") : pathname.startsWith("/problems/") ? "Problem" : "Practice"}
+              {pathname.startsWith("/profile") || pathname.startsWith("/users/") ? t("profile:title") : pathname === "/register" ? t("account:register") : pathname === "/login" ? t("auth.login") : pathname.startsWith("/submissions") ? t("submissionHistory:title") : pathname.startsWith("/problems/") ? "Problem" : "Practice"}
             </strong>
           </div>
 
@@ -142,7 +146,7 @@ export default function AppLayout() {
 
             {hasToken ? (
               <div className="header-account">
-                <span>{user?.username ?? t("auth.account")}</span>
+                <Link to="/profile" className="header-profile-link" title={user?.username}>{user?.displayName?.trim() || user?.username || t("auth.account")}</Link>
 
                 <button
                   type="button"

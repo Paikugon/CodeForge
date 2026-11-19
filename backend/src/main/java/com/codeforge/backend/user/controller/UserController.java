@@ -7,6 +7,7 @@ import com.codeforge.backend.user.dto.AdminUpdateUserRequest;
 import com.codeforge.backend.user.dto.ChangePasswordRequest;
 import com.codeforge.backend.user.dto.UserListResponse;
 import com.codeforge.backend.user.dto.UserProfileResponse;
+import com.codeforge.backend.user.dto.UpdateProfileRequest;
 import com.codeforge.backend.user.enums.UserRole;
 import com.codeforge.backend.user.service.UserService;
 
@@ -54,6 +55,14 @@ public class UserController {
     public UserProfileResponse getProfile(
             @PathVariable Long userId) {
         return userService.getProfile(userId, false);
+    }
+
+    @PatchMapping("/profile/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCurrentProfile(
+            @AuthenticationPrincipal Jwt jwt,
+            @Valid @RequestBody UpdateProfileRequest request) {
+        userService.updateProfile(Long.parseLong(jwt.getSubject()), request);
     }
 
     @PatchMapping("/{userId}")

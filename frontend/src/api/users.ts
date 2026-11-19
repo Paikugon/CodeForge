@@ -6,6 +6,7 @@ import type {
   UserListItem,
   UserProfile,
   UserRole,
+  UpdateProfileRequest,
 } from "../types/user";
 import { apiRequest, createQuery } from "./http";
 
@@ -23,6 +24,13 @@ export async function getUserProfile(
     `/api/users/profile/${encodeURIComponent(userId)}`,
     { signal },
   );
+}
+
+export async function updateMyProfile(request: UpdateProfileRequest): Promise<void> {
+  await apiRequest<void>("/api/users/profile/me", {
+    method: "PATCH",
+    body: JSON.stringify(request),
+  });
 }
 
 export type GetUsersParams = {

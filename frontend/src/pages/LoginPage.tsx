@@ -1,39 +1,28 @@
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ApiError } from "../api/http";
 import { useAuth } from "../context/AuthContext";
+import { safeAccountReturnTo } from "../utils/account";
+import "../styles/pages/auth.css";
+import "../styles/pages/account.css";
 
 export default function LoginPage() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const { signIn } = useAuth();
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => typeof location.state?.email === "string" ? location.state.email : "");
   const [password, setPassword] = useState("");
 
   const loginMutation = useMutation({
     mutationFn: signIn,
     retry: false,
 
-    onSuccess: () => {
-      // Xóa dữ liệu cache có thể thuộc tài khoản trước.
-      queryClient.clear();
-
-      const from: unknown = location.state?.from;
-      const fromPath = typeof from === "string" ? from.split(/[?#]/)[0] : "";
-
-      const destination =
-        typeof from === "string" &&
-        (fromPath === "/problems" || fromPath.startsWith("/problems/") ||
-          fromPath === "/submissions" || fromPath.startsWith("/submissions/"))
-          ? from
-          : "/problems";
-
-      navigate(destination, { replace: true });
+    onSuccess: response => {
+      navigate(response.mustChangePassword ? "/profile?tab=security" : safeAccountReturnTo(location.state?.from), { replace: true });
     },
   });
 
@@ -44,9 +33,12 @@ export default function LoginPage() {
       : "auth.loginError";
 
   return (
-    <section className="live-login">
+    <section className="live-login live-account-form">
       <h1>{t("auth.login")}</h1>
       <p>{t("auth.loginDescription")}</p>
+      {location.state?.registered && <p className="account-success" role="status">{t("account:registered")}</p>}
+      {location.state?.passwordChanged && <p className="account-success" role="status">{t("account:passwordChanged")}</p>}
+      {location.state?.sessionExpired && <p className="account-alert" role="alert">{t("account:errors.sessionExpired")}</p>}
 
       <form
         onSubmit={(event) => {
@@ -118,6 +110,7 @@ export default function LoginPage() {
           )}
         </button>
       </form>
+      <p className="account-switch">{t("account:noAccount")} <Link to="/register" state={{ from: safeAccountReturnTo(location.state?.from) }}>{t("account:register")}</Link></p>
     </section>
   );
 }

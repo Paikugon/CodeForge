@@ -173,7 +173,7 @@ export default function SubmissionHistoryPage() {
             return <TableRow key={item.id} className="table-link-row">
               <td><Link to={`/submissions/${item.id}`} className="row-link history-id" aria-label={t("open", { id: item.id })}>#{item.id}</Link></td>
               <td><Link to={`/problems/${item.problemId}`} className="row-action history-problem" aria-label={t("problem", { slug: item.slug })}>{item.displaySlug}</Link></td>
-              <td><span className="history-user" title={item.username}>{item.username}</span></td>
+              <td>{item.userId > 0 ? <Link to={`/users/${item.userId}`} className="history-user row-action" title={item.username}>{item.username}</Link> : <span className="history-user">{item.username ?? "—"}</span>}</td>
               <td><ResultBadge submission={item} /></td>
               <td>{language}</td>
               <td className="history-number">{item.executionTimeMs == null ? "—" : `${item.executionTimeMs} ms`}</td>

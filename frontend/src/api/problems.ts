@@ -146,10 +146,10 @@ async function getUserProblems(
   params: GetProblemsParams,
   signal?: AbortSignal,
 ): Promise<ProblemPage> {
-  const { page = 0, size = 20, sort = "createdAt,desc" } = params;
+  const { page = 0, size = 20, sort = "createdAt,desc", difficulty, tagIds = [] } = params;
 
   return apiRequest<ProblemPage>(
-    `${path}${createQuery({ page, size, sort })}`,
+    `${path}${createQuery({ page, size, sort, difficulty, tagIds: tagIds.length ? tagIds.join(",") : undefined })}`,
     { signal },
   );
 }

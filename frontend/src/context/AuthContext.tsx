@@ -34,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     enabled: Boolean(token),
     retry: false,
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
 
   const signOut = useCallback(() => {

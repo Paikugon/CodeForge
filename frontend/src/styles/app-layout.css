@@ -1103,6 +1103,18 @@ h3,
   white-space: nowrap;
 }
 
+.header-account > .header-profile-link {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.header-account > .header-profile-link:hover {
+  color: var(--orange);
+}
+
 .live-language select {
   min-height: 36px;
   padding: 0 10px;

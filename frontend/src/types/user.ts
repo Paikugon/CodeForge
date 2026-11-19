@@ -3,6 +3,8 @@ export type UserRole = "USER" | "ADMIN";
 export type UserProfile = {
   id: number;
   username: string;
+  displayName: string | null;
+  bio: string | null;
   email: string | null;
   role: UserRole | null;
   solvedCount: number;
@@ -36,4 +38,9 @@ export type AdminResetPasswordRequest = {
 export type ChangePasswordRequest = {
   currentPassword: string;
   newPassword: string;
+};
+
+export type UpdateProfileRequest = {
+  displayName?: string;
+  bio?: string;
 };
