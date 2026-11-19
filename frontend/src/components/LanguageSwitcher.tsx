@@ -8,9 +8,7 @@ export default function LanguageSwitcher() {
       {t("app.language")}{" "}
       <select
         value={i18n.resolvedLanguage}
-        onChange={(event) =>
-          void i18n.changeLanguage(event.target.value)
-        }
+        onChange={(event) => void i18n.changeLanguage(event.target.value)}
       >
         <option value="vi">Tiếng Việt</option>
         <option value="en">English</option>

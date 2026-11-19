@@ -4,6 +4,7 @@ import com.codeforge.backend.common.pagination.PaginationValidator;
 import com.codeforge.backend.problem.dto.ProblemRequest;
 import com.codeforge.backend.problem.dto.ProblemListResponse;
 import com.codeforge.backend.problem.dto.ProblemResponse;
+import com.codeforge.backend.problem.dto.ProblemBatchVisibilityRequest;
 import com.codeforge.backend.problem.dto.RunCodeRequest;
 import com.codeforge.backend.problem.dto.RunCodeResponse;
 import com.codeforge.backend.problem.service.ProblemService;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -143,6 +145,17 @@ public class ProblemController {
         return problemService.findUnsolvedByUserId(userId, pageable, difficulty, tagIds, false);
     }
     
+    @GetMapping("/{id}/authoring")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProblemResponse authoring(@PathVariable Long id) { return problemService.authoring(id); }
+
+    @PatchMapping("/batch-visibility")
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void visibilityBatch(@Valid @RequestBody ProblemBatchVisibilityRequest request) {
+        problemService.updateVisibilityBatch(request.ids(), request.enabled());
+    }
+
     @PostMapping("/{id}/run")
     public ResponseEntity<RunCodeResponse> run(
             @PathVariable Long id,

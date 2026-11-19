@@ -31,6 +31,33 @@ import static com.codeforge.backend.common.error.ErrorCode.*;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(org.springframework.web.multipart.support.MissingServletRequestPartException.class)
+    public ResponseEntity<ApiErrorResponse> handleMissingUploadPart(
+            org.springframework.web.multipart.support.MissingServletRequestPartException exception,
+            HttpServletRequest request) {
+        return error(HttpStatus.BAD_REQUEST, REQUEST_VALIDATION_FAILED, request);
+    }
+
+    @ExceptionHandler(org.springframework.web.multipart.MultipartException.class)
+    public ResponseEntity<ApiErrorResponse> handleMalformedUpload(
+            org.springframework.web.multipart.MultipartException exception, HttpServletRequest request) {
+        return error(HttpStatus.BAD_REQUEST, "CODE_TEST_CASE_IMPORT_FORMAT", request);
+    }
+
+    @ExceptionHandler(com.codeforge.backend.testcase.service.TestCaseImportException.class)
+    public ResponseEntity<ApiErrorResponse> handleTestCaseImport(
+            com.codeforge.backend.testcase.service.TestCaseImportException exception,
+            HttpServletRequest request) {
+        return error(HttpStatus.BAD_REQUEST, exception.getMessage(), request,
+                Map.of("file", exception.getFile() == null ? "" : exception.getFile()));
+    }
+
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiErrorResponse> handleUploadTooLarge(
+            org.springframework.web.multipart.MaxUploadSizeExceededException exception, HttpServletRequest request) {
+        return error(HttpStatus.PAYLOAD_TOO_LARGE, "CODE_TEST_CASE_IMPORT_TOO_LARGE", request);
+    }
+
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(IllegalArgumentException.class)

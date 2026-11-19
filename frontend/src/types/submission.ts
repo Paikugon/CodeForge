@@ -1,8 +1,4 @@
-export type SubmissionStatus =
-  | "PENDING"
-  | "JUDGING"
-  | "COMPLETED"
-  | "FAILED";
+export type SubmissionStatus = "PENDING" | "JUDGING" | "COMPLETED" | "FAILED";
 
 export type SubmissionVerdict =
   | "AC"
@@ -56,4 +52,7 @@ export type SubmissionListItem = Omit<
   | "errorMessage"
   | "failedOutput"
   | "failedTestCase"
->;
+> & {
+  slug: string;
+  displaySlug: string;
+};

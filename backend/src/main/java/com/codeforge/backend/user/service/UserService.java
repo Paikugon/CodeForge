@@ -4,6 +4,7 @@ import com.codeforge.backend.submission.repository.SubmissionRepository;
 import com.codeforge.backend.user.dto.AdminUpdateUserRequest;
 import com.codeforge.backend.user.dto.UserListResponse;
 import com.codeforge.backend.user.dto.UserProfileResponse;
+import com.codeforge.backend.user.dto.UpdateProfileRequest;
 import com.codeforge.backend.user.enums.UserRole;
 import com.codeforge.backend.user.model.User;
 import com.codeforge.backend.user.repository.UserRepository;
@@ -41,6 +42,8 @@ public class UserService {
         return new UserProfileResponse(
                 user.getId(),
                 user.getUsername(),
+                user.getDisplayName(),
+                user.getBio(),
                 includePrivateInfo ? user.getEmail() : null,
                 includePrivateInfo ? user.getRole().name() : null,
                 submissionRepository.countSolvedProblemsByUserId(userId),
@@ -50,6 +53,29 @@ public class UserService {
                 user.getCreatedAt(),
                 user.getUpdatedAt(),
                 includePrivateInfo ? user.isMustChangePassword() : null);
+    }
+
+    @Transactional
+    public void updateProfile(long userId, UpdateProfileRequest request) {
+        if (request.displayName() == null && request.bio() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, REQUEST_VALIDATION_FAILED);
+        }
+
+        User user = userRepository.findByIdForUpdate(userId)
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, USER_NOT_FOUND));
+
+        // Missing/null fields stay unchanged; an empty string clears a field.
+        if (request.displayName() != null) {
+            user.setDisplayName(normalizeProfileText(request.displayName()));
+        }
+        if (request.bio() != null) {
+            user.setBio(normalizeProfileText(request.bio()));
+        }
+    }
+
+    private String normalizeProfileText(String value) {
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     @Transactional

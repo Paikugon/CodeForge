@@ -10,6 +10,8 @@ public record SubmissionListResponse(
         Long userId,
         String username,
         Long problemId,
+        String slug,
+        String displaySlug,
         String language,
         SubmissionStatus status,
         SubmissionVerdict verdict,

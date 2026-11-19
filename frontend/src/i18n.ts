@@ -1,5 +1,14 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { appResources } from "./locales/app";
+import { authResources } from "./locales/auth";
+import { problemDetailResources } from "./locales/problemDetail";
+import { problemsResources } from "./locales/problems";
+import { submissionDetailResources } from "./locales/submissionDetail";
+import { submissionHistoryResources } from "./locales/submissionHistory";
+import { accountResources } from "./locales/account";
+import { profileResources } from "./locales/profile";
+import { adminResources } from "./locales/admin";
 
 const savedLanguage = localStorage.getItem("language");
 const initialLanguage = savedLanguage === "en" ? "en" : "vi";
@@ -7,106 +16,29 @@ const initialLanguage = savedLanguage === "en" ? "en" : "vi";
 i18n.use(initReactI18next).init({
   resources: {
     vi: {
+      admin: adminResources.vi,
+      account: accountResources.vi,
+      profile: profileResources.vi,
+      submissionHistory: submissionHistoryResources.vi,
       translation: {
-        app: {
-          language: "Ngôn ngữ",
-          title: "CodeForge",
-          tagline: "Mỗi bài toán, một bước tiến.",
-        },
-        problems: {
-          title: "Danh sách bài tập",
-          id: "Mã bài",
-          name: "Tên bài",
-          difficulty: "Độ khó",
-          tags: "Thẻ",
-          loading: "Đang tải...",
-          error: "Đã xảy ra lỗi khi tải danh sách bài tập.",
-          empty: "Không có bài tập nào được tìm thấy.",
-          previous: "Trước",
-          next: "Tiếp",
-          pageInfo: "Trang {{current}}/{{total}}",
-          // funny, I know
-          difficultyness: { // If you're reading this and wondering why there's a "ness", it's to distinguish it from "difficulty" key
-            easy: "Dễ",
-            medium: "Trung bình",
-            hard: "Khó",
-          },
-        },
-        problemDetail: {
-          title: "Chi tiết bài tập",
-          loading: "Đang tải bài tập...",
-          error: "Không thể tải bài tập.",
-          timeLimit: "Giới hạn thời gian",
-          memoryLimit: "Giới hạn bộ nhớ",
-          examples: "Ví dụ",
-          example: "Ví dụ {{number}}",
-          input: "Dữ liệu vào",
-          output: "Kết quả mong đợi",
-          codeEditor: {
-            code: "Mã nguồn",
-            language: "Ngôn ngữ",
-            run: "Chạy",
-            submit: "Gửi",
-            customInput: "Dữ liệu thử",
-            running: "Đang chạy...",
-            runError: "Chạy thử thất bại. Hãy kiểm tra kết nối và thử lại.",
-            runSuccess: "Chạy thử thành công.",
-            runResult: "Kết quả chạy",
-            resultCode: "Mã kết quả: {{code}}",
-            noOutput: "(Không có output)",
-          },
-        },
+        app: appResources.vi,
+        auth: authResources.vi,
+        problems: problemsResources.vi,
+        problemDetail: problemDetailResources.vi,
+        submissionDetail: submissionDetailResources.vi,
       },
     },
     en: {
+      admin: adminResources.en,
+      account: accountResources.en,
+      profile: profileResources.en,
+      submissionHistory: submissionHistoryResources.en,
       translation: {
-        app: {
-          language: "Language",
-          title: "CodeForge",
-          tagline: "One problem, one step forward.",
-        },
-        problems: {
-          title: "Problem List",
-          id: "Problem ID",
-          name: "Problem Name",
-          difficulty: "Difficulty",
-          tags: "Tags",
-          loading: "Loading...",
-          error: "An error occurred while loading the problem list.",
-          empty: "No problems found.",
-          previous: "Previous",
-          next: "Next",
-          pageInfo: "Page {{current}}/{{total}}",
-          difficultyness: {
-            easy: "Easy",
-            medium: "Medium",
-            hard: "Hard",
-          },
-        },
-        problemDetail: {
-          title: "Problem Detail",
-          loading: "Loading problem...",
-          error: "Unable to load the problem.",
-          timeLimit: "Time Limit",
-          memoryLimit: "Memory Limit",
-          examples: "Examples",
-          example: "Example {{number}}",
-          input: "Input",
-          output: "Output",
-          codeEditor: {
-            code: "Code",
-            language: "Language",
-            run: "Run",
-            submit: "Submit",
-            customInput: "Custom Input",
-            running: "Running...",
-            runError: "Run failed. Please check your connection and try again.",
-            runSuccess: "Run succeeded.",
-            runResult: "Run Result",
-            resultCode: "Result Code: {{code}}",
-            noOutput: "(No output)",
-          },
-        },
+        app: appResources.en,
+        auth: authResources.en,
+        problems: problemsResources.en,
+        problemDetail: problemDetailResources.en,
+        submissionDetail: submissionDetailResources.en,
       },
     },
   },

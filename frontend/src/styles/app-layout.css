@@ -1,0 +1,1128 @@
+.app-shell {
+  font-size: 15px;
+  line-height: 1.6;
+}
+.app-shell h3 {
+  font-size: 17px;
+}
+.app-shell p {
+  font-size: 15px;
+}
+.app-shell .page-heading h1 {
+  font-size: 32px;
+  line-height: 1.25;
+}
+.app-shell .page-heading p:not(.eyebrow) {
+  font-size: 15px;
+  line-height: 1.65;
+}
+.app-shell .eyebrow,
+.app-shell .page-heading .eyebrow {
+  font-size: 11px;
+}
+.app-shell .nav-item {
+  font-size: 14px;
+}
+.app-shell .workspace-label,
+.app-shell .sidebar-caption {
+  font-size: 11px;
+}
+.app-shell .nav-count {
+  font-size: 12px;
+}
+.app-shell .build-card strong,
+.app-shell .build-card p,
+.app-shell .build-card button,
+.app-shell .data-status {
+  font-size: 12px;
+}
+.app-shell .breadcrumb,
+.app-shell .breadcrumb strong {
+  font-size: 13px;
+}
+.app-shell .private-tag {
+  font-size: 12px;
+}
+.app-shell .demo-label {
+  font-size: 10px;
+}
+.app-shell .identity-select select {
+  font-size: 13px;
+}
+.app-shell .avatar.small {
+  font-size: 12px;
+}
+.app-shell button.button,
+.app-shell .text-button {
+  font-size: 14px;
+}
+.app-shell .list-tabs > button,
+.app-shell .panel-tabs > button,
+.app-shell .profile-main .list-tabs > button {
+  font-size: 14px;
+}
+.app-shell .list-tabs > button > span {
+  font-size: 12px;
+}
+.app-shell .sort-label select {
+  font-size: 13px;
+  max-width: 140px;
+}
+.app-shell .search-field input,
+.app-shell .select-field select {
+  font-size: 14px;
+}
+.app-shell .tag-picker-placeholder,
+.app-shell .tag-picker .tag-option {
+  font-size: 14px;
+}
+.app-shell .tag-picker .tag-picker-panel .tag-search input {
+  font-size: 14px;
+}
+.app-shell .tag-picker-heading {
+  font-size: 14px;
+}
+.app-shell .tag-picker-heading > span,
+.app-shell .tag-picker-footer .text-button {
+  font-size: 12px;
+}
+.app-shell .tag-picker-chip {
+  font-size: 13px;
+}
+.app-shell .tag-picker-count {
+  font-size: 12px;
+}
+.app-shell .tag-picker-footer .button {
+  font-size: 13px;
+}
+.app-shell .tag-options-empty,
+.app-shell .tag-count-caption {
+  font-size: 13px;
+}
+.app-shell .tag-usage-link,
+.app-shell .managed-tag-name {
+  font-size: 15px;
+}
+.app-shell .tag-form-meta {
+  font-size: 12px;
+}
+.app-shell table,
+.app-shell td {
+  font-size: 15px;
+}
+.app-shell th {
+  font-size: 13px;
+}
+.app-shell .problem-title,
+.app-shell .strong-link,
+.app-shell .user-link,
+.app-shell .id-link,
+.app-shell .member-cell strong {
+  font-size: 15px;
+}
+.app-shell .problem-title > span,
+.app-shell .cell-sub,
+.app-shell .date-cell,
+.app-shell .mono,
+.app-shell .member-cell small,
+.app-shell .slug {
+  font-size: 13px;
+}
+.app-shell .badge {
+  font-size: 12px;
+}
+.app-shell .table-hint,
+.app-shell .table-bottom,
+.app-shell .pagination,
+.app-shell .pagination button {
+  font-size: 13px;
+}
+.app-shell .table-hint {
+  white-space: normal;
+}
+.app-shell .practice-layout .problem-table th {
+  font-size: 13px;
+}
+.app-shell .practice-layout .problem-table td,
+.app-shell .practice-layout .problem-table .problem-title {
+  font-size: 16px;
+}
+.app-shell .practice-layout .problem-table .problem-title > span {
+  font-size: 13px;
+}
+.app-shell .practice-layout .problem-table .problem-tags {
+  margin-left: 34px;
+}
+.app-shell .practice-layout .problem-table .problem-tags button,
+.app-shell .practice-layout .problem-table .badge {
+  font-size: 12px;
+}
+.app-shell .practice-layout .problem-table .acceptance {
+  font-size: 14px;
+}
+.app-shell .practice-layout .problem-table .acceptance > span {
+  font-size: 12px;
+}
+.app-shell .practice-layout .pagination,
+.app-shell .practice-layout .pagination button {
+  font-size: 13px;
+}
+.app-shell .list-note {
+  font-size: 12px;
+}
+.app-shell .card-header .eyebrow,
+.app-shell .right-rail .card-header .eyebrow,
+.app-shell .challenge-number {
+  font-size: 11px;
+}
+.app-shell .challenge-card h3 {
+  font-size: 19px;
+}
+.app-shell .challenge-card p,
+.app-shell .rail-quote p {
+  font-size: 14px;
+}
+.app-shell .challenge-meta > span:last-child,
+.app-shell .rail-quote small {
+  font-size: 12px;
+}
+.app-shell .activity-item strong {
+  font-size: 14px;
+}
+.app-shell .activity-item > div > span,
+.app-shell .rail-link {
+  font-size: 12px;
+}
+.app-shell .small-copy,
+.app-shell .timezone-note,
+.app-shell .back-link {
+  font-size: 13px;
+}
+.app-shell .empty h3 {
+  font-size: 20px;
+}
+.app-shell .empty p,
+.app-shell .loading,
+.app-shell .toast,
+.app-shell .notice,
+.app-shell .account-banner {
+  font-size: 14px;
+}
+.app-shell .modal-title h2 {
+  font-size: 22px;
+}
+.app-shell .modal-description,
+.app-shell .info-grid p {
+  font-size: 15px;
+  line-height: 1.65;
+}
+.app-shell .info-grid strong {
+  font-size: 16px;
+}
+.app-shell .api-list,
+.app-shell .api-list strong,
+.app-shell .api-list code {
+  font-size: 12px;
+}
+.app-shell .form-field,
+.app-shell .form-grid.three .form-field,
+.app-shell .checkbox-field {
+  font-size: 14px;
+}
+.app-shell .form-field input,
+.app-shell .form-field textarea,
+.app-shell .form-field select {
+  font-size: 15px;
+}
+.app-shell .checkbox-field small,
+.app-shell .modal .notice,
+.app-shell .form-field > small {
+  font-size: 13px;
+}
+.app-shell .success-message h3 {
+  font-size: 22px;
+}
+.app-shell .success-message p,
+.app-shell .guard > p:not(.eyebrow) {
+  font-size: 15px;
+}
+.app-shell .detail-top,
+.app-shell .detail-top > span,
+.app-shell .limits,
+.app-shell .solved-label {
+  font-size: 13px;
+}
+.app-shell .statement-title h1 {
+  font-size: 29px;
+  line-height: 1.3;
+}
+.app-shell .statement-body,
+.app-shell .statement-body p {
+  font-size: 15px;
+  line-height: 1.8;
+}
+.app-shell .statement-body h3 {
+  font-size: 17px;
+}
+.app-shell .constraint,
+.app-shell .sample-block pre,
+.app-shell .source-code,
+.app-shell .compiler-output pre {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.app-shell .sample-title > span,
+.app-shell .sample-block > div,
+.app-shell .topic-pills > span {
+  font-size: 12px;
+}
+.app-shell .editor-header,
+.app-shell .editor-header select {
+  font-size: 14px;
+}
+.app-shell .editor-file,
+.app-shell .editor-file > span:last-child,
+.app-shell .editor-status {
+  font-size: 12px;
+}
+.app-shell .code-editor textarea {
+  font-size: 14px;
+  line-height: 24px;
+}
+.app-shell .line-numbers {
+  font-size: 13px;
+  line-height: 24px;
+}
+.app-shell .run-panel-title > span:first-child,
+.app-shell .run-content > label {
+  font-size: 14px;
+}
+.app-shell .demo-pill {
+  font-size: 11px;
+}
+.app-shell .run-content textarea,
+.app-shell .console-placeholder,
+.app-shell .run-result,
+.app-shell .run-result p {
+  font-size: 14px;
+}
+.app-shell .console-placeholder small,
+.app-shell .run-result small {
+  font-size: 12px;
+}
+.app-shell .judge-scenario label,
+.app-shell .judge-scenario select,
+.app-shell .judge-scenario > span {
+  font-size: 12px;
+}
+.app-shell .history-summary strong {
+  font-size: 28px;
+}
+.app-shell .history-summary > div > div > span {
+  font-size: 13px;
+}
+.app-shell .verdict-banner h2 {
+  font-size: 24px;
+}
+.app-shell .verdict-banner p {
+  font-size: 15px;
+}
+.app-shell .submission-metrics > div > span {
+  font-size: 13px;
+}
+.app-shell .submission-metrics strong {
+  font-size: 22px;
+}
+.app-shell .card-title h3,
+.app-shell .detail-meta h3 {
+  font-size: 16px;
+}
+.app-shell .card-title > span {
+  font-size: 12px;
+}
+.app-shell .source-locked h3 {
+  font-size: 21px;
+}
+.app-shell .source-locked p {
+  font-size: 15px;
+}
+.app-shell .source-locked small,
+.app-shell .detail-meta dt,
+.app-shell .detail-meta p,
+.app-shell .detail-meta dd small {
+  font-size: 13px;
+}
+.app-shell .detail-meta dd {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.app-shell .compiler-output,
+.app-shell .failed-grid span,
+.app-shell .compiler-output small {
+  font-size: 13px;
+}
+.app-shell .profile-card-body h2 {
+  font-size: 24px;
+}
+.app-shell .handle,
+.app-shell .profile-joined {
+  font-size: 13px;
+}
+.app-shell .profile-card-body > p {
+  font-size: 15px;
+}
+.app-shell .private-info-title {
+  font-size: 11px;
+}
+.app-shell .private-info > label {
+  font-size: 13px;
+}
+.app-shell .private-info strong {
+  font-size: 15px;
+  overflow-wrap: anywhere;
+}
+.app-shell .solved-row > strong,
+.app-shell .compact-submission {
+  font-size: 15px;
+}
+.app-shell .compact-submission small,
+.app-shell .compact-submission .small-copy {
+  font-size: 13px;
+}
+.app-shell .privacy-note strong {
+  font-size: 15px;
+}
+.app-shell .privacy-note p {
+  font-size: 14px;
+}
+.app-shell .admin-session,
+.app-shell .admin-overview span,
+.app-shell .visibility-toggle {
+  font-size: 13px;
+}
+.app-shell .admin-overview strong {
+  font-size: 30px;
+}
+.app-shell .member-preview strong {
+  font-size: 16px;
+}
+.app-shell .member-preview > div > span {
+  font-size: 14px;
+}
+.app-shell .footer {
+  font-size: 11px;
+}
+@media (max-width: 680px) {
+  .app-shell .page-heading h1 {
+    font-size: 28px;
+  }
+
+  .app-shell .page-heading p:not(.eyebrow) {
+    font-size: 14px;
+  }
+
+  .app-shell .identity-select select {
+    font-size: 12px;
+  }
+
+  .app-shell .practice-layout .problem-table th {
+    font-size: 12px;
+  }
+
+  .app-shell .practice-layout .problem-table .problem-title {
+    font-size: 15px;
+    gap: 8px;
+  }
+
+  .app-shell .practice-layout .problem-table .problem-title > span {
+    font-size: 12px;
+  }
+
+  .app-shell .practice-layout .problem-table .problem-tags {
+    margin-left: 30px;
+  }
+
+  .app-shell .practice-layout .problem-table .problem-tags button {
+    font-size: 11px;
+  }
+
+  .app-shell .practice-layout .problem-table .badge {
+    font-size: 11px;
+  }
+
+  .app-shell .practice-layout .problem-table th:nth-child(3) {
+    width: 86px;
+  }
+
+  .app-shell .statement-title h1 {
+    font-size: 26px;
+  }
+
+  .app-shell .modal-title h2 {
+    font-size: 20px;
+  }
+
+  .app-shell .compact-submission {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .app-shell .solved-row {
+    gap: 9px;
+  }
+
+  .app-shell .solved-row > strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+h1,
+h2,
+h3,
+.brand {
+  font-family: "Manrope", "DM Sans", sans-serif;
+}
+.app-shell {
+  min-height: 100vh;
+}
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar);
+  background: white;
+  border-right: 1px solid var(--border);
+  padding: 28px 17px 19px;
+  display: flex;
+  flex-direction: column;
+  z-index: 30;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 11px;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 38px;
+  margin-bottom: 43px;
+}
+.brand-icon {
+  width: 34px;
+  height: 35px;
+  background: var(--orange);
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: white;
+  box-shadow: 0 4px 7px #1687e815;
+}
+.brand-dot {
+  color: var(--orange);
+}
+.workspace-label {
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  font-weight: 650;
+  color: #a0a6b0;
+  padding: 0 14px;
+  margin-bottom: 11px;
+}
+.nav-item {
+  min-height: 43px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 550;
+  color: #767e8a;
+  margin-bottom: 4px;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.nav-item:hover {
+  background: #f6f7f9;
+  color: #333b47;
+}
+.nav-item.active {
+  background: var(--orange-soft);
+  color: #1687d6;
+}
+.nav-count {
+  margin-left: auto;
+  font-size: 10px;
+  min-width: 20px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #f2f4f7;
+  color: #9197a1;
+  text-align: center;
+}
+.active .nav-count {
+  background: #d9ecff;
+  color: #1683da;
+}
+.nav-divider {
+  height: 1px;
+  background: #f0f1f4;
+  margin: 20px 14px 22px;
+}
+.admin-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 35px 8px 0;
+}
+.build-card {
+  border: 1px solid #edf0f4;
+  border-radius: 9px;
+  padding: 15px 12px;
+  background: #fcfcfd;
+}
+.build-card strong {
+  font-size: 10px;
+  display: block;
+  letter-spacing: -0.1px;
+}
+.build-card p {
+  font-size: 10px;
+  color: #9a9fa8;
+  line-height: 1.8;
+  margin: 5px 0 12px;
+}
+.build-card button {
+  font-size: 10px;
+  font-weight: 600;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: #737c88;
+  justify-content: space-between;
+  width: 100%;
+}
+.data-status {
+  padding: 20px 1px 11px;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 10px;
+  color: #737d88;
+  border: 0;
+  background: transparent;
+}
+.data-status .status-dot {
+  margin-right: 0;
+}
+.status-dot {
+  display: inline-block;
+  vertical-align: middle;
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background: #48ad91;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+.sidebar-caption {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #a9afb8;
+  display: block;
+}
+.main-shell {
+  margin-left: var(--sidebar);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  height: 76px;
+  padding: 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  gap: 20px;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 11px;
+  color: #b1b6be;
+}
+.breadcrumb-root {
+  color: #9299a4;
+}
+.breadcrumb strong {
+  color: #687280;
+  font-size: 11px;
+  font-weight: 500;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.private-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #88909c;
+}
+.header-separator {
+  width: 1px;
+  height: 21px;
+  background: var(--border);
+  margin: 0 3px;
+}
+.demo-label {
+  font-size: 8px;
+  font-weight: 650;
+  letter-spacing: 1.2px;
+  color: #a3a9b2;
+}
+.identity-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+.identity-select select {
+  background: transparent;
+  border: 0;
+  appearance: none;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 10px 16px 10px 0;
+  max-width: 185px;
+  cursor: pointer;
+}
+.identity-select > svg:last-child {
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  color: #9a9faa;
+}
+.main-content {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 36px 36px 30px;
+  flex: 1;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 8px;
+  color: #adb4bf;
+  border-top: 1px solid #e9ecf0;
+  padding: 18px 36px;
+  margin-top: 14px;
+  gap: 15px;
+}
+.footer > span:first-child {
+  color: #9da6b3;
+  font-weight: 500;
+}
+.footer > span:first-child > span {
+  color: #d3d8df;
+  padding: 0 8px;
+}
+.mobile-menu {
+  display: none;
+}
+.mobile-backdrop {
+  display: none;
+}
+@media (min-width: 1600px) {
+  .main-content {
+    padding-top: 42px;
+  }
+
+  .topbar {
+    padding: 0 44px;
+  }
+
+  .main-content {
+    padding-left: 44px;
+    padding-right: 44px;
+  }
+
+  .main-content {
+    max-width: 1480px;
+  }
+}
+@media (max-width: 1250px) {
+  .sidebar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .brand {
+    font-size: 21px;
+    gap: 8px;
+    padding: 0 9px;
+  }
+
+  .brand-icon {
+    width: 31px;
+    height: 32px;
+  }
+
+  .nav-item {
+    font-size: 11px;
+    gap: 10px;
+    padding-left: 12px;
+    padding-right: 10px;
+  }
+
+  .workspace-label {
+    font-size: 8px;
+    letter-spacing: 1.2px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .topbar {
+    padding: 0 25px;
+  }
+
+  .main-content {
+    padding: 29px 25px;
+  }
+
+  .header-actions {
+    gap: 10px;
+  }
+
+  .demo-label {
+    display: none;
+  }
+
+  .footer {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}
+@media (max-width: 1050px) {
+  .private-tag {
+    display: none;
+  }
+
+  .header-separator {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .sidebar {
+    width: 224px;
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    z-index: 50;
+    padding-top: 22px;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-bottom {
+    padding-top: 20px;
+  }
+
+  .sidebar-caption {
+    font-size: 8px;
+  }
+
+  .main-shell {
+    margin-left: 0;
+  }
+
+  .mobile-menu {
+    display: inline-flex;
+  }
+
+  .mobile-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: #14233550;
+    border: 0;
+    z-index: 40;
+  }
+
+  .topbar {
+    padding: 0 18px;
+    height: 64px;
+    gap: 10px;
+  }
+
+  .breadcrumb {
+    gap: 8px;
+  }
+
+  .breadcrumb-root {
+    display: none;
+  }
+
+  .breadcrumb > svg {
+    display: none;
+  }
+
+  .identity-select select {
+    font-size: 10px;
+    max-width: 165px;
+  }
+
+  .identity-select .avatar {
+    width: 27px;
+    height: 27px;
+    border-radius: 8px;
+    font-size: 9px;
+  }
+
+  .main-content {
+    padding: 26px 20px;
+  }
+
+  .footer {
+    padding: 16px 20px;
+    font-size: 7px;
+    line-height: 1.8;
+  }
+
+  .footer > span:last-child {
+    display: none;
+  }
+}
+.nav-item {
+  color: #667384;
+  font-size: 12px;
+}
+.workspace-label {
+  color: #858e9b;
+}
+.sidebar-caption {
+  color: #8d97a5;
+}
+.build-card p {
+  color: #7c8795;
+}
+.data-status {
+  color: #6e7e90;
+}
+.breadcrumb-root {
+  color: #7c899a;
+}
+.breadcrumb strong {
+  color: #596b80;
+}
+.private-tag {
+  color: #788696;
+}
+.demo-label {
+  color: #8593a5;
+}
+.footer {
+  font-size: 9px;
+}
+@media (max-width: 760px) {
+  .footer {
+    font-size: 8px;
+  }
+}
+.brand-dot {
+  color: #1687e8;
+}
+@media (max-width: 900px) {
+  .sidebar {
+    width: 224px;
+    transform: translateX(-100%);
+    transition: transform 0.2s;
+    z-index: 50;
+    padding-top: 22px;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main-shell {
+    margin-left: 0;
+  }
+
+  .mobile-menu {
+    display: inline-flex;
+  }
+
+  .mobile-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: #14233570;
+    border: 0;
+    z-index: 40;
+  }
+
+  .main-content {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .topbar {
+    height: 65px;
+  }
+
+  .breadcrumb {
+    gap: 9px;
+  }
+
+  .sidebar-bottom {
+    padding-top: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .main-content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+/* Keep every navigation item reachable in short browser windows and at larger zoom. */
+.sidebar {
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.sidebar > * {
+  flex-shrink: 0;
+}
+
+.sidebar .sidebar-bottom {
+  flex-shrink: 0;
+}
+
+@media (max-height: 820px) {
+  .sidebar .brand {
+    margin-bottom: 24px;
+  }
+
+  .sidebar .nav-divider {
+    margin: 14px;
+  }
+
+  .sidebar .sidebar-bottom {
+    padding-top: 18px;
+  }
+
+  .sidebar .build-card {
+    padding: 12px;
+  }
+
+  .sidebar .build-card .mini-logo,
+  .sidebar .build-card p {
+    display: none;
+  }
+
+  .sidebar .build-card strong {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-height: 780px) {
+  .sidebar .build-card {
+    display: none;
+  }
+}
+
+@media (max-height: 680px) {
+  .sidebar .brand {
+    margin-bottom: 18px;
+  }
+
+  .sidebar .nav-item {
+    min-height: 38px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 2px;
+  }
+
+  .sidebar .workspace-label {
+    margin-bottom: 8px;
+  }
+
+  .sidebar .nav-divider {
+    margin: 10px 14px;
+  }
+
+  .sidebar .sidebar-bottom {
+    padding-top: 14px;
+  }
+
+  .sidebar .build-card {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .app-shell .sidebar:not(.open) {
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 680px) {
+  .live-language label {
+    display: none;
+  }
+}
+
+.header-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-account > span {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-account > .header-profile-link {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.header-account > .header-profile-link:hover {
+  color: var(--orange);
+}
+
+.live-language select {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--white);
+  color: var(--text);
+  font: inherit;
+}
+.live-language label {
+  color: var(--muted);
+  font-size: 13px;
+}

@@ -4,7 +4,6 @@ import com.codeforge.backend.judge.dto.JudgeResult;
 import com.codeforge.backend.judge.service.JudgeService;
 import com.codeforge.backend.judge.service.TestCaseStorageService;
 import com.codeforge.backend.problem.model.Problem;
-import com.codeforge.backend.problem.repository.ProblemRepository;
 import com.codeforge.backend.submission.enums.SubmissionStatus;
 import com.codeforge.backend.submission.model.Submission;
 import com.codeforge.backend.submission.repository.SubmissionRepository;

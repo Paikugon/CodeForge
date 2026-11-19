@@ -1,4 +1,4 @@
-import type { ProblemPage, ProblemDetail } from "../types/problem";
+import type { Problem, ProblemPage, ProblemDetail } from "../types/problem";
 import type { RunCodeRequest, RunCodeResponse } from "../types/run";
 import { apiRequest, createQuery } from "./http";
 
@@ -12,35 +12,50 @@ export type ProblemRequest = {
   spjEnabled: boolean;
   spjSource?: string | null;
   enabled?: boolean | null;
+  tagIds?: number[];
 };
 
-type GetProblemsParams = {
+export type GetProblemsParams = {
   page?: number;
   size?: number;
   sort?: string;
   enabled?: boolean;
+  difficulty?: Problem["difficulty"];
+  tagIds?: number[];
 };
 
 export async function getProblems(
   params: GetProblemsParams = {},
   signal?: AbortSignal,
 ): Promise<ProblemPage> {
-  const { page = 0, size = 20, sort = "createdAt,desc", enabled } = params;
+  const {
+    page = 0,
+    size = 20,
+    sort = "createdAt,desc",
+    enabled,
+    difficulty,
+    tagIds = [],
+  } = params;
 
-  return apiRequest<ProblemPage>(
-    `/api/problems${createQuery({ page, size, sort, enabled })}`,
-    { signal },
-  );
+  const query = createQuery({
+    page,
+    size,
+    sort,
+    enabled,
+    difficulty,
+    tagIds: tagIds.length > 0 ? tagIds.join(",") : undefined,
+  });
+
+  return apiRequest<ProblemPage>(`/api/problems${query}`, { signal });
 }
 
 export async function getProblemById(
   id: string,
   signal?: AbortSignal,
 ): Promise<ProblemDetail> {
-  return apiRequest<ProblemDetail>(
-    `/api/problems/${encodeURIComponent(id)}`,
-    { signal },
-  );
+  return apiRequest<ProblemDetail>(`/api/problems/${encodeURIComponent(id)}`, {
+    signal,
+  });
 }
 
 export async function runCode(
@@ -69,20 +84,16 @@ export async function updateProblem(
   id: number | string,
   request: ProblemRequest,
 ): Promise<ProblemDetail> {
-  return apiRequest<ProblemDetail>(
-    `/api/problems/${encodeURIComponent(id)}`,
-    {
-      method: "PUT",
-      body: JSON.stringify(request),
-    },
-  );
+  return apiRequest<ProblemDetail>(`/api/problems/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(request),
+  });
 }
 
 export async function deleteProblem(id: number | string): Promise<void> {
-  await apiRequest<void>(
-    `/api/problems/${encodeURIComponent(id)}`,
-    { method: "DELETE" },
-  );
+  await apiRequest<void>(`/api/problems/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
 }
 
 export async function getSolvedProblems(
@@ -128,10 +139,16 @@ async function getUserProblems(
   params: GetProblemsParams,
   signal?: AbortSignal,
 ): Promise<ProblemPage> {
-  const { page = 0, size = 20, sort = "createdAt,desc" } = params;
+  const {
+    page = 0,
+    size = 20,
+    sort = "createdAt,desc",
+    difficulty,
+    tagIds = [],
+  } = params;
 
   return apiRequest<ProblemPage>(
-    `${path}${createQuery({ page, size, sort })}`,
+    `${path}${createQuery({ page, size, sort, difficulty, tagIds: tagIds.length ? tagIds.join(",") : undefined })}`,
     { signal },
   );
 }

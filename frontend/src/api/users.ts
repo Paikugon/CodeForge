@@ -6,12 +6,11 @@ import type {
   UserListItem,
   UserProfile,
   UserRole,
+  UpdateProfileRequest,
 } from "../types/user";
 import { apiRequest, createQuery } from "./http";
 
-export async function getMyProfile(
-  signal?: AbortSignal,
-): Promise<UserProfile> {
+export async function getMyProfile(signal?: AbortSignal): Promise<UserProfile> {
   return apiRequest<UserProfile>("/api/users/profile/me", { signal });
 }
 
@@ -23,6 +22,15 @@ export async function getUserProfile(
     `/api/users/profile/${encodeURIComponent(userId)}`,
     { signal },
   );
+}
+
+export async function updateMyProfile(
+  request: UpdateProfileRequest,
+): Promise<void> {
+  await apiRequest<void>("/api/users/profile/me", {
+    method: "PATCH",
+    body: JSON.stringify(request),
+  });
 }
 
 export type GetUsersParams = {
@@ -37,7 +45,13 @@ export async function getUsers(
   params: GetUsersParams = {},
   signal?: AbortSignal,
 ): Promise<Page<UserListItem>> {
-  const { page = 0, size = 20, sort = "createdAt,desc", role, enabled } = params;
+  const {
+    page = 0,
+    size = 20,
+    sort = "createdAt,desc",
+    role,
+    enabled,
+  } = params;
 
   return apiRequest<Page<UserListItem>>(
     `/api/users${createQuery({ page, size, sort, role, enabled })}`,
@@ -59,13 +73,10 @@ export async function resetUserPassword(
   userId: number | string,
   request: AdminResetPasswordRequest,
 ): Promise<void> {
-  await apiRequest<void>(
-    `/api/users/${encodeURIComponent(userId)}/password`,
-    {
-      method: "PUT",
-      body: JSON.stringify(request),
-    },
-  );
+  await apiRequest<void>(`/api/users/${encodeURIComponent(userId)}/password`, {
+    method: "PUT",
+    body: JSON.stringify(request),
+  });
 }
 
 export async function changeMyPassword(

@@ -196,6 +196,22 @@ public class ProblemService {
     }
 
     @Transactional(readOnly = true)
+    public ProblemResponse authoring(Long id) {
+        Problem problem = problemRepository.findById(id).orElseThrow(() -> new ProblemNotFoundException(id));
+        return ProblemResponse.from(problem, List.of(), true);
+    }
+
+    @Transactional
+    public void updateVisibilityBatch(List<Long> ids, boolean enabled) {
+        if (ids == null || ids.isEmpty() || ids.size() > 100 || new java.util.HashSet<>(ids).size() != ids.size()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CODE_REQUEST_VALIDATION_FAILED");
+        }
+        List<Problem> selected = problemRepository.findSelectedForUpdate(ids);
+        if (selected.size() != ids.size()) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "CODE_PROBLEM_NOT_FOUND");
+        selected.forEach(problem -> problem.setEnabled(enabled));
+    }
+
+    @Transactional(readOnly = true)
     public ProblemResponse findById(
             Long id,
             boolean includeSpecialJudgeDetails,

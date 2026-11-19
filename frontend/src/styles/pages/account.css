@@ -1,0 +1,83 @@
+.live-account-form .account-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+.live-account-form .account-field label {
+  font-size: 14px;
+  font-weight: 550;
+  color: var(--text);
+}
+.live-account-form .account-field input {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+.live-account-form .account-field input:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+.live-account-form .account-field input[aria-invalid="true"] {
+  border-color: #c95066;
+}
+.live-account-form .account-field-error {
+  color: #b63d53;
+  font-size: 13px;
+}
+.live-account-form .account-hint {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0;
+}
+.live-account-form .account-alert {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  font-size: 14px;
+  background: var(--orange-soft);
+}
+.live-account-form .account-success {
+  padding: 12px;
+  margin-top: 18px;
+  border-radius: 7px;
+  background: var(--orange-soft);
+  color: var(--text);
+  font-size: 14px;
+}
+.live-account-form .account-switch {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 14px;
+}
+.live-account-form .account-switch a {
+  color: var(--orange);
+  font-weight: 600;
+}
+.live-account-form > p {
+  margin-top: 10px;
+}
+.live-account-form form {
+  display: grid;
+  gap: 16px;
+}
+.live-account-form .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+html[data-theme="dark"] .live-account-form .account-field-error {
+  color: #efa6b2;
+}
+@media (max-width: 480px) {
+  .live-login.live-account-form {
+    padding: 22px 18px;
+    margin: 16px auto;
+  }
+}

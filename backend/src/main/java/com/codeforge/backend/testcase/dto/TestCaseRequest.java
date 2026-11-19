@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record TestCaseRequest(
-    @NotNull @Size(max = 1_000_000) String input,
-    @NotNull @Size(max = 1_000_000) String expectedOutput,
+    @NotNull @Size(max = TestCaseLimits.MAX_FILE_BYTES) String input,
+    @NotNull @Size(max = TestCaseLimits.MAX_FILE_BYTES) String expectedOutput,
     Boolean isSample,
     @Min(0) Integer orderIndex
 ) {}

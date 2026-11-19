@@ -17,6 +17,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import static com.codeforge.backend.common.error.ErrorCode.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.nio.charset.StandardCharsets;
+import com.codeforge.backend.testcase.dto.TestCaseLimits;
+import com.codeforge.backend.testcase.dto.TestCaseSummary;
 
 @Service
 public class TestCaseService {
@@ -42,6 +46,7 @@ public class TestCaseService {
 
     @Transactional
     public List<TestCaseResponse> createBatch(Long problemId, List<TestCaseRequest> requests) {
+        validateBatchContent(requests);
         markTestCasesUnsynced(problemId);
         Integer largestExistingIndex = testCaseRepository.findMaxOrderIndexByProblemId(problemId);
         long nextIndex = largestExistingIndex == null ? 0 : (long) largestExistingIndex + 1;
@@ -87,6 +92,7 @@ public class TestCaseService {
             Long testCaseId,
             TestCaseRequest request) {
 
+        validateBatchContent(List.of(request));
         markTestCasesUnsynced(problemId);
 
         TestCase testCase = testCaseRepository
@@ -128,6 +134,70 @@ public class TestCaseService {
                     HttpStatus.NOT_FOUND,
                     PROBLEM_NOT_FOUND);
         }
+    }
+
+    public record Status(boolean synced, long totalTestCases) {}
+
+    @Transactional(readOnly = true)
+    public Status status(Long problemId) {
+        Problem problem = problemRepository.findById(problemId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, PROBLEM_NOT_FOUND));
+        return new Status(problem.isTestCasesSynced(), testCaseRepository.countByProblemId(problemId));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TestCaseSummary> summaries(Long problemId, Pageable pageable) {
+        validateProblemExists(problemId);
+        return testCaseRepository.findSummaries(problemId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public TestCaseResponse getOne(Long problemId, Long id) {
+        return testCaseRepository.findByIdAndProblemId(id, problemId).map(this::toResponse)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, TEST_CASE_NOT_FOUND));
+    }
+
+    @Transactional
+    public void updateSampleBatch(Long problemId, List<Long> ids, boolean sample) {
+        markTestCasesUnsynced(problemId);
+        validateSelection(problemId, ids);
+        testCaseRepository.updateSampleBatch(problemId, ids, sample, java.time.OffsetDateTime.now());
+        eventPublisher.publishEvent(new TestCasesChangedEvent(problemId));
+    }
+
+    @Transactional
+    public void deleteBatch(Long problemId, List<Long> ids) {
+        markTestCasesUnsynced(problemId);
+        validateSelection(problemId, ids);
+        testCaseRepository.deleteSelected(problemId, ids);
+        eventPublisher.publishEvent(new TestCasesChangedEvent(problemId));
+    }
+
+    private void validateSelection(Long problemId, List<Long> ids) {
+        if (ids.isEmpty() || ids.size() > 100 || new HashSet<>(ids).size() != ids.size())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, REQUEST_VALIDATION_FAILED);
+        if (testCaseRepository.findSelectedIds(problemId, ids).size() != ids.size())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, TEST_CASE_NOT_FOUND);
+    }
+
+    private void validateBatchContent(List<TestCaseRequest> requests) {
+        if (requests == null || requests.isEmpty() || requests.size() > TestCaseLimits.MAX_CASES)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, REQUEST_VALIDATION_FAILED);
+        long bytes = 0;
+        for (var request : requests) {
+            if (request == null || request.input() == null || request.expectedOutput() == null)
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, REQUEST_VALIDATION_FAILED);
+            for (String content : List.of(request.input(), request.expectedOutput())) {
+                if (content.indexOf('\0') >= 0)
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "CODE_INVALID_VALUE");
+                int length = content.getBytes(StandardCharsets.UTF_8).length;
+                if (length > TestCaseLimits.MAX_FILE_BYTES)
+                    throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "CODE_TEST_CASE_IMPORT_TOO_LARGE");
+                bytes += length;
+            }
+        }
+        if (bytes > TestCaseLimits.MAX_BATCH_BYTES)
+            throw new ResponseStatusException(HttpStatus.PAYLOAD_TOO_LARGE, "CODE_TEST_CASE_IMPORT_TOO_LARGE");
     }
 
     private void markTestCasesUnsynced(Long problemId) {

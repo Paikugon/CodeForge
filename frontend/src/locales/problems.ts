@@ -1,0 +1,38 @@
+export const problemsResources = {
+  vi: {
+    title: "Danh sách bài tập",
+    id: "Mã bài",
+    name: "Tên bài",
+    difficulty: "Độ khó",
+    tags: "Thẻ",
+    loading: "Đang tải...",
+    error: "Đã xảy ra lỗi khi tải danh sách bài tập.",
+    empty: "Không có bài tập nào được tìm thấy.",
+    previous: "Trước",
+    next: "Tiếp",
+    pageInfo: "Trang {{current}}/{{total}}",
+    difficultyness: {
+      easy: "Dễ",
+      medium: "Trung bình",
+      hard: "Khó",
+    },
+  },
+  en: {
+    title: "Problem List",
+    id: "Problem ID",
+    name: "Problem Name",
+    difficulty: "Difficulty",
+    tags: "Tags",
+    loading: "Loading...",
+    error: "An error occurred while loading the problem list.",
+    empty: "No problems found.",
+    previous: "Previous",
+    next: "Next",
+    pageInfo: "Page {{current}}/{{total}}",
+    difficultyness: {
+      easy: "Easy",
+      medium: "Medium",
+      hard: "Hard",
+    },
+  },
+};
