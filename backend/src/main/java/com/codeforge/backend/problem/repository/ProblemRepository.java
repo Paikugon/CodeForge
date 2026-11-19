@@ -16,6 +16,10 @@ import java.util.Optional;
 
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select p from Problem p where p.id in :ids order by p.id")
+    List<Problem> findSelectedForUpdate(@Param("ids") List<Long> ids);
+
     boolean existsBySlug(String slug);
 
     @Query("select p.id from Problem p order by p.id")
