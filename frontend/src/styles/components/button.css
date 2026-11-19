@@ -1,6 +1,6 @@
-.page-heading>.button {
+.page-heading > .button {
   flex-shrink: 0;
-  margin-top: 18px
+  margin-top: 18px;
 }
 .button {
   min-height: 37px;
@@ -11,33 +11,35 @@
   font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
-  transition: background .15s, transform .15s;
-  box-shadow: 0 2px 2px #17212f02
+  transition:
+    background 0.15s,
+    transform 0.15s;
+  box-shadow: 0 2px 2px #17212f02;
 }
 .button:hover {
   background: #f6f7f9;
-  border-color: #d9dee5
+  border-color: #d9dee5;
 }
 .button:active {
-  transform: translateY(1px)
+  transform: translateY(1px);
 }
 .button.primary {
   background: var(--orange);
   color: white;
   border-color: var(--orange);
-  box-shadow: 0 2px 4px #1687e820
+  box-shadow: 0 2px 4px #1687e820;
 }
 .button.primary:hover {
   background: var(--orange-dark);
-  border-color: var(--orange-dark)
+  border-color: var(--orange-dark);
 }
 .button.full {
-  width: 100%
+  width: 100%;
 }
 .button.compact {
   min-height: 29px;
   padding: 5px 10px;
-  font-size: 10px
+  font-size: 10px;
 }
 .icon-button {
   border: 0;
@@ -45,11 +47,11 @@
   padding: 7px;
   border-radius: 5px;
   color: #929aa6;
-  flex-shrink: 0
+  flex-shrink: 0;
 }
 .icon-button:hover {
   background: #f1f3f7;
-  color: #515c6b
+  color: #515c6b;
 }
 .text-button {
   border: 0;
@@ -57,7 +59,7 @@
   color: var(--orange);
   padding: 7px 0;
   font-size: 11px;
-  font-weight: 600
+  font-weight: 600;
 }
 .challenge-card .button {
   background: #f8fcff;
@@ -66,95 +68,90 @@
   font-size: 10px;
   justify-content: space-between;
   padding-left: 12px;
-  padding-right: 12px
+  padding-right: 12px;
 }
 .notice .text-button {
   padding: 0;
   margin-left: auto;
-  white-space: nowrap
+  white-space: nowrap;
 }
 .modal-title .icon-button {
-  margin: -5px -7px -5px 0
+  margin: -5px -7px -5px 0;
 }
-.guard>.button {
-  margin-top: 12px
+.guard > .button {
+  margin-top: 12px;
 }
 .guard .text-button {
-  color: #99a2ae
+  color: #99a2ae;
 }
-.detail-top>.icon-button {
-  margin-left: auto
+.detail-top > .icon-button {
+  margin-left: auto;
 }
 .editor-header .icon-button {
-  padding: 4px
+  padding: 4px;
 }
 .editor-actions .button {
-  font-size: 10px
+  font-size: 10px;
 }
 .private-info .button {
   font-size: 10px;
-  margin-top: 4px
+  margin-top: 4px;
 }
 .row-actions .icon-button {
-  padding: 5px
+  padding: 5px;
 }
 .row-actions .button {
   color: #9aa7b8;
-  border-color: #e9edf3
+  border-color: #e9edf3;
 }
-@media(max-width:1250px) {
-
-  .page-heading>.button {
+@media (max-width: 1250px) {
+  .page-heading > .button {
     font-size: 10px;
-    padding: 8px 10px
+    padding: 8px 10px;
   }
 }
-@media(max-width:1050px) {
-
-  .detail-meta>.button {
-    width: auto
+@media (max-width: 1050px) {
+  .detail-meta > .button {
+    width: auto;
   }
 
-  .page-heading>.button {
-    margin-top: 26px
+  .page-heading > .button {
+    margin-top: 26px;
   }
 }
-@media(max-width:760px) {
-
-  .page-heading>.button {
-    margin-top: 0
+@media (max-width: 760px) {
+  .page-heading > .button {
+    margin-top: 0;
   }
 
-  .private-info>.button {
+  .private-info > .button {
     align-self: start;
     margin: 2px 0 0;
-    font-size: 9px
+    font-size: 9px;
   }
 }
-.page-heading>.button {
-  font-size: 11px
+.page-heading > .button {
+  font-size: 11px;
 }
 .challenge-card .button {
   font-size: 11px;
-  color: #628ab0
+  color: #628ab0;
 }
 .editor-actions .button {
-  font-size: 11px
+  font-size: 11px;
 }
 .row-actions .button {
   font-size: 11px;
-  color: #859cbd
+  color: #859cbd;
 }
-@media(max-width:760px) {
-
-  .page-heading>.button {
-    font-size: 11px
+@media (max-width: 760px) {
+  .page-heading > .button {
+    font-size: 11px;
   }
 }
-@media(max-width:760px) {
-
+@media (max-width: 760px) {
   .editor-actions .button {
-    font-size: 11px
+    font-size: 11px;
   }
 }
 .app-shell .header-actions .button {

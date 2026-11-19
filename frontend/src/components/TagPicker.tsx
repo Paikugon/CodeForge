@@ -1,13 +1,13 @@
-'use client';
-import { useEffect, useId, useRef, useState } from 'react';
-import { Check, ChevronDown, Search, Tags, X } from 'lucide-react';
-import type { Tag } from '../types/tag';
+"use client";
+import { useEffect, useId, useRef, useState } from "react";
+import { Check, ChevronDown, Search, Tags, X } from "lucide-react";
+import type { Tag } from "../types/tag";
 
 export default function TagPicker({
   tags,
   selected,
   onChange,
-  label = 'Tags',
+  label = "Tags",
   compact = false,
 }: {
   tags: Tag[];
@@ -17,7 +17,7 @@ export default function TagPicker({
   compact?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const root = useRef<HTMLDivElement>(null);
   const panelId = useId();
 
@@ -26,42 +26,43 @@ export default function TagPicker({
     const close = (event: MouseEvent) => {
       if (!root.current?.contains(event.target as Node)) setOpen(false);
     };
-    document.addEventListener('mousedown', close);
-    return () => document.removeEventListener('mousedown', close);
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
   }, [open]);
 
   const selectedTags = [...new Set(selected)].map(
-    id => tags.find(tag => tag.id === id) ?? { id, name: `Unknown tag #${id}` },
+    (id) =>
+      tags.find((tag) => tag.id === id) ?? { id, name: `Unknown tag #${id}` },
   );
   const shown = [...tags]
     .sort((a, b) => a.name.localeCompare(b.name))
-    .filter(tag =>
+    .filter((tag) =>
       tag.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()),
     );
   const toggle = (id: number) =>
     onChange(
       selected.includes(id)
-        ? selected.filter(value => value !== id)
+        ? selected.filter((value) => value !== id)
         : [...selected, id],
     );
 
   return (
     <div
-      className={`tag-picker ${compact ? 'compact-picker' : ''}`}
+      className={`tag-picker ${compact ? "compact-picker" : ""}`}
       ref={root}
-      onKeyDown={event => {
-        if (event.key === 'Escape') {
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
           event.stopPropagation();
           setOpen(false);
           root.current
-            ?.querySelector<HTMLButtonElement>('.tag-picker-trigger')
+            ?.querySelector<HTMLButtonElement>(".tag-picker-trigger")
             ?.focus();
         }
       }}
     >
       <div
-        className={`tag-picker-control ${selectedTags.length ? 'has-selection' : ''}`}
-        onClick={() => setOpen(value => !value)}
+        className={`tag-picker-control ${selectedTags.length ? "has-selection" : ""}`}
+        onClick={() => setOpen((value) => !value)}
       >
         <button
           type="button"
@@ -70,12 +71,12 @@ export default function TagPicker({
           aria-haspopup="dialog"
           aria-expanded={open}
           aria-controls={open ? panelId : undefined}
-          onClick={event => {
+          onClick={(event) => {
             event.stopPropagation();
-            setOpen(value => !value);
+            setOpen((value) => !value);
           }}
-          onKeyDown={event => {
-            if (event.key === 'ArrowDown') {
+          onKeyDown={(event) => {
+            if (event.key === "ArrowDown") {
               event.preventDefault();
               setOpen(true);
             }
@@ -83,23 +84,23 @@ export default function TagPicker({
         >
           <span className="sr-only">
             {label}
-            {selectedTags.length ? `: ${selectedTags.length} selected` : ''}
+            {selectedTags.length ? `: ${selectedTags.length} selected` : ""}
           </span>
         </button>
 
         <Tags className="tag-picker-icon" size={15} aria-hidden="true" />
         <div
-          className={`tag-picker-values ${selectedTags.length ? '' : 'is-empty'}`}
-          title={selectedTags.map(tag => tag.name).join(', ')}
+          className={`tag-picker-values ${selectedTags.length ? "" : "is-empty"}`}
+          title={selectedTags.map((tag) => tag.name).join(", ")}
         >
           {selectedTags.length ? (
-            selectedTags.map(tag => (
+            selectedTags.map((tag) => (
               <span className="tag-picker-chip" key={tag.id}>
                 <span>{tag.name}</span>
                 <button
                   type="button"
-                  aria-label={`Remove ${tag.name} ${compact ? 'filter' : 'tag'}`}
-                  onClick={event => {
+                  aria-label={`Remove ${tag.name} ${compact ? "filter" : "tag"}`}
+                  onClick={(event) => {
                     event.stopPropagation();
                     toggle(tag.id);
                   }}
@@ -110,7 +111,7 @@ export default function TagPicker({
             ))
           ) : (
             <span className="tag-picker-placeholder">
-              {compact ? 'All tags' : 'Choose tags'}
+              {compact ? "All tags" : "Choose tags"}
             </span>
           )}
         </div>
@@ -123,7 +124,7 @@ export default function TagPicker({
           </span>
         )}
         <ChevronDown
-          className={`tag-picker-chevron ${open ? 'is-open' : ''}`}
+          className={`tag-picker-chevron ${open ? "is-open" : ""}`}
           size={14}
           aria-hidden="true"
         />
@@ -137,7 +138,7 @@ export default function TagPicker({
         >
           <div className="tag-picker-heading">
             <strong>{label}</strong>
-            <span>{compact ? 'Match all selected' : 'Select concepts'}</span>
+            <span>{compact ? "Match all selected" : "Select concepts"}</span>
           </div>
           <label className="tag-search">
             <Search size={15} />
@@ -145,21 +146,21 @@ export default function TagPicker({
               autoFocus
               placeholder="Find a tag…"
               aria-label="Search tags"
-              onKeyDown={event => {
-                if (event.key === 'Enter') event.preventDefault();
+              onKeyDown={(event) => {
+                if (event.key === "Enter") event.preventDefault();
               }}
               value={search}
-              onChange={event => setSearch(event.target.value)}
+              onChange={(event) => setSearch(event.target.value)}
             />
           </label>
           <div className="tag-options">
-            {shown.map(tag => (
+            {shown.map((tag) => (
               <button
                 type="button"
                 role="checkbox"
                 aria-checked={selected.includes(tag.id)}
                 key={tag.id}
-                className={`tag-option ${selected.includes(tag.id) ? 'is-selected' : ''}`}
+                className={`tag-option ${selected.includes(tag.id) ? "is-selected" : ""}`}
                 onClick={() => toggle(tag.id)}
               >
                 <span className="tag-option-check" aria-hidden="true">

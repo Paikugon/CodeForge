@@ -17,28 +17,30 @@ export default function TableRow({
       onClick={
         onRowClick
           ? (event) => {
-            if (
-              event.defaultPrevented ||
-              event.button !== 0 ||
-              event.ctrlKey ||
-              event.metaKey ||
-              event.shiftKey ||
-              event.altKey
-            ) return;
-
-            const target = event.target;
-
-            if (
-              target instanceof Element &&
-              target.closest(
-                'a, button, input, select, textarea, label, [role="button"], [role="checkbox"], [contenteditable], [data-row-click-ignore]'
+              if (
+                event.defaultPrevented ||
+                event.button !== 0 ||
+                event.ctrlKey ||
+                event.metaKey ||
+                event.shiftKey ||
+                event.altKey
               )
-            ) return;
+                return;
 
-            if (window.getSelection()?.toString()) return;
+              const target = event.target;
 
-            onRowClick();
-          }
+              if (
+                target instanceof Element &&
+                target.closest(
+                  'a, button, input, select, textarea, label, [role="button"], [role="checkbox"], [contenteditable], [data-row-click-ignore]',
+                )
+              )
+                return;
+
+              if (window.getSelection()?.toString()) return;
+
+              onRowClick();
+            }
           : undefined
       }
     >

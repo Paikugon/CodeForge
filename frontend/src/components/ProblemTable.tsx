@@ -11,13 +11,8 @@ export default function ProblemTable({
   problems: Problem[];
   footer?: ReactNode;
 }) {
-
   return (
-    <Table
-      label="Problems"
-      className="problem-table"
-      footer={footer}
-    >
+    <Table label="Problems" className="problem-table" footer={footer}>
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -37,13 +32,8 @@ export default function ProblemTable({
           </tr>
         ) : (
           problems.map((problem) => (
-            <TableRow
-              key={problem.id}
-              className="table-link-row"
-            >
-              <td className="mono">
-                {String(problem.id).padStart(3, "0")}
-              </td>
+            <TableRow key={problem.id} className="table-link-row">
+              <td className="mono">{String(problem.id).padStart(3, "0")}</td>
 
               <td>
                 <Link
@@ -65,9 +55,7 @@ export default function ProblemTable({
               </td>
 
               <td>
-                <span
-                  className={`badge ${problem.difficulty.toLowerCase()}`}
-                >
+                <span className={`badge ${problem.difficulty.toLowerCase()}`}>
                   {problem.difficulty === "EASY"
                     ? "Easy"
                     : problem.difficulty === "MEDIUM"

@@ -20,7 +20,7 @@
   font-size: 14px;
 }
 
-.live-submission-history .history-heading>.button {
+.live-submission-history .history-heading > .button {
   flex-shrink: 0;
 }
 
@@ -112,7 +112,7 @@
   font-size: 14px;
 }
 
-.live-submission-history .history-list-heading>span {
+.live-submission-history .history-list-heading > span {
   color: var(--muted);
   font-size: 13px;
 }
@@ -186,7 +186,7 @@
   color: var(--muted);
 }
 
-.live-submission-history .history-empty-cell>svg {
+.live-submission-history .history-empty-cell > svg {
   margin-bottom: 16px;
 }
 

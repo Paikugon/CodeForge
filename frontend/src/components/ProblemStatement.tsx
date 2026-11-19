@@ -11,16 +11,13 @@ export default function ProblemStatement({
     .sort((a, b) => a.orderIndex - b.orderIndex || a.id - b.id);
 
   const difficulty =
-    problem.difficulty.charAt(0) +
-    problem.difficulty.slice(1).toLowerCase();
+    problem.difficulty.charAt(0) + problem.difficulty.slice(1).toLowerCase();
 
   return (
     <article className="live-statement-card">
       <header className="live-statement-header">
         <div className="live-statement-meta">
-          <span className="mono">
-            #{String(problem.id).padStart(3, "0")}
-          </span>
+          <span className="mono">#{String(problem.id).padStart(3, "0")}</span>
 
           <span className={`badge ${problem.difficulty.toLowerCase()}`}>
             {difficulty}
@@ -53,9 +50,7 @@ export default function ProblemStatement({
       </header>
 
       <div className="live-statement-body">
-        <div className="live-problem-description">
-          {problem.description}
-        </div>
+        <div className="live-problem-description">{problem.description}</div>
 
         {samples.length > 0 && (
           <section className="live-problem-examples">
@@ -68,12 +63,16 @@ export default function ProblemStatement({
                 <div className="live-sample-grid">
                   <div>
                     <h4>Input</h4>
-                    <pre><code>{sample.input}</code></pre>
+                    <pre>
+                      <code>{sample.input}</code>
+                    </pre>
                   </div>
 
                   <div>
                     <h4>Output</h4>
-                    <pre><code>{sample.expectedOutput}</code></pre>
+                    <pre>
+                      <code>{sample.expectedOutput}</code>
+                    </pre>
                   </div>
                 </div>
               </article>

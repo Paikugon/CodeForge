@@ -13,9 +13,7 @@ type ThemeContextValue = {
   toggleTheme: () => void;
 };
 
-const ThemeContext = createContext<ThemeContextValue | undefined>(
-  undefined,
-);
+const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
 function getInitialTheme(): Theme {
   try {
@@ -41,7 +39,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((current) => current === "light" ? "dark" : "light");
+    setTheme((current) => (current === "light" ? "dark" : "light"));
   };
 
   return (

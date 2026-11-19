@@ -1,5 +1,5 @@
 .profile-activity {
-  min-width: 0
+  min-width: 0;
 }
 
 .profile-activity-toolbar {
@@ -9,17 +9,17 @@
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 16px;
-  border-bottom: 1px solid var(--border)
+  border-bottom: 1px solid var(--border);
 }
 
 .profile-activity-tabs {
   display: flex;
   align-items: stretch;
   gap: 22px;
-  min-width: 0
+  min-width: 0;
 }
 
-.profile-activity-tabs>button {
+.profile-activity-tabs > button {
   display: inline-flex;
   align-items: center;
   gap: 9px;
@@ -32,12 +32,12 @@
   color: var(--muted);
   font-size: 15px;
   font-weight: 600;
-  white-space: nowrap
+  white-space: nowrap;
 }
 
-.profile-activity-tabs>button.selected {
+.profile-activity-tabs > button.selected {
   color: var(--orange);
-  border-bottom-color: var(--orange)
+  border-bottom-color: var(--orange);
 }
 
 .profile-tab-count {
@@ -54,13 +54,13 @@
   font-size: 13px;
   line-height: 1;
   font-weight: 650;
-  font-variant-numeric: tabular-nums
+  font-variant-numeric: tabular-nums;
 }
 
-.selected>.profile-tab-count {
+.selected > .profile-tab-count {
   background: var(--orange-soft);
   border-color: transparent;
-  color: var(--orange)
+  color: var(--orange);
 }
 
 .profile-activity-summary {
@@ -70,53 +70,54 @@
   padding: 10px 0;
   color: var(--muted);
   font-size: 13px;
-  flex-wrap: wrap
+  flex-wrap: wrap;
 }
 
 .profile-activity-summary strong {
   color: var(--text);
   font-weight: 650;
-  font-variant-numeric: tabular-nums
+  font-variant-numeric: tabular-nums;
 }
 
 .profile-activity-panel:focus-visible {
   outline: 2px solid var(--orange);
-  outline-offset: 3px
+  outline-offset: 3px;
 }
 
-@media(max-width:680px) {
+@media (max-width: 680px) {
   .profile-activity-toolbar {
     gap: 0;
-    margin-bottom: 12px
+    margin-bottom: 12px;
   }
 
   .profile-activity-tabs {
     width: 100%;
-    gap: 18px
+    gap: 18px;
   }
 
-  .profile-activity-tabs>button {
+  .profile-activity-tabs > button {
     font-size: 14px;
-    gap: 7px
+    gap: 7px;
   }
 
   .profile-activity-summary {
     padding-top: 2px;
     padding-bottom: 12px;
-    font-size: 12px
+    font-size: 12px;
   }
 
   .profile-tab-count {
     min-width: 25px;
     height: 23px;
-    font-size: 12px
+    font-size: 12px;
   }
-}.profile-main>.profile-difficulty {
+}
+.profile-main > .profile-difficulty {
   margin-bottom: 22px;
   padding: 24px;
   border: 1px solid var(--border);
   border-radius: 10px;
-  background: #fff
+  background: #fff;
 }
 
 .profile-difficulty .difficulty-heading h3 {
@@ -124,44 +125,44 @@
   color: var(--text);
   font-size: 18px;
   font-weight: 650;
-  letter-spacing: -.3px
+  letter-spacing: -0.3px;
 }
 
 .profile-difficulty .difficulty-heading p {
   margin: 5px 0 0;
   font-size: 14px;
-  color: var(--muted)
+  color: var(--muted);
 }
 
 .profile-difficulty .difficulty-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
-  margin-top: 24px
+  margin-top: 24px;
 }
 
 .profile-difficulty .difficulty-stat {
   --difficulty-color: #23866e;
   min-width: 0;
-  position: relative
+  position: relative;
 }
 
 .profile-difficulty .difficulty-stat.medium {
-  --difficulty-color: #ad7419
+  --difficulty-color: #ad7419;
 }
 
 .profile-difficulty .difficulty-stat.hard {
-  --difficulty-color: #cf5368
+  --difficulty-color: #cf5368;
 }
 
-.profile-difficulty .difficulty-stat+.difficulty-stat::before {
-  content: '';
+.profile-difficulty .difficulty-stat + .difficulty-stat::before {
+  content: "";
   position: absolute;
   left: -12px;
   top: 0;
   bottom: 0;
   width: 1px;
-  background: var(--border)
+  background: var(--border);
 }
 
 .profile-difficulty .difficulty-label {
@@ -170,7 +171,7 @@
   gap: 8px;
   font-size: 14px;
   font-weight: 650;
-  color: var(--difficulty-color)
+  color: var(--difficulty-color);
 }
 
 .profile-difficulty .difficulty-dot {
@@ -178,7 +179,7 @@
   height: 7px;
   border-radius: 50%;
   background: currentColor;
-  flex: none
+  flex: none;
 }
 
 .profile-difficulty .difficulty-count {
@@ -186,7 +187,7 @@
   align-items: baseline;
   gap: 9px;
   margin: 10px 0 13px;
-  font-variant-numeric: tabular-nums
+  font-variant-numeric: tabular-nums;
 }
 
 .profile-difficulty .difficulty-count strong {
@@ -194,156 +195,157 @@
   line-height: 1.2;
   font-weight: 650;
   letter-spacing: -1px;
-  color: var(--text)
+  color: var(--text);
 }
 
-.profile-difficulty .difficulty-count>span {
+.profile-difficulty .difficulty-count > span {
   font-size: 14px;
-  color: var(--muted)
+  color: var(--muted);
 }
 
 .profile-difficulty .difficulty-track {
   height: 7px;
   border-radius: 5px;
   background: #edf1f6;
-  overflow: hidden
+  overflow: hidden;
 }
 
-.profile-difficulty .difficulty-track>span {
+.profile-difficulty .difficulty-track > span {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: var(--difficulty-color)
+  background: var(--difficulty-color);
 }
 
 .profile-difficulty p.difficulty-remaining {
   margin: 10px 0 0;
   font-size: 13px;
-  color: var(--muted)
+  color: var(--muted);
 }
 
-html[data-theme=dark] .profile-main>.profile-difficulty {
-  background: #142338
+html[data-theme="dark"] .profile-main > .profile-difficulty {
+  background: #142338;
 }
 
-html[data-theme=dark] .profile-difficulty .difficulty-track {
-  background: #22374f
+html[data-theme="dark"] .profile-difficulty .difficulty-track {
+  background: #22374f;
 }
 
-html[data-theme=dark] .profile-difficulty .difficulty-stat {
-  --difficulty-color: #78c6ac
+html[data-theme="dark"] .profile-difficulty .difficulty-stat {
+  --difficulty-color: #78c6ac;
 }
 
-html[data-theme=dark] .profile-difficulty .difficulty-stat.medium {
-  --difficulty-color: #e1b762
+html[data-theme="dark"] .profile-difficulty .difficulty-stat.medium {
+  --difficulty-color: #e1b762;
 }
 
-html[data-theme=dark] .profile-difficulty .difficulty-stat.hard {
-  --difficulty-color: #ed91a0
+html[data-theme="dark"] .profile-difficulty .difficulty-stat.hard {
+  --difficulty-color: #ed91a0;
 }
 
-@media(max-width:1100px) {
-  .profile-main>.profile-difficulty {
-    padding: 20px
+@media (max-width: 1100px) {
+  .profile-main > .profile-difficulty {
+    padding: 20px;
   }
 
   .profile-difficulty .difficulty-grid {
-    gap: 16px
+    gap: 16px;
   }
 
-  .profile-difficulty .difficulty-stat+.difficulty-stat::before {
-    left: -8px
+  .profile-difficulty .difficulty-stat + .difficulty-stat::before {
+    left: -8px;
   }
 
   .profile-difficulty .difficulty-count-caption {
-    display: none
+    display: none;
   }
 }
 
-@media(max-width:480px) {
+@media (max-width: 480px) {
   .profile-difficulty .difficulty-grid {
     grid-template-columns: minmax(0, 1fr);
     gap: 17px;
-    margin-top: 20px
+    margin-top: 20px;
   }
 
   .profile-difficulty .difficulty-stat {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     column-gap: 18px;
-    align-items: center
+    align-items: center;
   }
 
-  .profile-difficulty .difficulty-stat+.difficulty-stat {
+  .profile-difficulty .difficulty-stat + .difficulty-stat {
     padding-top: 17px;
-    border-top: 1px solid var(--border)
+    border-top: 1px solid var(--border);
   }
 
-  .profile-difficulty .difficulty-stat+.difficulty-stat::before {
-    display: none
+  .profile-difficulty .difficulty-stat + .difficulty-stat::before {
+    display: none;
   }
 
   .profile-difficulty .difficulty-count {
     margin: 0 0 7px;
-    gap: 6px
+    gap: 6px;
   }
 
   .profile-difficulty .difficulty-count strong {
-    font-size: 24px
+    font-size: 24px;
   }
 
   .profile-difficulty .difficulty-track {
-    grid-column: 1/-1
+    grid-column: 1/-1;
   }
 
   .profile-difficulty p.difficulty-remaining {
     grid-column: 1/-1;
-    margin-top: 7px
+    margin-top: 7px;
   }
 
   .profile-difficulty .difficulty-heading h3 {
-    font-size: 17px
+    font-size: 17px;
   }
-}.profile-solved-scroll {
+}
+.profile-solved-scroll {
   overflow-x: auto;
-  overscroll-behavior-x: contain
+  overscroll-behavior-x: contain;
 }
 
 .profile-solved-scroll:focus-visible {
   outline: 2px solid var(--orange);
-  outline-offset: -3px
+  outline-offset: -3px;
 }
 
 .profile-solved-scroll .profile-solved-table {
   width: 100%;
   min-width: 640px;
-  table-layout: fixed
+  table-layout: fixed;
 }
 
 .profile-solved-table .solved-problem-col {
-  width: 46%
+  width: 46%;
 }
 
 .profile-solved-table .solved-difficulty-col {
-  width: 16%
+  width: 16%;
 }
 
 .profile-solved-table .solved-count-col {
-  width: 14%
+  width: 14%;
 }
 
 .profile-solved-table .solved-date-col {
-  width: 24%
+  width: 24%;
 }
 
 .profile-solved-table th {
   padding: 13px 18px;
-  font-size: 13px
+  font-size: 13px;
 }
 
 .profile-solved-table td {
   padding: 17px 18px;
-  font-size: 15px
+  font-size: 15px;
 }
 
 .profile-solved-table .profile-solved-link {
@@ -351,89 +353,89 @@ html[data-theme=dark] .profile-difficulty .difficulty-stat.hard {
   align-items: center;
   gap: 10px;
   min-width: 0;
-  color: var(--text)
+  color: var(--text);
 }
 
 .profile-solved-table .profile-solved-link:hover {
-  color: var(--orange)
+  color: var(--orange);
 }
 
-.profile-solved-table .profile-solved-link>svg {
+.profile-solved-table .profile-solved-link > svg {
   flex: none;
-  color: var(--muted)
+  color: var(--muted);
 }
 
-.profile-solved-table .profile-solved-link>svg:first-child {
-  color: #6fae96
+.profile-solved-table .profile-solved-link > svg:first-child {
+  color: #6fae96;
 }
 
 .profile-solved-table .profile-problem-id {
   font: 12px monospace;
   color: var(--muted);
-  flex: none
+  flex: none;
 }
 
-.profile-solved-table .profile-solved-link>strong {
+.profile-solved-table .profile-solved-link > strong {
   font-size: 15px;
   font-weight: 550;
   overflow-wrap: anywhere;
-  line-height: 1.6
+  line-height: 1.6;
 }
 
-.profile-solved-table .profile-solved-link>svg:last-child {
-  margin-left: auto
+.profile-solved-table .profile-solved-link > svg:last-child {
+  margin-left: auto;
 }
 
 .profile-solved-table .solved-count-cell {
-  text-align: center
+  text-align: center;
 }
 
 .profile-solved-table th.solved-count-cell {
   padding-left: 8px;
   padding-right: 8px;
-  font-size: 12px
+  font-size: 12px;
 }
 
 .profile-solved-table .profile-submission-count {
   font-size: 15px;
   font-weight: 550;
   font-variant-numeric: tabular-nums;
-  color: var(--text)
+  color: var(--text);
 }
 
 .profile-solved-table .profile-last-submitted {
   font-size: 13px;
   white-space: nowrap;
   color: var(--text);
-  font-variant-numeric: tabular-nums
+  font-variant-numeric: tabular-nums;
 }
 
 .profile-solved-table .profile-last-submitted small {
   display: block;
   margin-top: 3px;
   color: var(--muted);
-  font-size: 12px
+  font-size: 12px;
 }
 
-@media(max-width:1100px) {
-
+@media (max-width: 1100px) {
   .profile-solved-table th,
   .profile-solved-table td {
     padding-left: 13px;
-    padding-right: 13px
+    padding-right: 13px;
   }
 
   .profile-solved-table .profile-solved-link {
-    gap: 8px
+    gap: 8px;
   }
-}.profile-start {
-  padding: 28px
+}
+.profile-start {
+  padding: 28px;
 }
 
 .profile-start-heading {
   display: flex;
   align-items: flex-start;
-  gap: 15px
+  gap: 15px;
 }
 
 .profile-start-icon {
@@ -445,42 +447,42 @@ html[data-theme=dark] .profile-difficulty .difficulty-stat.hard {
   height: 46px;
   border-radius: 10px;
   background: var(--orange-soft);
-  color: var(--orange)
+  color: var(--orange);
 }
 
 .profile-start .profile-start-heading h3 {
   margin: 0;
   font-size: 19px;
   color: var(--text);
-  letter-spacing: -.3px
+  letter-spacing: -0.3px;
 }
 
 .profile-start .profile-start-heading p {
   margin: 6px 0 0;
   font-size: 14px;
   color: var(--muted);
-  line-height: 1.7
+  line-height: 1.7;
 }
 
 .profile-start .profile-starter-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
-  margin-top: 26px
+  margin-top: 26px;
 }
 
 .profile-start .profile-starter-group {
   min-width: 0;
   padding: 15px;
   border: 1px solid var(--border);
-  border-radius: 8px
+  border-radius: 8px;
 }
 
-.profile-start .profile-starter-group>.badge {
-  margin-bottom: 9px
+.profile-start .profile-starter-group > .badge {
+  margin-bottom: 9px;
 }
 
-.profile-start .profile-starter-group>a {
+.profile-start .profile-starter-group > a {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -488,22 +490,22 @@ html[data-theme=dark] .profile-difficulty .difficulty-stat.hard {
   padding: 8px 0;
   color: var(--text);
   font-size: 14px;
-  line-height: 1.6
+  line-height: 1.6;
 }
 
-.profile-start .profile-starter-group>a>span {
+.profile-start .profile-starter-group > a > span {
   min-width: 0;
-  overflow-wrap: anywhere
+  overflow-wrap: anywhere;
 }
 
-.profile-start .profile-starter-group>a>svg {
+.profile-start .profile-starter-group > a > svg {
   flex: none;
-  color: var(--muted)
+  color: var(--muted);
 }
 
-.profile-start .profile-starter-group>a:hover,
-.profile-start .profile-starter-group>a:hover>svg {
-  color: var(--orange)
+.profile-start .profile-starter-group > a:hover,
+.profile-start .profile-starter-group > a:hover > svg {
+  color: var(--orange);
 }
 
 .profile-start .profile-start-browse {
@@ -513,39 +515,39 @@ html[data-theme=dark] .profile-difficulty .difficulty-stat.hard {
   margin-top: 23px;
   color: var(--orange);
   font-size: 14px;
-  font-weight: 600
+  font-weight: 600;
 }
 
-@media(max-width:1100px) {
+@media (max-width: 1100px) {
   .profile-start {
-    padding: 22px
+    padding: 22px;
   }
 
   .profile-start .profile-starter-grid {
-    gap: 12px
+    gap: 12px;
   }
 
   .profile-start .profile-starter-group {
-    padding: 12px
+    padding: 12px;
   }
 }
 
-@media(max-width:680px) {
+@media (max-width: 680px) {
   .profile-start .profile-starter-grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 12px
+    gap: 12px;
   }
 
   .profile-start-heading {
-    gap: 12px
+    gap: 12px;
   }
 
   .profile-start-icon {
     width: 38px;
-    height: 38px
+    height: 38px;
   }
 
   .profile-start .profile-start-heading h3 {
-    font-size: 18px
+    font-size: 18px;
   }
 }

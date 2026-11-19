@@ -66,7 +66,10 @@ export default function ProblemList() {
           setPage(0);
           setDifficulty(draftDifficulty);
           setTagIds([...new Set(draftTagIds)].sort((a, b) => a - b));
-          console.log("Filters applied:", { difficulty: draftDifficulty, tagIds: tagIds });
+          console.log("Filters applied:", {
+            difficulty: draftDifficulty,
+            tagIds: tagIds,
+          });
         }}
       >
         {/* Difficulty filter */}

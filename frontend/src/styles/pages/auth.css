@@ -13,7 +13,7 @@
   margin-top: 0;
 }
 
-.live-login>p {
+.live-login > p {
   color: var(--muted);
 }
 
@@ -42,4 +42,3 @@
 .live-login button {
   margin-top: 8px;
 }
-

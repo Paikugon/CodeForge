@@ -29,8 +29,7 @@ export default function ProblemDetailPage() {
   const navigate = useNavigate();
 
   const submitMutation = useMutation({
-    mutationFn: (request: SubmissionRequest) =>
-      createSubmission(request),
+    mutationFn: (request: SubmissionRequest) => createSubmission(request),
 
     retry: false,
 
@@ -45,7 +44,11 @@ export default function ProblemDetailPage() {
     python: "solution.py",
   }[language];
 
-  const { data: problem, isPending, isError } = useQuery({
+  const {
+    data: problem,
+    isPending,
+    isError,
+  } = useQuery({
     queryKey: ["problem", id],
     queryFn: ({ signal }) => {
       if (!id) {
@@ -204,7 +207,9 @@ export default function ProblemDetailPage() {
                 <Play size={16} aria-hidden="true" />
               )}
 
-              {runMutation.isPending ? t("problemDetail.codeEditor.running") : t("problemDetail.codeEditor.run")}
+              {runMutation.isPending
+                ? t("problemDetail.codeEditor.running")
+                : t("problemDetail.codeEditor.run")}
             </button>
 
             <button
@@ -219,13 +224,15 @@ export default function ProblemDetailPage() {
                 })
               }
             >
-              {submitMutation.isPending ? t("problemDetail.codeEditor.submitting") : t("problemDetail.codeEditor.submit")}
+              {submitMutation.isPending
+                ? t("problemDetail.codeEditor.submitting")
+                : t("problemDetail.codeEditor.submit")}
             </button>
 
             {submitMutation.isError && (
               <p role="alert">
                 {submitMutation.error instanceof ApiError &&
-                  submitMutation.error.status === 401
+                submitMutation.error.status === 401
                   ? t("auth.loginRequired")
                   : t("problemDetail.submitError")}
               </p>
@@ -235,4 +242,4 @@ export default function ProblemDetailPage() {
       </div>
     </section>
   );
-} 
+}

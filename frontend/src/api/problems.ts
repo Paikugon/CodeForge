@@ -46,20 +46,16 @@ export async function getProblems(
     tagIds: tagIds.length > 0 ? tagIds.join(",") : undefined,
   });
 
-  return apiRequest<ProblemPage>(
-    `/api/problems${query}`,
-    { signal },
-  );
+  return apiRequest<ProblemPage>(`/api/problems${query}`, { signal });
 }
 
 export async function getProblemById(
   id: string,
   signal?: AbortSignal,
 ): Promise<ProblemDetail> {
-  return apiRequest<ProblemDetail>(
-    `/api/problems/${encodeURIComponent(id)}`,
-    { signal },
-  );
+  return apiRequest<ProblemDetail>(`/api/problems/${encodeURIComponent(id)}`, {
+    signal,
+  });
 }
 
 export async function runCode(
@@ -88,20 +84,16 @@ export async function updateProblem(
   id: number | string,
   request: ProblemRequest,
 ): Promise<ProblemDetail> {
-  return apiRequest<ProblemDetail>(
-    `/api/problems/${encodeURIComponent(id)}`,
-    {
-      method: "PUT",
-      body: JSON.stringify(request),
-    },
-  );
+  return apiRequest<ProblemDetail>(`/api/problems/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(request),
+  });
 }
 
 export async function deleteProblem(id: number | string): Promise<void> {
-  await apiRequest<void>(
-    `/api/problems/${encodeURIComponent(id)}`,
-    { method: "DELETE" },
-  );
+  await apiRequest<void>(`/api/problems/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
 }
 
 export async function getSolvedProblems(
@@ -147,7 +139,13 @@ async function getUserProblems(
   params: GetProblemsParams,
   signal?: AbortSignal,
 ): Promise<ProblemPage> {
-  const { page = 0, size = 20, sort = "createdAt,desc", difficulty, tagIds = [] } = params;
+  const {
+    page = 0,
+    size = 20,
+    sort = "createdAt,desc",
+    difficulty,
+    tagIds = [],
+  } = params;
 
   return apiRequest<ProblemPage>(
     `${path}${createQuery({ page, size, sort, difficulty, tagIds: tagIds.length ? tagIds.join(",") : undefined })}`,

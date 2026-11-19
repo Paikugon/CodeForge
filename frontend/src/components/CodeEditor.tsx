@@ -23,7 +23,6 @@ export default function CodeEditor({
   value,
   onChange,
 }: CodeEditorProps) {
-
   const { theme } = useTheme();
 
   return (

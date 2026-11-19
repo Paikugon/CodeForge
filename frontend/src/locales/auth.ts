@@ -6,7 +6,8 @@ export const authResources = {
     email: "Email",
     password: "Mật khẩu",
     invalidCredentials: "Email hoặc mật khẩu không đúng.",
-    loginError: "Không thể đăng nhập. Hãy kiểm tra kết nối hoặc trạng thái tài khoản.",
+    loginError:
+      "Không thể đăng nhập. Hãy kiểm tra kết nối hoặc trạng thái tài khoản.",
     loginRequired: "Hãy đăng nhập để nộp bài.",
     account: "Tài khoản",
     logout: "Đăng xuất",
@@ -18,7 +19,8 @@ export const authResources = {
     email: "Email",
     password: "Password",
     invalidCredentials: "Incorrect email or password.",
-    loginError: "Unable to log in. Please check your connection or account status.",
+    loginError:
+      "Unable to log in. Please check your connection or account status.",
     loginRequired: "Please log in to submit a solution.",
     account: "Account",
     logout: "Log out",

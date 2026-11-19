@@ -1,8 +1,4 @@
-export type SubmissionStatus =
-  | "PENDING"
-  | "JUDGING"
-  | "COMPLETED"
-  | "FAILED";
+export type SubmissionStatus = "PENDING" | "JUDGING" | "COMPLETED" | "FAILED";
 
 export type SubmissionVerdict =
   | "AC"

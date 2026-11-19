@@ -1,24 +1,17 @@
 import type { RunCodeResponse } from "../types/run";
 
-export default function RunResult({
-  result,
-}: {
-  result: RunCodeResponse;
-}) {
+export default function RunResult({ result }: { result: RunCodeResponse }) {
   const metrics = [
     { label: "Result code", value: result.resultCode ?? "—" },
     { label: "Exit code", value: result.exitCode ?? "—" },
     {
       label: "Time",
-      value: result.executionTimeMs === null
-        ? "—"
-        : `${result.executionTimeMs} ms`,
+      value:
+        result.executionTimeMs === null ? "—" : `${result.executionTimeMs} ms`,
     },
     {
       label: "Memory",
-      value: result.memoryUsedKb === null
-        ? "—"
-        : `${result.memoryUsedKb} KB`,
+      value: result.memoryUsedKb === null ? "—" : `${result.memoryUsedKb} KB`,
     },
   ];
 

@@ -28,10 +28,11 @@ export const submissionHistoryResources = {
     loginDescription: "Bạn vẫn có thể xem danh sách tất cả bài nộp.",
     login: "Đăng nhập",
     forbidden: "Tài khoản của bạn không được phép xem danh sách này.",
-    activeNote: "Có bài đang chờ hoặc đang chấm. Bấm Tải lại để cập nhật kết quả.",
+    activeNote:
+      "Có bài đang chờ hoặc đang chấm. Bấm Tải lại để cập nhật kết quả.",
     outOfRange: "Trang này không có bài nộp.",
     firstPage: "Về trang đầu",
-    columns: { 
+    columns: {
       id: "Bài nộp",
       problem: "Bài tập",
       user: "Người nộp",
@@ -39,31 +40,32 @@ export const submissionHistoryResources = {
       language: "Ngôn ngữ",
       time: "Thời gian",
       memory: "Bộ nhớ",
-      date: "Thời gian nộp"
+      date: "Thời gian nộp",
     },
     open: "Xem bài nộp #{{id}}",
     problem: "Bài tập {{slug}}",
     timezone: "Thời gian hiển thị theo giờ Việt Nam (UTC+7).",
-    pagination: { 
+    pagination: {
       label: "Phân trang bài nộp",
       results: "{{from}}-{{to}} / {{total}} bài nộp",
       page: "Trang {{current}} / {{total}}",
       previous: "Trang trước",
-      next: "Trang sau"
+      next: "Trang sau",
     },
-    status: { 
+    status: {
       PENDING: "Đang chờ chấm",
       JUDGING: "Đang chấm",
       COMPLETED: "Đã chấm xong",
-      FAILED: "Chấm thất bại" },
-    results: { 
+      FAILED: "Chấm thất bại",
+    },
+    results: {
       AC: "Chấp nhận",
       WA: "Sai kết quả",
       TLE: "Quá thời gian",
       MLE: "Quá bộ nhớ",
       RE: "Lỗi khi chạy",
       CE: "Lỗi biên dịch",
-      SE: "Lỗi hệ thống"
+      SE: "Lỗi hệ thống",
     },
   },
   en: {
@@ -79,7 +81,8 @@ export const submissionHistoryResources = {
     reset: "Clear filters",
     refresh: "Refresh",
     invalidProblem: "Problem ID must be a valid positive integer.",
-    allFilterNote: "All submissions currently supports filtering by problem ID.",
+    allFilterNote:
+      "All submissions currently supports filtering by problem ID.",
     newest: "Newest first",
     count: "{{count}} submissions",
     loading: "Loading submissions…",
@@ -95,9 +98,11 @@ export const submissionHistoryResources = {
     loginDescription: "You can still browse all submissions.",
     login: "Log in",
     forbidden: "Your account cannot access this list.",
-    activeNote: "Some submissions are pending or judging. Refresh to update their results.",
-    outOfRange: "There are no submissions on this page.", firstPage: "Go to first page",
-    columns: { 
+    activeNote:
+      "Some submissions are pending or judging. Refresh to update their results.",
+    outOfRange: "There are no submissions on this page.",
+    firstPage: "Go to first page",
+    columns: {
       id: "Submission",
       problem: "Problem",
       user: "Submitted by",
@@ -105,7 +110,7 @@ export const submissionHistoryResources = {
       language: "Language",
       time: "Runtime",
       memory: "Memory",
-      date: "Submitted at"
+      date: "Submitted at",
     },
     open: "View submission #{{id}}",
     problem: "Problem {{slug}}",
@@ -115,13 +120,14 @@ export const submissionHistoryResources = {
       results: "{{from}}-{{to}} of {{total}} submissions",
       page: "Page {{current}} of {{total}}",
       previous: "Previous page",
-      next: "Next page"
+      next: "Next page",
     },
     status: {
       PENDING: "Pending",
       JUDGING: "Judging",
       COMPLETED: "Completed",
-      FAILED: "Judging failed" },
+      FAILED: "Judging failed",
+    },
     results: {
       AC: "Accepted",
       WA: "Wrong Answer",
@@ -129,7 +135,7 @@ export const submissionHistoryResources = {
       MLE: "Memory Limit Exceeded",
       RE: "Runtime Error",
       CE: "Compilation Error",
-      SE: "System Error"
+      SE: "System Error",
     },
   },
 };

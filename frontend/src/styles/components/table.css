@@ -3,60 +3,60 @@
   border: 1px solid #e6e9ee;
   border-radius: 9px;
   overflow: hidden;
-  box-shadow: var(--shadow)
+  box-shadow: var(--shadow);
 }
 .table-scroll {
-  overflow-x: auto
+  overflow-x: auto;
 }
 table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 11px
+  font-size: 11px;
 }
 thead {
-  background: #fcfcfd
+  background: #fcfcfd;
 }
 th {
   font-size: 9px;
   font-weight: 500;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   color: #959eaa;
   padding: 12px 17px;
   border-bottom: 1px solid var(--border);
-  white-space: nowrap
+  white-space: nowrap;
 }
 td {
   padding: 15px 17px;
   border-bottom: 1px solid #f0f1f4;
-  vertical-align: middle
+  vertical-align: middle;
 }
 tbody tr:last-child td {
-  border-bottom: 0
+  border-bottom: 0;
 }
 .problem-table td {
   height: 73px;
   padding-top: 13px;
-  padding-bottom: 13px
+  padding-bottom: 13px;
 }
 .problem-table th:nth-child(3) {
-  width: 96px
+  width: 96px;
 }
 .problem-table th:nth-child(4) {
-  width: 99px
+  width: 99px;
 }
 .problem-table th:last-child {
-  width: 40px
+  width: 40px;
 }
 .status-col {
   width: 55px;
   text-align: center;
   padding-left: 16px !important;
-  padding-right: 7px !important
+  padding-right: 7px !important;
 }
 .status-col svg {
   display: inline-block;
-  vertical-align: middle
+  vertical-align: middle;
 }
 .problem-title {
   display: flex;
@@ -65,22 +65,22 @@ tbody tr:last-child td {
   font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
-  color: #4b5564
+  color: #4b5564;
 }
 .problem-title:hover {
-  color: var(--orange)
+  color: var(--orange);
 }
-.problem-title>span {
+.problem-title > span {
   font-family: monospace;
   font-size: 9px;
   font-weight: 400;
-  color: #a0a8b4
+  color: #a0a8b4;
 }
 .problem-tags {
   display: flex;
   gap: 6px;
   margin: 5px 0 0 30px;
-  flex-wrap: wrap
+  flex-wrap: wrap;
 }
 .problem-tags button {
   background: #f6f7f9;
@@ -89,11 +89,11 @@ tbody tr:last-child td {
   border: 0;
   border-radius: 3px;
   padding: 1px 5px;
-  line-height: 1.6
+  line-height: 1.6;
 }
 .problem-tags button:hover {
   background: #e7f3ff;
-  color: var(--orange)
+  color: var(--orange);
 }
 .badge {
   display: inline-flex;
@@ -107,19 +107,19 @@ tbody tr:last-child td {
   font-weight: 500;
   white-space: nowrap;
   background: #f0f2f6;
-  color: #7d8797
+  color: #7d8797;
 }
 .badge.easy,
 .badge.ac,
 .badge.active {
   background: #ecf7f1;
-  color: #4eaa89
+  color: #4eaa89;
 }
 .badge.medium,
 .badge.wa,
 .badge.tle {
   background: #fff5df;
-  color: #cca04d
+  color: #cca04d;
 }
 .badge.hard,
 .badge.ce,
@@ -129,47 +129,47 @@ tbody tr:last-child td {
 .badge.se,
 .badge.failed {
   background: #fff0ef;
-  color: #d07d76
+  color: #d07d76;
 }
 .badge.admin {
   background: #f0ebfa;
-  color: #927ab6
+  color: #927ab6;
 }
 .badge.judging,
 .badge.pending {
   background: #eaf1fc;
-  color: #7595c1
+  color: #7595c1;
 }
 .badge.member {
   background: #eff2f7;
-  color: #8794a6
+  color: #8794a6;
 }
 .badge.special-judge {
   background: #f0ebfa;
-  color: #927ab6
+  color: #927ab6;
 }
 .acceptance {
   font-size: 10px;
   color: #6b7788;
-  font-variant-numeric: tabular-nums
+  font-variant-numeric: tabular-nums;
 }
-.acceptance>span {
+.acceptance > span {
   font-size: 8px;
   margin-left: 2px;
-  color: #9ca4b1
+  color: #9ca4b1;
 }
 .mini-bar {
   width: 48px;
   height: 3px;
   border-radius: 9px;
   background: #eef1f4;
-  margin-top: 5px
+  margin-top: 5px;
 }
 .mini-bar i {
   display: block;
   height: 100%;
   background: #c8ddd3;
-  border-radius: 9px
+  border-radius: 9px;
 }
 .todo-dot {
   width: 6px;
@@ -177,7 +177,7 @@ tbody tr:last-child td {
   border-radius: 50%;
   background: #dce1e7;
   display: inline-block;
-  vertical-align: middle
+  vertical-align: middle;
 }
 .attempt-dot {
   display: inline-block;
@@ -186,13 +186,13 @@ tbody tr:last-child td {
   border: 1.5px solid #e6b264;
   border-radius: 50%;
   vertical-align: middle;
-  flex-shrink: 0
+  flex-shrink: 0;
 }
 .is-saved {
-  color: #62a2d9 !important
+  color: #62a2d9 !important;
 }
 .bookmark-button {
-  padding: 5px
+  padding: 5px;
 }
 .pagination {
   display: flex;
@@ -201,12 +201,12 @@ tbody tr:last-child td {
   padding: 14px 16px;
   border-top: 1px solid var(--border);
   font-size: 9px;
-  color: #9ba3ae
+  color: #9ba3ae;
 }
-.pagination>div {
+.pagination > div {
   display: flex;
   align-items: center;
-  gap: 5px
+  gap: 5px;
 }
 .pagination button {
   border: 1px solid transparent;
@@ -215,15 +215,15 @@ tbody tr:last-child td {
   width: 25px;
   height: 25px;
   font-size: 9px;
-  color: #9ca5b1
+  color: #9ca5b1;
 }
 .pagination button.current {
   background: #eaf5ff;
   border: 1px solid #d4eaff;
-  color: #348cd4
+  color: #348cd4;
 }
 .pagination button:not(:disabled):hover {
-  background: #f5f6f8
+  background: #f5f6f8;
 }
 .list-note {
   display: flex;
@@ -231,20 +231,20 @@ tbody tr:last-child td {
   align-items: center;
   font-size: 8px;
   color: #a8aeb7;
-  padding: 12px 1px
+  padding: 12px 1px;
 }
-.list-note>span {
+.list-note > span {
   display: flex;
   align-items: center;
-  gap: 5px
+  gap: 5px;
 }
 .list-note svg {
-  color: #9bc5b6
+  color: #9bc5b6;
 }
 .list-note .attempt-dot {
   width: 5px;
   height: 5px;
-  border-width: 1px
+  border-width: 1px;
 }
 .table-hint {
   font-size: 9px;
@@ -252,198 +252,194 @@ tbody tr:last-child td {
   margin-bottom: 12px;
   display: flex;
   align-items: center;
-  gap: 6px
+  gap: 6px;
 }
 .cell-sub {
   font-size: 8px;
   color: #adb6c1;
   display: block;
-  margin-top: 5px
+  margin-top: 5px;
 }
 .id-link {
   font-size: 11px;
   color: #8a97aa;
-  font-family: monospace
+  font-family: monospace;
 }
 .id-link:hover,
 .strong-link:hover,
 .user-link:hover {
-  color: var(--orange)
+  color: var(--orange);
 }
 .date-cell {
   font-size: 9px;
   color: #a1adbd;
-  white-space: nowrap
+  white-space: nowrap;
 }
-.page-heading>.badge {
+.page-heading > .badge {
   font-size: 11px;
   padding: 7px 10px;
-  align-self: center
+  align-self: center;
 }
-@media(min-width:1600px) {
-
+@media (min-width: 1600px) {
   .problem-table td {
-    height: 78px
+    height: 78px;
   }
 }
-@media(max-width:1250px) {
-
+@media (max-width: 1250px) {
   .problem-title {
     font-size: 10px;
-    gap: 8px
+    gap: 8px;
   }
 
   .problem-tags {
-    margin-left: 25px
+    margin-left: 25px;
   }
 
   .problem-table th:nth-child(3) {
-    width: 80px
+    width: 80px;
   }
 
   .problem-table td {
     padding-left: 13px;
-    padding-right: 13px
+    padding-right: 13px;
   }
 
   .problem-table th {
     padding-left: 13px;
-    padding-right: 13px
+    padding-right: 13px;
   }
 
   .status-col {
-    width: 44px
+    width: 44px;
   }
 
   .table-hint {
-    font-size: 8px
+    font-size: 8px;
   }
 }
-@media(max-width:1050px) {
-
+@media (max-width: 1050px) {
   .problem-table td {
-    height: 76px
+    height: 76px;
   }
 
-  .page-heading>.badge {
-    align-self: center
+  .page-heading > .badge {
+    align-self: center;
   }
 
   .table-hint {
-    display: none
+    display: none;
   }
 }
-@media(max-width:760px) {
-
+@media (max-width: 760px) {
   .status-col {
     padding-left: 12px !important;
-    width: 40px
+    width: 40px;
   }
 
   .problem-title {
     font-size: 11px;
-    gap: 8px
+    gap: 8px;
   }
 
   .problem-table th,
   .problem-table td {
     padding-left: 12px;
-    padding-right: 12px
+    padding-right: 12px;
   }
 
   .problem-table th:nth-child(4),
   .problem-table td:nth-child(4) {
-    display: none
+    display: none;
   }
 
   .problem-table th:last-child {
     width: 28px;
-    padding-left: 0
+    padding-left: 0;
   }
 
   .problem-table td:last-child {
     padding-left: 0;
-    padding-right: 8px
+    padding-right: 8px;
   }
 
   .problem-table th:nth-child(3) {
-    width: 75px
+    width: 75px;
   }
 
   .problem-tags {
-    margin-left: 25px
+    margin-left: 25px;
   }
 
   .problem-tags button {
-    font-size: 6px
+    font-size: 6px;
   }
 
   .problem-table td {
-    height: 76px
+    height: 76px;
   }
 
   .pagination {
     padding: 14px 12px;
-    font-size: 8px
+    font-size: 8px;
   }
 
   .list-note {
     font-size: 7px;
-    gap: 13px
+    gap: 13px;
   }
 
-  .page-heading>.badge {
-    margin-top: 0
+  .page-heading > .badge {
+    margin-top: 0;
   }
 
   .table-scroll table:not(.problem-table) {
-    min-width: 720px
+    min-width: 720px;
   }
 
   .table-scroll table:not(.problem-table) td {
     padding-top: 15px;
-    padding-bottom: 15px
+    padding-bottom: 15px;
   }
 
-  .solved-row>.badge {
-    font-size: 7px
+  .solved-row > .badge {
+    font-size: 7px;
   }
 }
 th {
   font-size: 10px;
-  color: #8290a2
+  color: #8290a2;
 }
 td {
-  font-size: 12px
+  font-size: 12px;
 }
 .problem-title {
   font-size: 12px;
-  color: #4c5c71
+  color: #4c5c71;
 }
-.problem-title>span {
+.problem-title > span {
   font-size: 10px;
-  color: #8e9aab
+  color: #8e9aab;
 }
 .problem-tags button {
   font-size: 8px;
-  color: #7e8b9d
+  color: #7e8b9d;
 }
 .badge {
   font-size: 9px;
   font-weight: 550;
-  padding: 4px 7px
+  padding: 4px 7px;
 }
 .badge.easy,
 .badge.ac,
 .badge.active {
   color: #318265;
-  background: #eaf6ef
+  background: #eaf6ef;
 }
 .badge.medium,
 .badge.wa,
 .badge.tle {
   color: #a87926;
-  background: #fff3da
+  background: #fff3da;
 }
 .badge.hard,
 .badge.ce,
@@ -453,96 +449,94 @@ td {
 .badge.se,
 .badge.failed {
   color: #b85b54;
-  background: #fff0ed
+  background: #fff0ed;
 }
 .badge.admin,
 .badge.special-judge {
-  color: #8865ac
+  color: #8865ac;
 }
 .badge.member {
-  color: #748399
+  color: #748399;
 }
 .acceptance {
   font-size: 11px;
-  color: #728298
+  color: #728298;
 }
-.acceptance>span {
-  font-size: 9px
+.acceptance > span {
+  font-size: 9px;
 }
 .pagination {
   font-size: 10px;
-  color: #8b9aad
+  color: #8b9aad;
 }
 .pagination button {
-  font-size: 10px
+  font-size: 10px;
 }
 .list-note {
   font-size: 9px;
-  color: #8e9cad
+  color: #8e9cad;
 }
 .id-link {
   font-size: 12px;
-  color: #758eaf
+  color: #758eaf;
 }
 .cell-sub {
   font-size: 9px;
-  color: #97a9bf
+  color: #97a9bf;
 }
 .date-cell {
   font-size: 10px;
-  color: #8da2be
+  color: #8da2be;
 }
 .table-hint {
   font-size: 10px;
-  color: #9eafc4
+  color: #9eafc4;
 }
-@media(max-width:760px) {
-
+@media (max-width: 760px) {
   .problem-title {
-    font-size: 11px
+    font-size: 11px;
   }
 
   .problem-tags button {
-    font-size: 8px
+    font-size: 8px;
   }
 
   .badge {
-    font-size: 9px
+    font-size: 9px;
   }
 
   .list-note {
-    font-size: 8px
+    font-size: 8px;
   }
 }
 .badge.judging,
 .badge.pending {
   background: #e8f3ff;
-  color: #488bc3
+  color: #488bc3;
 }
-@media(max-width:760px) {
-
+@media (max-width: 760px) {
   .problem-table {
-    table-layout: fixed
+    table-layout: fixed;
   }
 
   .problem-table .status-col {
     width: 31px;
     padding-left: 8px !important;
-    padding-right: 4px !important
+    padding-right: 4px !important;
   }
 
   .problem-table th:nth-child(3) {
-    width: 66px
+    width: 66px;
   }
 
   .problem-table th:last-child {
-    width: 27px
+    width: 27px;
   }
 
   .problem-table th:nth-child(2),
   .problem-table td:nth-child(2) {
     padding-left: 8px;
-    padding-right: 5px
+    padding-right: 5px;
   }
 
   .problem-table .problem-title {
@@ -550,39 +544,39 @@ td {
     align-items: baseline;
     gap: 7px;
     line-height: 1.65;
-    font-size: 11px
+    font-size: 11px;
   }
 
-  .problem-table .problem-title>span {
-    font-size: 9px
+  .problem-table .problem-title > span {
+    font-size: 9px;
   }
 
   .problem-table .problem-tags {
     margin-left: 24px;
-    gap: 4px
+    gap: 4px;
   }
 
   .problem-table .problem-tags button {
     font-size: 7px;
     padding: 1px 4px;
     white-space: normal;
-    text-align: left
+    text-align: left;
   }
 
   .problem-table td:nth-child(3),
   .problem-table th:nth-child(3) {
     padding-left: 7px;
-    padding-right: 4px
+    padding-right: 4px;
   }
 
   .problem-table .badge {
     font-size: 8px;
-    padding: 4px 5px
+    padding: 4px 5px;
   }
 }
-@media(max-width:760px) {
+@media (max-width: 760px) {
   .problem-table th.status-col {
-    color: transparent
+    color: transparent;
   }
 }
 .table-scroll[tabindex]:focus-visible {
@@ -669,4 +663,3 @@ td {
   position: relative;
   z-index: 2;
 }
-

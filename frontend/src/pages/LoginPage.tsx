@@ -14,15 +14,22 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { signIn } = useAuth();
 
-  const [email, setEmail] = useState(() => typeof location.state?.email === "string" ? location.state.email : "");
+  const [email, setEmail] = useState(() =>
+    typeof location.state?.email === "string" ? location.state.email : "",
+  );
   const [password, setPassword] = useState("");
 
   const loginMutation = useMutation({
     mutationFn: signIn,
     retry: false,
 
-    onSuccess: response => {
-      navigate(response.mustChangePassword ? "/profile?tab=security" : safeAccountReturnTo(location.state?.from), { replace: true });
+    onSuccess: (response) => {
+      navigate(
+        response.mustChangePassword
+          ? "/profile?tab=security"
+          : safeAccountReturnTo(location.state?.from),
+        { replace: true },
+      );
     },
   });
 
@@ -36,19 +43,27 @@ export default function LoginPage() {
     <section className="live-login live-account-form">
       <h1>{t("auth.login")}</h1>
       <p>{t("auth.loginDescription")}</p>
-      {location.state?.registered && <p className="account-success" role="status">{t("account:registered")}</p>}
-      {location.state?.passwordChanged && <p className="account-success" role="status">{t("account:passwordChanged")}</p>}
-      {location.state?.sessionExpired && <p className="account-alert" role="alert">{t("account:errors.sessionExpired")}</p>}
+      {location.state?.registered && (
+        <p className="account-success" role="status">
+          {t("account:registered")}
+        </p>
+      )}
+      {location.state?.passwordChanged && (
+        <p className="account-success" role="status">
+          {t("account:passwordChanged")}
+        </p>
+      )}
+      {location.state?.sessionExpired && (
+        <p className="account-alert" role="alert">
+          {t("account:errors.sessionExpired")}
+        </p>
+      )}
 
       <form
         onSubmit={(event) => {
           event.preventDefault();
 
-          if (
-            loginMutation.isPending ||
-            !email.trim() ||
-            !password
-          ) {
+          if (loginMutation.isPending || !email.trim() || !password) {
             return;
           }
 
@@ -58,9 +73,7 @@ export default function LoginPage() {
           });
         }}
       >
-        <label htmlFor="login-email">
-          {t("auth.email")}
-        </label>
+        <label htmlFor="login-email">{t("auth.email")}</label>
 
         <input
           id="login-email"
@@ -73,9 +86,7 @@ export default function LoginPage() {
           onChange={(event) => setEmail(event.target.value)}
         />
 
-        <label htmlFor="login-password">
-          {t("auth.password")}
-        </label>
+        <label htmlFor="login-password">{t("auth.password")}</label>
 
         <input
           id="login-password"
@@ -97,20 +108,20 @@ export default function LoginPage() {
         <button
           type="submit"
           className="button primary"
-          disabled={
-            loginMutation.isPending ||
-            !email.trim() ||
-            !password
-          }
+          disabled={loginMutation.isPending || !email.trim() || !password}
         >
-          {t(
-            loginMutation.isPending
-              ? "auth.loggingIn"
-              : "auth.login",
-          )}
+          {t(loginMutation.isPending ? "auth.loggingIn" : "auth.login")}
         </button>
       </form>
-      <p className="account-switch">{t("account:noAccount")} <Link to="/register" state={{ from: safeAccountReturnTo(location.state?.from) }}>{t("account:register")}</Link></p>
+      <p className="account-switch">
+        {t("account:noAccount")}{" "}
+        <Link
+          to="/register"
+          state={{ from: safeAccountReturnTo(location.state?.from) }}
+        >
+          {t("account:register")}
+        </Link>
+      </p>
     </section>
   );
 }

@@ -7,7 +7,13 @@ type TablePaginationProps = {
   totalElements: number;
   onPageChange: (page: number) => void;
   disabled?: boolean;
-  labels?: { label: string; results: string; page: string; previous: string; next: string };
+  labels?: {
+    label: string;
+    results: string;
+    page: string;
+    previous: string;
+    next: string;
+  };
 };
 
 export default function TablePagination({
@@ -29,9 +35,10 @@ export default function TablePagination({
       aria-label={labels?.label ?? "Table pagination"}
     >
       <span aria-live="polite">
-        {labels?.results ?? (totalElements === 0
-          ? "0 results"
-          : `${from}–${to} of ${totalElements} results`)}
+        {labels?.results ??
+          (totalElements === 0
+            ? "0 results"
+            : `${from}–${to} of ${totalElements} results`)}
       </span>
 
       {hasResults && (
@@ -45,9 +52,7 @@ export default function TablePagination({
             <ChevronLeft size={16} aria-hidden="true" />
           </button>
 
-          <span>
-            {labels?.page ?? `Page ${page + 1} of ${totalPages}`}
-          </span>
+          <span>{labels?.page ?? `Page ${page + 1} of ${totalPages}`}</span>
 
           <button
             type="button"

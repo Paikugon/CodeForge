@@ -13,10 +13,7 @@ import "./styles/pages/submissions.css";
 import "./styles/app-layout.css";
 import "./styles/components/button.css";
 import "./styles/theme.css";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";

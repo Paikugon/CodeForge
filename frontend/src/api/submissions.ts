@@ -28,10 +28,9 @@ export async function getSubmission(
   id: number | string,
   signal?: AbortSignal,
 ): Promise<Submission> {
-  return apiRequest<Submission>(
-    `/api/submissions/${encodeURIComponent(id)}`,
-    { signal },
-  );
+  return apiRequest<Submission>(`/api/submissions/${encodeURIComponent(id)}`, {
+    signal,
+  });
 }
 
 export async function getSubmissions(
