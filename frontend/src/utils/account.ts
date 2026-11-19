@@ -51,7 +51,7 @@ export function accountErrorKey(error: unknown, fallback: string): string {
 export function safeAccountReturnTo(value: unknown, fallback = "/profile"): string {
   if (typeof value !== "string") return fallback;
   const path = value.split(/[?#]/)[0];
-  return ["/problems", "/submissions", "/profile", "/users"].some(
+  return ["/problems", "/submissions", "/profile", "/users", "/admin"].some(
     root => path === root || path.startsWith(`${root}/`),
   ) ? value : fallback;
 }

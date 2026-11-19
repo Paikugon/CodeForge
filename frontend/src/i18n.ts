@@ -8,6 +8,7 @@ import { submissionDetailResources } from "./locales/submissionDetail";
 import { submissionHistoryResources } from "./locales/submissionHistory";
 import { accountResources } from "./locales/account";
 import { profileResources } from "./locales/profile";
+import { adminResources } from "./locales/admin";
 
 const savedLanguage = localStorage.getItem("language");
 const initialLanguage = savedLanguage === "en" ? "en" : "vi";
@@ -15,6 +16,7 @@ const initialLanguage = savedLanguage === "en" ? "en" : "vi";
 i18n.use(initReactI18next).init({
   resources: {
     vi: {
+      admin: adminResources.vi,
       account: accountResources.vi,
       profile: profileResources.vi,
       submissionHistory: submissionHistoryResources.vi,
@@ -27,6 +29,7 @@ i18n.use(initReactI18next).init({
       },
     },
     en: {
+      admin: adminResources.en,
       account: accountResources.en,
       profile: profileResources.en,
       submissionHistory: submissionHistoryResources.en,

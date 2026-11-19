@@ -12,6 +12,7 @@ export type ProblemRequest = {
   spjEnabled: boolean;
   spjSource?: string | null;
   enabled?: boolean | null;
+  tagIds?: number[];
 };
 
 export type GetProblemsParams = {

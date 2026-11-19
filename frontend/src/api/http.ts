@@ -66,7 +66,7 @@ export async function apiRequest<T>(
     requestHeaders.set("Authorization", `Bearer ${accessToken}`);
   }
 
-  if (init.body && !requestHeaders.has("Content-Type")) {
+  if (init.body && !(init.body instanceof FormData) && !requestHeaders.has("Content-Type")) {
     requestHeaders.set("Content-Type", "application/json");
   }
 

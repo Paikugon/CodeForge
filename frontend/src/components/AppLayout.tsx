@@ -8,6 +8,7 @@ import {
   Moon,
   Sun,
   UserRound,
+  Settings2,
 } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTheme } from "../context/ThemeContext";
@@ -91,6 +92,7 @@ export default function AppLayout() {
           <NavLink to="/profile" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} onClick={() => setMenuOpen(false)}>
             <UserRound size={19} />{t("profile:mine")}
           </NavLink>
+          {user?.role === "ADMIN" && !user.mustChangePassword && <NavLink to="/admin/problems" className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`} onClick={() => setMenuOpen(false)}><Settings2 size={19} />{t("admin:title")}</NavLink>}
         </nav>
 
         <div className="sidebar-bottom">
@@ -124,7 +126,7 @@ export default function AppLayout() {
             <span className="breadcrumb-root">Workspace</span>
             <ChevronRight size={14} />
             <strong>
-              {pathname.startsWith("/profile") || pathname.startsWith("/users/") ? t("profile:title") : pathname === "/register" ? t("account:register") : pathname === "/login" ? t("auth.login") : pathname.startsWith("/submissions") ? t("submissionHistory:title") : pathname.startsWith("/problems/") ? "Problem" : "Practice"}
+              {pathname.startsWith("/admin/") ? t("admin:title") : pathname.startsWith("/profile") || pathname.startsWith("/users/") ? t("profile:title") : pathname === "/register" ? t("account:register") : pathname === "/login" ? t("auth.login") : pathname.startsWith("/submissions") ? t("submissionHistory:title") : pathname.startsWith("/problems/") ? "Problem" : "Practice"}
             </strong>
           </div>
 

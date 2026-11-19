@@ -9,6 +9,10 @@ const LoginPage = lazy(() => import("./pages/LoginPage"));
 const SubmissionHistoryPage = lazy(() => import("./pages/SubmissionHistoryPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const AdminRoute = lazy(() => import("./components/admin/AdminRoute"));
+const AdminProblemsPage = lazy(() => import("./pages/admin/AdminProblemsPage"));
+const AdminProblemFormPage = lazy(() => import("./pages/admin/AdminProblemFormPage"));
+const AdminTestCasesPage = lazy(() => import("./pages/admin/AdminTestCasesPage"));
 
 export default function App() {
   return (
@@ -24,6 +28,12 @@ export default function App() {
           <Route path="/problems/:id" element={<ProblemDetailPage />} />
           <Route path="/submissions/:id" element={<SubmissionDetailPage />} />
           <Route path="/submissions" element={<SubmissionHistoryPage />} />
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/problems" element={<AdminProblemsPage />} />
+            <Route path="/admin/problems/new" element={<AdminProblemFormPage create />} />
+            <Route path="/admin/problems/:id" element={<AdminProblemFormPage />} />
+            <Route path="/admin/problems/:id/test-cases" element={<AdminTestCasesPage />} />
+          </Route>
         </Route>
       </Routes>
     </Suspense>
