@@ -17,6 +17,8 @@ import com.codeforge.backend.testcase.service.TestCaseService;
 import com.codeforge.backend.tag.model.Tag;
 import com.codeforge.backend.tag.repository.TagRepository;
 import com.codeforge.backend.tag.dto.TagResponse;
+import com.codeforge.backend.user.model.User;
+import com.codeforge.backend.user.repository.UserRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,7 @@ public class ProblemService {
     private final SubmissionRepository submissionRepository;
     private final TagRepository tagRepository;
     private final TestCaseService testCaseService;
+    private final UserRepository userRepository;
 
     public ProblemService(
             ProblemRepository problemRepository,
@@ -53,17 +56,24 @@ public class ProblemService {
             ApplicationEventPublisher eventPublisher,
             SubmissionRepository submissionRepository,
             TagRepository tagRepository,
-            TestCaseService testCaseService) {
+            TestCaseService testCaseService,
+            UserRepository userRepository) {
         this.problemRepository = problemRepository;
         this.testCaseRepository = testCaseRepository;
         this.eventPublisher = eventPublisher;
         this.submissionRepository = submissionRepository;
         this.tagRepository = tagRepository;
         this.testCaseService = testCaseService;
+        this.userRepository = userRepository;
     }
 
     @Transactional
     public ProblemResponse create(ProblemRequest request) {
+        return create(request, null);
+    }
+
+    @Transactional
+    public ProblemResponse create(ProblemRequest request, Long creatorId) {
         if (problemRepository.existsBySlug(request.slug())) {
             throw new ProblemAlreadyExistsException(request.slug());
         }
@@ -75,6 +85,11 @@ public class ProblemService {
                 request.timeLimitMs() == null ? 1000 : request.timeLimitMs(),
                 request.memoryLimitMb() == null ? 256 : request.memoryLimitMb(),
                 request.difficulty() == null ? ProblemDifficulty.EASY : request.difficulty());
+        if (creatorId != null) {
+            User creator = userRepository.findById(creatorId)
+                    .orElseThrow(() -> new ProblemNotFoundException(creatorId));
+            problem.setCreatedBy(creator);
+        }
         applySpj(problem, request);
         problem.setEnabled(request.enabled() == null || request.enabled());
         replaceTags(problem, request.tagIds());

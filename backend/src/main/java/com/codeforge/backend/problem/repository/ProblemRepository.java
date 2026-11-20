@@ -40,9 +40,10 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     @Query("""
             select new com.codeforge.backend.problem.dto.ProblemListResponse(
-                p.id, p.title, p.slug, p.timeLimitMs, p.memoryLimitMb,
+                p.id, p.title, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
                 p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
+            left join p.createdBy creator
             where (:enabled is null or p.enabled = :enabled)
               and (:difficulty is null or p.difficulty = :difficulty)
               and (:tagIds is null or (
@@ -58,9 +59,10 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     @Query(value = """
             select distinct new com.codeforge.backend.problem.dto.ProblemListResponse(
-                p.id, p.title, p.slug, p.timeLimitMs, p.memoryLimitMb,
+                p.id, p.title, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
                 p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
+            left join p.createdBy creator
             join com.codeforge.backend.submission.model.Submission s
                 on s.problemId = p.id
             where s.userId = :userId
@@ -93,9 +95,10 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     @Query(value = """
             select new com.codeforge.backend.problem.dto.ProblemListResponse(
-                p.id, p.title, p.slug, p.timeLimitMs, p.memoryLimitMb,
+                p.id, p.title, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
                 p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
+            left join p.createdBy creator
             where exists (
                 select 1
                 from Submission s

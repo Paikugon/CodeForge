@@ -64,6 +64,7 @@ class ProblemAuthoringApiTests {
         JsonNode body = mapper.readTree(response.body());
         long id = body.get("id").asLong();
         assertEquals("A plus B", body.get("title").asText());
+        assertEquals("authoradmin", body.get("createdBy").asText());
         assertEquals(2, body.get("testCases").size());
         assertEquals(0, body.at("/testCases/0/orderIndex").asInt());
         assertEquals(1, body.at("/testCases/1/orderIndex").asInt());

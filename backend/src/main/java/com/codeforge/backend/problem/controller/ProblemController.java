@@ -50,8 +50,10 @@ public class ProblemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyRole('ADMIN', 'PROBLEM_MANAGER')")
-    public ProblemResponse create(@Valid @RequestBody ProblemRequest request) {
-        return problemService.create(request);
+    public ProblemResponse create(
+            @Valid @RequestBody ProblemRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        return problemService.create(request, Long.parseLong(jwt.getSubject()));
     }
 
     @DeleteMapping("/{id}")

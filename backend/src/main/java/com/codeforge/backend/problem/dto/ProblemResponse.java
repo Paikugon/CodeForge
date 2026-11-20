@@ -14,6 +14,7 @@ import java.util.List;
 public record ProblemResponse(
     Long id,
     String title,
+    String createdBy,
     String slug,
     ProblemDifficulty difficulty,
     String description,
@@ -52,6 +53,7 @@ public record ProblemResponse(
         return new ProblemResponse(
             problem.getId(),
             problem.getTitle(),
+            problem.getCreatedBy() == null ? null : problem.getCreatedBy().getUsername(),
             problem.getSlug(),
             problem.getDifficulty(),
             problem.getDescription(),
@@ -76,7 +78,7 @@ public record ProblemResponse(
         }
 
         return new ProblemResponse(
-            id, title, slug, difficulty, description, timeLimitMs, memoryLimitMb,
+            id, title, createdBy, slug, difficulty, description, timeLimitMs, memoryLimitMb,
             spjEnabled, spjSource, enabled, createdAt, updatedAt, tags, testCases,
             stats.acceptedSubmissionCount(), stats.judgedSubmissionCount(),
             stats.acceptanceRate()
