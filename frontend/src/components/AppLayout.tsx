@@ -104,30 +104,33 @@ export default function AppLayout() {
             <UserRound size={19} />
             {t("profile:mine")}
           </NavLink>
-          {user?.role === "ADMIN" && !user.mustChangePassword && (
-            <>
-              <NavLink
-                to="/admin/problems"
-                className={({ isActive }) =>
-                  `nav-item ${isActive ? "active" : ""}`
-                }
-                onClick={() => setMenuOpen(false)}
-              >
-                <Settings2 size={19} />
-                {t("admin:title")}
-              </NavLink>
-              <NavLink
-                to="/admin/users"
-                className={({ isActive }) =>
-                  `nav-item ${isActive ? "active" : ""}`
-                }
-                onClick={() => setMenuOpen(false)}
-              >
-                <UsersRound size={19} />
-                {t("adminUsers:title")}
-              </NavLink>
-            </>
-          )}
+          {["ADMIN", "PROBLEM_MANAGER"].includes(user?.role ?? "") &&
+            !user?.mustChangePassword && (
+              <>
+                <NavLink
+                  to="/admin/problems"
+                  className={({ isActive }) =>
+                    `nav-item ${isActive ? "active" : ""}`
+                  }
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <Settings2 size={19} />
+                  {t("admin:title")}
+                </NavLink>
+                {user?.role === "ADMIN" && (
+                  <NavLink
+                    to="/admin/users"
+                    className={({ isActive }) =>
+                      `nav-item ${isActive ? "active" : ""}`
+                    }
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <UsersRound size={19} />
+                    {t("adminUsers:title")}
+                  </NavLink>
+                )}
+              </>
+            )}
         </nav>
 
         <div className="sidebar-bottom">

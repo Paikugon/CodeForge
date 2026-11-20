@@ -127,7 +127,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/problems/*/test-cases",
                                 "/api/problems/*/test-cases/**")
-                        .hasRole("ADMIN")
+                        .hasAnyRole("ADMIN", "PROBLEM_MANAGER")
                         .requestMatchers(HttpMethod.GET, "/api/problems/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.POST,

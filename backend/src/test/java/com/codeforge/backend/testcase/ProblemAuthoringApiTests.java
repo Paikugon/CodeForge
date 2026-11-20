@@ -40,6 +40,7 @@ class ProblemAuthoringApiTests {
     @MockitoBean private TestCaseSyncService syncService;
     private final HttpClient client = HttpClient.newHttpClient();
     private String adminToken;
+    private String problemManagerToken;
     private String memberToken;
 
     @BeforeEach
@@ -48,6 +49,7 @@ class ProblemAuthoringApiTests {
             jdbc.update("delete from " + table);
         }
         adminToken = token("authoradmin", "ADMIN");
+        problemManagerToken = token("problemmanager", "PROBLEM_MANAGER");
         memberToken = token("authormember", "USER");
         reset(syncService);
     }
@@ -157,12 +159,12 @@ class ProblemAuthoringApiTests {
     }
 
     @Test
-    void mutationsRequireAnAdminAndUnknownProblemReturns404() throws Exception {
+    void mutationsRequireProblemManagementPermissionAndUnknownProblemReturns404() throws Exception {
         long id = problemId();
         var payload = Map.of("testCases", List.of(sample()));
         assertEquals(401, send("POST", casesPath(id) + "/batch", payload, null).statusCode());
         assertEquals(403, send("POST", casesPath(id) + "/batch", payload, memberToken).statusCode());
-        assertEquals(404, send("POST", casesPath(Long.MAX_VALUE) + "/batch", payload, adminToken).statusCode());
+        assertEquals(404, send("POST", casesPath(Long.MAX_VALUE) + "/batch", payload, problemManagerToken).statusCode());
         assertEquals(0, testCases.count());
     }
 

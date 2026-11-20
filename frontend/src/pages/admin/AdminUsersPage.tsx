@@ -24,7 +24,7 @@ export default function AdminUsersPage() {
       : 0;
   const rawRole = search.get("role");
   const role =
-    rawRole === "ADMIN" || rawRole === "USER"
+    rawRole === "ADMIN" || rawRole === "PROBLEM_MANAGER" || rawRole === "USER"
       ? (rawRole as UserRole)
       : undefined;
   const enabled =
@@ -102,6 +102,9 @@ export default function AdminUsersPage() {
           >
             <option value="">{t("admin:all")}</option>
             <option value="USER">{t("roles.USER")}</option>
+            <option value="PROBLEM_MANAGER">
+              {t("roles.PROBLEM_MANAGER")}
+            </option>
             <option value="ADMIN">{t("roles.ADMIN")}</option>
           </select>
         </label>

@@ -129,7 +129,7 @@ export default function AdminUserDialog({
                 ?.focus();
               return;
             }
-          } else if (!["USER", "ADMIN"].includes(role)) {
+          } else if (!["USER", "PROBLEM_MANAGER", "ADMIN"].includes(role)) {
             setErrors({ form: "unsaved" });
             return;
           }
@@ -154,7 +154,7 @@ export default function AdminUserDialog({
                 disabled={pending || self}
                 onChange={(event) => setRole(event.target.value as UserRole)}
               >
-                {["USER", "ADMIN"].map((value) => (
+                {["USER", "PROBLEM_MANAGER", "ADMIN"].map((value) => (
                   <option value={value} key={value}>
                     {t(`roles.${value}`)}
                   </option>

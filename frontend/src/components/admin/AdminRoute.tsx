@@ -40,7 +40,7 @@ export default function AdminRoute() {
     );
   if (query.data.mustChangePassword)
     return <Navigate to="/profile?tab=security" replace />;
-  if (query.data.role !== "ADMIN")
+  if (!["ADMIN", "PROBLEM_MANAGER"].includes(query.data.role ?? ""))
     return (
       <section className="live-admin admin-state">
         <h1>{t("forbidden")}</h1>
