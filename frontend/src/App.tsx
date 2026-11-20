@@ -1,5 +1,11 @@
 import { lazy, Suspense } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import AppLayout from "./components/AppLayout";
 
 const ProblemList = lazy(() => import("./components/ProblemList"));
@@ -16,9 +22,18 @@ const AdminProblemsPage = lazy(() => import("./pages/admin/AdminProblemsPage"));
 const AdminProblemFormPage = lazy(
   () => import("./pages/admin/AdminProblemFormPage"),
 );
-const AdminTestCasesPage = lazy(
-  () => import("./pages/admin/AdminTestCasesPage"),
-);
+function AdminTestCasesRedirect() {
+  const { id = "" } = useParams();
+  const { search } = useLocation();
+  const next = new URLSearchParams(search);
+  next.set("tab", "test-cases");
+  return (
+    <Navigate
+      to={`/admin/problems/${encodeURIComponent(id)}?${next}`}
+      replace
+    />
+  );
+}
 
 export default function App() {
   return (
@@ -46,7 +61,7 @@ export default function App() {
             />
             <Route
               path="/admin/problems/:id/test-cases"
-              element={<AdminTestCasesPage />}
+              element={<AdminTestCasesRedirect />}
             />
           </Route>
         </Route>

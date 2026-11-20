@@ -1,13 +1,7 @@
 export type SubmissionStatus = "PENDING" | "JUDGING" | "COMPLETED" | "FAILED";
 
 export type SubmissionVerdict =
-  | "AC"
-  | "WA"
-  | "TLE"
-  | "MLE"
-  | "RE"
-  | "CE"
-  | "SE";
+  "AC" | "WA" | "TLE" | "MLE" | "RE" | "CE" | "SE";
 
 export type SubmissionLanguage = "CPP" | "JAVA" | "PYTHON" | string;
 

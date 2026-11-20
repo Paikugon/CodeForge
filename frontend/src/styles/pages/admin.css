@@ -475,3 +475,45 @@ html[data-theme="dark"] .admin-confirm .button.danger {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.live-admin .admin-heading-start {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  min-width: 0;
+}
+.live-admin .admin-editor {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--white);
+}
+.live-admin .admin-editor > .admin-form-tabs {
+  margin-bottom: 22px;
+}
+.live-admin .admin-editor > .admin-form {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+.live-admin .admin-editor > .admin-form[hidden] {
+  display: none;
+}
+.live-admin .admin-editor > .admin-form-panel[hidden] {
+  display: none;
+}
+.live-admin .admin-editor .admin-form-footer {
+  justify-content: flex-end;
+}
+.live-admin .admin-form-tabs > button:disabled {
+  cursor: not-allowed;
+}
+@media (max-width: 680px) {
+  .live-admin .admin-editor {
+    padding: 16px;
+  }
+  .live-admin .admin-heading-start {
+    gap: 12px;
+  }
+}

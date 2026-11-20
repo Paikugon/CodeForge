@@ -21,7 +21,13 @@ import {
 import TestCaseEditor from "../../components/admin/TestCaseEditor";
 import TestCaseImportPanel from "../../components/admin/TestCaseImportPanel";
 
-export default function AdminTestCasesPage() {
+export default function AdminTestCasesPage({
+  embedded = false,
+  active = true,
+}: {
+  embedded?: boolean;
+  active?: boolean;
+}) {
   const { t } = useTranslation("admin");
   const { id = "" } = useParams();
   const valid = validAdminId(id);
@@ -39,7 +45,7 @@ export default function AdminTestCasesPage() {
   const problem = useQuery({
     queryKey: ["admin", "problem", id],
     queryFn: ({ signal }) => getAdminProblem(id, signal),
-    enabled: valid,
+    enabled: valid && active,
     retry: false,
     staleTime: 30_000,
     refetchOnWindowFocus: false,
@@ -47,14 +53,14 @@ export default function AdminTestCasesPage() {
   const query = useQuery({
     queryKey: ["admin", "test-cases", id, page],
     queryFn: ({ signal }) => getTestCaseSummaries(id, page, signal),
-    enabled: valid && problem.isSuccess,
+    enabled: valid && problem.isSuccess && active,
     retry: false,
     refetchOnWindowFocus: false,
   });
   const status = useQuery({
     queryKey: ["admin", "test-case-status", id],
     queryFn: ({ signal }) => getTestCaseStatus(id, signal),
-    enabled: valid && problem.isSuccess,
+    enabled: valid && problem.isSuccess && active,
     retry: false,
     refetchOnWindowFocus: false,
   });
@@ -117,12 +123,14 @@ export default function AdminTestCasesPage() {
 
   return (
     <section className="live-admin admin-selectable">
-      <div className="admin-heading">
-        <h1>{t("caseTitle", { title: problem.data.title })}</h1>
-        <Link className="button" to={`/admin/problems/${id}`}>
-          {t("editProblem")}
-        </Link>
-      </div>
+      {!embedded && (
+        <div className="admin-heading">
+          <h1>{t("caseTitle", { title: problem.data.title })}</h1>
+          <Link className="button" to={`/admin/problems/${id}`}>
+            {t("editProblem")}
+          </Link>
+        </div>
+      )}
       <div className="admin-status">
         <span className={`badge ${status.data?.synced ? "active" : "pending"}`}>
           {status.data
@@ -169,9 +177,11 @@ export default function AdminTestCasesPage() {
         >
           {t("importTitle")}
         </button>
-        <Link to="/admin/problems" className="button">
-          {t("back")}
-        </Link>
+        {!embedded && (
+          <Link to="/admin/problems" className="button">
+            {t("back")}
+          </Link>
+        )}
       </div>
       {editor !== undefined && (
         <TestCaseEditor

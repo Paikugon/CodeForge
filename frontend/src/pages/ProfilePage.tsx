@@ -134,8 +134,7 @@ function ProfileProblems({
       ? rawPage
       : 0;
   const rawDifficulty = search.get("difficulty") as
-    | Problem["difficulty"]
-    | null;
+    Problem["difficulty"] | null;
   const difficulty =
     rawDifficulty && difficulties.includes(rawDifficulty)
       ? rawDifficulty

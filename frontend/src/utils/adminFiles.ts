@@ -30,8 +30,8 @@ export function validateImportFiles(files: File[]): string | undefined {
 export function validAdminId(value?: string): value is string {
   return Boolean(
     value &&
-      /^\d+$/.test(value) &&
-      Number.isSafeInteger(Number(value)) &&
-      Number(value) > 0,
+    /^\d+$/.test(value) &&
+    Number.isSafeInteger(Number(value)) &&
+    Number(value) > 0,
   );
 }

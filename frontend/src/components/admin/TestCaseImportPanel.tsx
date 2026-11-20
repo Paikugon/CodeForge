@@ -56,33 +56,50 @@ export default function TestCaseImportPanel({
     <section className="admin-panel" aria-labelledby="import-title">
       <div className="admin-heading">
         <h2 id="import-title">{t("importTitle")}</h2>
-        <button
-          type="button"
-          className="button"
-          disabled={pending}
-          onClick={onClose}
-        >
-          {t("cancel")}
-        </button>
       </div>
       <p className="admin-note">{t("importHint")}</p>
-      <input
-        type="file"
-        aria-label={t("chooseFile")}
-        accept=".zip,.in,.out"
-        multiple
-        disabled={pending}
-        onChange={(event) => {
-          const next = Array.from(event.target.files ?? []);
-          event.target.value = "";
-          setFiles(next);
-          setCases([]);
-          setInvalid(validateImportFiles(next) ?? "");
-          setImported(undefined);
-          preview.reset();
-          commit.reset();
-        }}
-      />
+      <div className="admin-file-row">
+        <input
+          type="file"
+          aria-label={t("chooseFile")}
+          accept=".zip,.in,.out"
+          multiple
+          disabled={pending}
+          onChange={(event) => {
+            const next = Array.from(event.target.files ?? []);
+            event.target.value = "";
+            setFiles(next);
+            setCases([]);
+            setInvalid(validateImportFiles(next) ?? "");
+            setImported(undefined);
+            preview.reset();
+            commit.reset();
+          }}
+        />
+        {!cases.length && (
+          <div className="admin-actions">
+            <button
+              type="button"
+              className="button primary"
+              disabled={pending || !files.length || Boolean(invalid)}
+              onClick={() => {
+                setInvalid(validateImportFiles(files) ?? "");
+                if (!validateImportFiles(files)) preview.mutate();
+              }}
+            >
+              {t(preview.isPending ? "previewing" : "preview")}
+            </button>
+            <button
+              type="button"
+              className="button"
+              disabled={pending}
+              onClick={onClose}
+            >
+              {t("cancel")}
+            </button>
+          </div>
+        )}
+      </div>
       {files.length > 0 && (
         <p className="admin-note">
           {files.length} file ·{" "}
@@ -110,19 +127,6 @@ export default function TestCaseImportPanel({
         <p className="admin-success" role="status">
           {t("imported", { count: imported })}
         </p>
-      )}
-      {!cases.length && (
-        <button
-          type="button"
-          className="button primary"
-          disabled={pending || !files.length || Boolean(invalid)}
-          onClick={() => {
-            setInvalid(validateImportFiles(files) ?? "");
-            if (!validateImportFiles(files)) preview.mutate();
-          }}
-        >
-          {t(preview.isPending ? "previewing" : "preview")}
-        </button>
       )}
       {cases.length > 0 && (
         <>
