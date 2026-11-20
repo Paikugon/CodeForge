@@ -5,6 +5,8 @@ import type { Tag } from "./tag";
 export type Problem = {
   id: number;
   title: string;
+  createdById: number | null;
+  createdBy: string | null;
   slug: string;
   timeLimitMs: number;
   memoryLimitMb: number;
@@ -23,6 +25,7 @@ export type ProblemPage = Page<Problem>;
 export type ProblemDetail = {
   id: number;
   title: string;
+  createdBy: string | null;
   slug: string;
   difficulty: "EASY" | "MEDIUM" | "HARD";
   description: string;

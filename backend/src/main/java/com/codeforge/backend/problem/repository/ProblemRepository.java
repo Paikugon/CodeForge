@@ -40,7 +40,7 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     @Query("""
             select new com.codeforge.backend.problem.dto.ProblemListResponse(
-                p.id, p.title, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
+                p.id, p.title, creator.id, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
                 p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
             left join p.createdBy creator
@@ -59,7 +59,7 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     @Query(value = """
             select distinct new com.codeforge.backend.problem.dto.ProblemListResponse(
-                p.id, p.title, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
+                p.id, p.title, creator.id, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
                 p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
             left join p.createdBy creator
@@ -95,7 +95,7 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     @Query(value = """
             select new com.codeforge.backend.problem.dto.ProblemListResponse(
-                p.id, p.title, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
+                p.id, p.title, creator.id, creator.username, p.slug, p.timeLimitMs, p.memoryLimitMb,
                 p.difficulty, p.enabled, p.createdAt, p.updatedAt)
             from Problem p
             left join p.createdBy creator

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -38,6 +38,14 @@ export default function AdminUsersPage() {
     mode: UserDialogMode;
   } | null>(null);
   const [notice, setNotice] = useState("");
+  useEffect(() => {
+    if (!notice) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setNotice(""), 5_000);
+    return () => window.clearTimeout(timeout);
+  }, [notice]);
   const query = useQuery({
     queryKey: ["admin", "users", { page, role, enabled }],
     queryFn: ({ signal }) =>
@@ -135,9 +143,9 @@ export default function AdminUsersPage() {
         </Link>
       </p>
       {notice && (
-        <p className="admin-success" role="status">
+        <div className="toast" role="status" aria-live="polite">
           {notice}
-        </p>
+        </div>
       )}
       {query.isError && (
         <AdminError error={query.error} retry={() => void query.refetch()} />

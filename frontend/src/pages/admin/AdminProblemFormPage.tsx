@@ -64,6 +64,14 @@ function ProblemForm({ problem }: { problem?: ProblemDetail }) {
   const [invalid, setInvalid] = useState("");
   const [reading, setReading] = useState(0);
   const [saved, setSaved] = useState(false);
+  useEffect(() => {
+    if (!saved) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setSaved(false), 5_000);
+    return () => window.clearTimeout(timeout);
+  }, [saved]);
   const tags = useQuery({
     queryKey: ["tags"],
     queryFn: ({ signal }) => getTags(signal),
@@ -400,9 +408,9 @@ function ProblemForm({ problem }: { problem?: ProblemDetail }) {
         )}
         {mutation.isError && <AdminError error={mutation.error} />}
         {saved && (
-          <p role="status" className="admin-success">
+          <div className="toast" role="status" aria-live="polite">
             {t("saved")}
-          </p>
+          </div>
         )}
         <div className="admin-actions admin-form-footer">
           <button
