@@ -1,3 +1,6 @@
+export const PASSWORD_CHANGE_REQUIRED_EVENT =
+  "codeforge:password-change-required";
+
 export type ApiErrorPayload = {
   timestamp?: string;
   status?: number;
@@ -86,6 +89,22 @@ export async function apiRequest<T>(
       payload = (await response.json()) as ApiErrorPayload;
     } catch {
       payload = undefined;
+    }
+
+    const code = payload?.code ?? payload?.message;
+
+    if (
+      response.status === 403 &&
+      code === "CODE_PASSWORD_CHANGE_REQUIRED" &&
+      typeof window !== "undefined" &&
+      accessToken &&
+      accessToken === getAccessToken()
+    ) {
+      window.dispatchEvent(
+        new CustomEvent(PASSWORD_CHANGE_REQUIRED_EVENT, {
+          detail: accessToken,
+        }),
+      );
     }
 
     throw new ApiError(response.status, payload);
