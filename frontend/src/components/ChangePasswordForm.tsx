@@ -57,7 +57,7 @@ export default function ChangePasswordForm({
       <h2 id="password-title">{t("changePassword")}</h2>
       <p>{t("passwordChangeDescription")}</p>
       {required && (
-        <p className="account-alert" role="status">
+        <p className="account-alert account-alert--required" role="status">
           {t("passwordRequired")}
         </p>
       )}
