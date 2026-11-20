@@ -122,6 +122,11 @@ export const adminResources = {
       next: "Trang sau",
     },
     errors: {
+      CODE_LAST_ACTIVE_ADMIN:
+        "Cần giữ ít nhất một quản trị viên đang hoạt động.",
+      CODE_USER_NOT_FOUND: "Không tìm thấy tài khoản. Hãy tải lại danh sách.",
+      CODE_PASSWORD_BCRYPT_LIMIT: "Mật khẩu không được vượt quá 72 byte UTF-8.",
+      CODE_PASSWORD_LENGTH_INVALID: "Mật khẩu cần có 8–72 ký tự.",
       generic: "Không thể hoàn tất yêu cầu. Hãy kiểm tra kết nối và thử lại.",
       CODE_PROBLEM_ALREADY_EXISTS: "Slug đã được sử dụng.",
       CODE_PROBLEM_HAS_SUBMISSIONS: "Bài đã có submissions nên không thể xóa.",
@@ -272,6 +277,10 @@ export const adminResources = {
       next: "Next page",
     },
     errors: {
+      CODE_LAST_ACTIVE_ADMIN: "At least one active administrator must remain.",
+      CODE_USER_NOT_FOUND: "Account not found. Refresh the list.",
+      CODE_PASSWORD_BCRYPT_LIMIT: "Passwords cannot exceed 72 UTF-8 bytes.",
+      CODE_PASSWORD_LENGTH_INVALID: "Passwords must contain 8–72 characters.",
       generic:
         "Unable to complete the request. Check your connection and try again.",
       CODE_PROBLEM_ALREADY_EXISTS: "This slug is already in use.",

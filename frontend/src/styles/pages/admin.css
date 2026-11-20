@@ -517,3 +517,82 @@ html[data-theme="dark"] .admin-confirm .button.danger {
     gap: 12px;
   }
 }
+
+.live-admin .admin-users-table {
+  min-width: 900px;
+}
+.live-admin .admin-users-table th:first-child {
+  width: auto;
+  min-width: 165px;
+}
+.live-admin .admin-users-table td {
+  overflow-wrap: anywhere;
+}
+.live-admin .admin-user-email {
+  max-width: 260px;
+}
+.admin-user-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(600px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 0;
+  color: var(--text);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 24px 80px #0005;
+}
+.admin-user-dialog::backdrop {
+  background: #07111f99;
+}
+.admin-user-dialog .admin-user-dialog-heading {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+}
+.admin-user-dialog .admin-user-dialog-heading h2 {
+  margin: 0;
+}
+.admin-user-dialog .admin-user-dialog-heading > button {
+  flex-shrink: 0;
+  padding: 8px;
+}
+.live-admin.admin-user-dialog .admin-form {
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+.admin-user-dialog .admin-note {
+  margin: 0;
+}
+.admin-user-dialog .admin-user-dialog-actions {
+  justify-content: flex-end;
+}
+.admin-user-dialog .admin-user-password-toggle {
+  justify-self: start;
+}
+.admin-user-dialog .admin-user-field-error {
+  margin: 0;
+  color: #b5435b;
+  font-size: 13px;
+}
+html[data-theme="dark"] .admin-user-dialog .admin-user-field-error {
+  color: #efa6b2;
+}
+@media (max-width: 680px) {
+  .admin-user-dialog .admin-user-dialog-heading {
+    padding: 16px;
+  }
+}

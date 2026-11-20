@@ -15,6 +15,7 @@ import {
   Sun,
   UserRound,
   Settings2,
+  UsersRound,
 } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTheme } from "../context/ThemeContext";
@@ -104,16 +105,28 @@ export default function AppLayout() {
             {t("profile:mine")}
           </NavLink>
           {user?.role === "ADMIN" && !user.mustChangePassword && (
-            <NavLink
-              to="/admin/problems"
-              className={({ isActive }) =>
-                `nav-item ${isActive ? "active" : ""}`
-              }
-              onClick={() => setMenuOpen(false)}
-            >
-              <Settings2 size={19} />
-              {t("admin:title")}
-            </NavLink>
+            <>
+              <NavLink
+                to="/admin/problems"
+                className={({ isActive }) =>
+                  `nav-item ${isActive ? "active" : ""}`
+                }
+                onClick={() => setMenuOpen(false)}
+              >
+                <Settings2 size={19} />
+                {t("admin:title")}
+              </NavLink>
+              <NavLink
+                to="/admin/users"
+                className={({ isActive }) =>
+                  `nav-item ${isActive ? "active" : ""}`
+                }
+                onClick={() => setMenuOpen(false)}
+              >
+                <UsersRound size={19} />
+                {t("adminUsers:title")}
+              </NavLink>
+            </>
           )}
         </nav>
 

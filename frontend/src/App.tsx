@@ -19,6 +19,7 @@ const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const AdminRoute = lazy(() => import("./components/admin/AdminRoute"));
 const AdminProblemsPage = lazy(() => import("./pages/admin/AdminProblemsPage"));
+const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
 const AdminProblemFormPage = lazy(
   () => import("./pages/admin/AdminProblemFormPage"),
 );
@@ -51,6 +52,7 @@ export default function App() {
           <Route path="/submissions" element={<SubmissionHistoryPage />} />
           <Route element={<AdminRoute />}>
             <Route path="/admin/problems" element={<AdminProblemsPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route
               path="/admin/problems/new"
               element={<AdminProblemFormPage create />}
