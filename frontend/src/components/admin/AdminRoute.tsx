@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
 import { getMyProfile } from "../../api/users";
 import { AdminError } from "./AdminUi";
+import { PageSkeleton } from "../ui/Skeleton";
 
 export default function AdminRoute() {
   const { t } = useTranslation("admin");
@@ -31,7 +32,7 @@ export default function AdminRoute() {
         </Link>
       </section>
     );
-  if (query.isPending) return <p role="status">{t("loading")}</p>;
+  if (query.isPending) return <PageSkeleton label={t("loading")} />;
   if (query.isError)
     return (
       <section className="live-admin">

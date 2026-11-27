@@ -455,6 +455,112 @@
   --result-text: #46627f;
 }
 
+.submission-detail-skeleton {
+  display: grid;
+  gap: 22px;
+}
+
+.submission-skeleton-heading {
+  display: grid;
+  gap: 12px;
+}
+
+.submission-skeleton-banner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 126px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--white);
+}
+
+.submission-skeleton-banner > .skeleton--pill {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+}
+
+.submission-skeleton-banner > div {
+  flex: 1;
+}
+
+.submission-skeleton-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--white);
+}
+
+.submission-skeleton-metrics > div {
+  display: grid;
+  gap: 8px;
+  padding: 20px;
+}
+
+.submission-skeleton-metric {
+  width: 55%;
+  height: 26px;
+}
+
+.submission-skeleton-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 24px;
+  align-items: start;
+}
+
+.submission-skeleton-main {
+  display: grid;
+  gap: 22px;
+}
+
+.submission-skeleton-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--white);
+}
+
+.submission-skeleton-code {
+  height: 290px;
+}
+
+@media (max-width: 1000px) {
+  .submission-skeleton-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .submission-detail-skeleton {
+    gap: 16px;
+  }
+
+  .submission-skeleton-banner {
+    min-height: 110px;
+    padding: 18px;
+  }
+
+  .submission-skeleton-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .submission-skeleton-metrics > div {
+    padding: 16px 14px;
+  }
+
+  .submission-skeleton-metrics > div:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
+  }
+}
+
 .live-submission-detail[data-tone="success"] {
   --result-bg: #edf8f2;
   --result-border: #c8e5d6;

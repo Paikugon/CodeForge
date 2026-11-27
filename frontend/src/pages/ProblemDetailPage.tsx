@@ -19,6 +19,7 @@ import RunResult from "../components/RunResult";
 import { createSubmission } from "../api/submissions";
 import { ApiError } from "../api/http";
 import type { SubmissionRequest } from "../types/submission";
+import { SkeletonBlock } from "../components/ui/Skeleton";
 
 export default function ProblemDetailPage() {
   const { id } = useParams();
@@ -74,7 +75,7 @@ export default function ProblemDetailPage() {
   }
 
   if (isPending) {
-    return <p role="status">{t("problemDetail.loading")}</p>;
+    return <ProblemDetailSkeleton label={t("problemDetail.loading")} />;
   }
 
   return (
@@ -239,6 +240,35 @@ export default function ProblemDetailPage() {
             )}
           </div>
         </section>
+      </div>
+    </section>
+  );
+}
+
+function ProblemDetailSkeleton({ label }: { label: string }) {
+  return (
+    <section
+      className="problem-detail-skeleton"
+      role="status"
+      aria-label={label}
+    >
+      <div className="problem-detail-skeleton-panel">
+        <SkeletonBlock className="skeleton--heading" />
+        <SkeletonBlock className="skeleton--line skeleton--line-short" />
+        <SkeletonBlock className="skeleton--line" />
+        <SkeletonBlock className="skeleton--line" />
+        <SkeletonBlock className="skeleton--line skeleton--line-short" />
+        <div className="problem-detail-skeleton-samples">
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+          <SkeletonBlock className="problem-detail-skeleton-sample" />
+        </div>
+      </div>
+      <div className="problem-detail-skeleton-panel problem-detail-skeleton-editor">
+        <div className="problem-detail-skeleton-editor-heading">
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+          <SkeletonBlock className="skeleton--control" />
+        </div>
+        <SkeletonBlock className="problem-detail-skeleton-code" />
       </div>
     </section>
   );

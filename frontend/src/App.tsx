@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import {
   Navigate,
   Route,
@@ -39,38 +39,36 @@ function AdminTestCasesRedirect() {
 
 export default function App() {
   return (
-    <Suspense fallback={<p role="status">Loading…</p>}>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route element={<PasswordChangeGuard />}>
-            <Route index element={<Navigate to="/problems" replace />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/profile" element={<ProfilePage own />} />
-            <Route path="/users/:id" element={<ProfilePage />} />
-            <Route path="/problems" element={<ProblemList />} />
-            <Route path="/problems/:id" element={<ProblemDetailPage />} />
-            <Route path="/submissions/:id" element={<SubmissionDetailPage />} />
-            <Route path="/submissions" element={<SubmissionHistoryPage />} />
-            <Route element={<AdminRoute />}>
-              <Route path="/admin/problems" element={<AdminProblemsPage />} />
-              <Route path="/admin/users" element={<AdminUsersPage />} />
-              <Route
-                path="/admin/problems/new"
-                element={<AdminProblemFormPage create />}
-              />
-              <Route
-                path="/admin/problems/:id"
-                element={<AdminProblemFormPage />}
-              />
-              <Route
-                path="/admin/problems/:id/test-cases"
-                element={<AdminTestCasesRedirect />}
-              />
-            </Route>
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route element={<PasswordChangeGuard />}>
+          <Route index element={<Navigate to="/problems" replace />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/profile" element={<ProfilePage own />} />
+          <Route path="/users/:id" element={<ProfilePage />} />
+          <Route path="/problems" element={<ProblemList />} />
+          <Route path="/problems/:id" element={<ProblemDetailPage />} />
+          <Route path="/submissions/:id" element={<SubmissionDetailPage />} />
+          <Route path="/submissions" element={<SubmissionHistoryPage />} />
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/problems" element={<AdminProblemsPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route
+              path="/admin/problems/new"
+              element={<AdminProblemFormPage create />}
+            />
+            <Route
+              path="/admin/problems/:id"
+              element={<AdminProblemFormPage />}
+            />
+            <Route
+              path="/admin/problems/:id/test-cases"
+              element={<AdminTestCasesRedirect />}
+            />
           </Route>
         </Route>
-      </Routes>
-    </Suspense>
+      </Route>
+    </Routes>
   );
 }

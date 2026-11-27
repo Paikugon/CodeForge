@@ -112,6 +112,10 @@
   font-size: 14px;
 }
 
+.live-submission-history > .skeleton-table {
+  margin-top: 20px;
+}
+
 .live-submission-history .history-list-heading > span {
   color: var(--muted);
   font-size: 13px;

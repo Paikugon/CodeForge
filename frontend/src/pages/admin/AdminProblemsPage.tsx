@@ -6,6 +6,7 @@ import { Plus, RefreshCw } from "lucide-react";
 import { deleteProblem, getProblems } from "../../api/problems";
 import { setProblemVisibility } from "../../api/admin";
 import Table from "../../components/ui/Table";
+import { SkeletonTable } from "../../components/ui/Skeleton";
 import {
   AdminError,
   AdminPagination,
@@ -181,7 +182,7 @@ export default function AdminProblemsPage() {
         </button>
       </FloatingSelection>
       {query.isPending ? (
-        <p role="status">{t("loading")}</p>
+        <SkeletonTable columns={7} rows={7} label={t("loading")} />
       ) : (
         query.data && (
           <Table

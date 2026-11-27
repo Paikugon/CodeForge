@@ -7,6 +7,7 @@ import { getTags } from "../api/tags";
 import { ChevronDown } from "lucide-react";
 import ProblemTable from "./ProblemTable";
 import TablePagination from "./ui/TablePagination";
+import { SkeletonBlock, SkeletonTable } from "./ui/Skeleton";
 
 type DifficultyFilter = "" | "EASY" | "MEDIUM" | "HARD";
 
@@ -47,7 +48,7 @@ export default function ProblemList() {
   });
 
   if (isPending) {
-    return <p role="status">{t("problems.loading")}</p>;
+    return <ProblemListSkeleton label={t("problems.loading")} />;
   }
 
   if (isError) {
@@ -92,7 +93,9 @@ export default function ProblemList() {
 
         {/* Tag picker */}
         {tagsQuery.isPending ? (
-          <span role="status">Loading tags…</span>
+          <span role="status" aria-label="Loading tags">
+            <SkeletonBlock className="skeleton--control problem-tag-skeleton" />
+          </span>
         ) : tagsQuery.isError ? (
           <span role="alert">
             Could not load tags.{" "}
@@ -130,5 +133,21 @@ export default function ProblemList() {
         }
       />
     </section>
+  );
+}
+
+function ProblemListSkeleton({ label }: { label: string }) {
+  return (
+    <div className="problem-skeleton">
+      <div className="problem-skeleton-header" aria-hidden="true">
+        <SkeletonBlock className="skeleton--heading" />
+      </div>
+      <div className="problem-skeleton-filters" aria-hidden="true">
+        <SkeletonBlock className="skeleton--control" />
+        <SkeletonBlock className="skeleton--control problem-tag-skeleton" />
+        <SkeletonBlock className="skeleton--control problem-find-skeleton" />
+      </div>
+      <SkeletonTable columns={5} rows={6} label={label} />
+    </div>
   );
 }

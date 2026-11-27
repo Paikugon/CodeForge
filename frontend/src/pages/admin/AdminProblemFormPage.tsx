@@ -16,6 +16,7 @@ import {
 import { getAdminProblem } from "../../api/admin";
 import { getTags } from "../../api/tags";
 import { AdminError, FileTextField } from "../../components/admin/AdminUi";
+import { PageSkeleton, SkeletonBlock } from "../../components/ui/Skeleton";
 import type { ProblemDetail } from "../../types/problem";
 import { validAdminId } from "../../utils/adminFiles";
 
@@ -278,7 +279,9 @@ function ProblemForm({ problem }: { problem?: ProblemDetail }) {
           <fieldset disabled={pending}>
             <legend>{t("tags")}</legend>
             {tags.isPending ? (
-              <p>{t("loading")}</p>
+              <span role="status" aria-label={t("loading")}>
+                <SkeletonBlock className="skeleton--control" />
+              </span>
             ) : tags.isError ? (
               <AdminError
                 error={tags.error}
@@ -473,7 +476,7 @@ export default function AdminProblemFormPage({
       ) : create ? (
         <ProblemForm />
       ) : query.isPending ? (
-        <p role="status">{t("loading")}</p>
+        <PageSkeleton label={t("loading")} />
       ) : query.isError ? (
         <AdminError error={query.error} retry={() => void query.refetch()} />
       ) : (

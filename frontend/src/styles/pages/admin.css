@@ -460,6 +460,10 @@ html[data-theme="dark"] .admin-confirm .button.danger {
 .admin-case-dialog .admin-dialog-state {
   padding: 24px;
 }
+.admin-case-dialog .admin-dialog-skeleton {
+  display: grid;
+  gap: 14px;
+}
 @media (max-width: 680px) {
   .admin-case-dialog {
     width: calc(100vw - 20px);

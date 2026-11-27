@@ -13,6 +13,11 @@ import {
 import { validAdminId } from "../../utils/adminFiles";
 import Table from "../../components/ui/Table";
 import {
+  PageSkeleton,
+  SkeletonBlock,
+  SkeletonTable,
+} from "../../components/ui/Skeleton";
+import {
   AdminError,
   AdminPagination,
   ConfirmDialog,
@@ -110,7 +115,7 @@ export default function AdminTestCasesPage({
         <p role="alert">{t("formInvalid")}</p>
       </section>
     );
-  if (problem.isPending) return <p role="status">{t("loading")}</p>;
+  if (problem.isPending) return <PageSkeleton label={t("loading")} />;
   if (problem.isError)
     return (
       <section className="live-admin">
@@ -133,9 +138,13 @@ export default function AdminTestCasesPage({
       )}
       <div className="admin-status">
         <span className={`badge ${status.data?.synced ? "active" : "pending"}`}>
-          {status.data
-            ? t(status.data.synced ? "synced" : "unsynced")
-            : t("loading")}
+          {status.isPending ? (
+            <SkeletonBlock className="skeleton--pill" />
+          ) : status.data ? (
+            t(status.data.synced ? "synced" : "unsynced")
+          ) : (
+            "—"
+          )}
         </span>
         <button
           type="button"
@@ -236,7 +245,7 @@ export default function AdminTestCasesPage({
         <AdminError error={query.error} retry={() => void query.refetch()} />
       )}
       {query.isPending ? (
-        <p role="status">{t("loading")}</p>
+        <SkeletonTable columns={6} rows={7} label={t("loading")} />
       ) : (
         query.data && (
           <Table

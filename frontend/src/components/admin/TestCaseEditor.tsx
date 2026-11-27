@@ -7,6 +7,7 @@ import { createTestCase, updateTestCase } from "../../api/testCases";
 import type { TestCase, TestCaseRequest } from "../../types/testcase";
 import { MAX_CASE_FILE_BYTES } from "../../utils/adminFiles";
 import { AdminError, FileTextField } from "./AdminUi";
+import { SkeletonBlock } from "../ui/Skeleton";
 
 function EditorForm({
   problemId,
@@ -220,8 +221,15 @@ export default function TestCaseEditor({
           onBusyChange={setBusy}
         />
       ) : query.isPending ? (
-        <div className="admin-dialog-state">
-          <p role="status">{t("loading")}</p>
+        <div
+          className="admin-dialog-state admin-dialog-skeleton"
+          role="status"
+          aria-label={t("loading")}
+        >
+          <SkeletonBlock className="skeleton--heading" />
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
         </div>
       ) : query.isError ? (
         <div className="admin-dialog-state">

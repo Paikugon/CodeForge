@@ -27,6 +27,7 @@ import { getProblemById } from "../api/problems";
 import { ApiError } from "../api/http";
 import { useTheme } from "../context/ThemeContext";
 import type { Submission } from "../types/submission";
+import { SkeletonBlock } from "../components/ui/Skeleton";
 
 const languageNames: Record<string, string> = {
   cpp: "C++ 20",
@@ -88,6 +89,55 @@ function CopyCodeButton({ source }: { source: string }) {
         {state === "copied" ? <Check size={17} /> : <Copy size={17} />}
       </button>
     </div>
+  );
+}
+
+function SubmissionDetailSkeleton({ label }: { label: string }) {
+  return (
+    <section
+      className="live-submission-detail submission-detail-skeleton"
+      role="status"
+      aria-label={label}
+    >
+      <div className="submission-skeleton-heading">
+        <SkeletonBlock className="skeleton--heading" />
+        <SkeletonBlock className="skeleton--line skeleton--line-short" />
+      </div>
+      <div className="submission-skeleton-banner">
+        <SkeletonBlock className="skeleton--pill" />
+        <div>
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+        </div>
+      </div>
+      <div className="submission-skeleton-metrics">
+        {Array.from({ length: 4 }, (_, index) => (
+          <div key={index}>
+            <SkeletonBlock className="skeleton--line skeleton--line-short" />
+            <SkeletonBlock className="submission-skeleton-metric" />
+          </div>
+        ))}
+      </div>
+      <div className="submission-skeleton-grid">
+        <div className="submission-skeleton-main">
+          <div className="submission-skeleton-card">
+            <SkeletonBlock className="skeleton--line skeleton--line-short" />
+            <SkeletonBlock className="submission-skeleton-code" />
+          </div>
+          <div className="submission-skeleton-card">
+            <SkeletonBlock className="skeleton--line skeleton--line-short" />
+            <SkeletonBlock className="skeleton--line" />
+            <SkeletonBlock className="skeleton--line" />
+          </div>
+        </div>
+        <div className="submission-skeleton-card">
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -173,15 +223,7 @@ export default function SubmissionDetailPage() {
   }
 
   if (!submission) {
-    return (
-      <section
-        className="live-submission-detail live-detail-state"
-        role="status"
-      >
-        <LoaderCircle className="spin" size={28} aria-hidden="true" />
-        <p>{t("submissionDetail.loading")}</p>
-      </section>
-    );
+    return <SubmissionDetailSkeleton label={t("submissionDetail.loading")} />;
   }
 
   const active = isActive(submission.status);

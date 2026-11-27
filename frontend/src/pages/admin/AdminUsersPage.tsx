@@ -7,6 +7,7 @@ import { getUsers } from "../../api/users";
 import { useAuth } from "../../context/AuthContext";
 import type { UserListItem, UserRole } from "../../types/user";
 import Table from "../../components/ui/Table";
+import { SkeletonTable } from "../../components/ui/Skeleton";
 import { AdminError, AdminPagination } from "../../components/admin/AdminUi";
 import AdminUserDialog, {
   type UserDialogMode,
@@ -151,7 +152,7 @@ export default function AdminUsersPage() {
         <AdminError error={query.error} retry={() => void query.refetch()} />
       )}
       {query.isPending ? (
-        <p role="status">{t("admin:loading")}</p>
+        <SkeletonTable columns={6} rows={7} label={t("admin:loading")} />
       ) : (
         query.data && (
           <Table

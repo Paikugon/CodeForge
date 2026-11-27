@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   Link,
   NavLink,
@@ -21,6 +21,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { useTheme } from "../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
+import { PageSkeleton } from "./ui/Skeleton";
 
 export default function AppLayout() {
   const { pathname, search } = useLocation();
@@ -231,7 +232,9 @@ export default function AppLayout() {
         </header>
 
         <main className="main-content">
-          <Outlet />
+          <Suspense fallback={<PageSkeleton label={t("app.loading")} />}>
+            <Outlet />
+          </Suspense>
         </main>
 
         <footer className="footer">
