@@ -8,6 +8,7 @@ import { ChevronDown } from "lucide-react";
 import ProblemTable from "./ProblemTable";
 import TablePagination from "./ui/TablePagination";
 import { SkeletonBlock, SkeletonTable } from "./ui/Skeleton";
+import "../styles/pages/problems.css";
 
 type DifficultyFilter = "" | "EASY" | "MEDIUM" | "HARD";
 

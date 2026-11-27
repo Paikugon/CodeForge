@@ -3,9 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CodeMirror from "@uiw/react-codemirror";
-import { cpp } from "@codemirror/lang-cpp";
-import { java } from "@codemirror/lang-java";
-import { python } from "@codemirror/lang-python";
 import {
   AlertCircle,
   ArrowLeft,
@@ -28,14 +25,14 @@ import { ApiError } from "../api/http";
 import { useTheme } from "../context/ThemeContext";
 import type { Submission } from "../types/submission";
 import { SkeletonBlock } from "../components/ui/Skeleton";
+import { useLanguageExtension } from "../components/useLanguageExtension";
+import "../styles/pages/submissions.css";
 
 const languageNames: Record<string, string> = {
   cpp: "C++ 20",
   java: "Java 21",
   python: "Python 3",
 };
-const languageExtensions = { cpp: cpp(), java: java(), python: python() };
-
 function isActive(status?: Submission["status"]) {
   return status === "PENDING" || status === "JUDGING";
 }
@@ -161,6 +158,9 @@ export default function SubmissionDetailPage() {
   });
 
   const submission = submissionQuery.data;
+  const languageKey = submission?.language.toLowerCase() ?? "";
+  const { extension, failed: languageExtensionFailed } =
+    useLanguageExtension(languageKey);
   const problemId = submission?.problemId;
   const responseStatus =
     submissionQuery.error instanceof ApiError
@@ -252,10 +252,7 @@ export default function SubmissionDetailPage() {
       : tone === "danger"
         ? XCircle
         : AlertCircle;
-  const languageKey = submission.language.toLowerCase();
   const language = languageNames[languageKey] ?? submission.language;
-  const extension =
-    languageExtensions[languageKey as keyof typeof languageExtensions];
   const locale = i18n.resolvedLanguage?.startsWith("vi") ? "vi-VN" : "en-GB";
   const problemTitle =
     problemQuery.data?.title ??
@@ -385,6 +382,9 @@ export default function SubmissionDetailPage() {
                     tabSize: 4,
                   }}
                 />
+                {languageExtensionFailed && (
+                  <p role="alert">{t("app.languageSupportError")}</p>
+                )}
               </div>
             ) : (
               <div className="source-locked">

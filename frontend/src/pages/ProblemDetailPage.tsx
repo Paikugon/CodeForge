@@ -20,6 +20,9 @@ import { createSubmission } from "../api/submissions";
 import { ApiError } from "../api/http";
 import type { SubmissionRequest } from "../types/submission";
 import { SkeletonBlock } from "../components/ui/Skeleton";
+import "../styles/pages/problems.css";
+import "../styles/pages/problem-detail.css";
+import "../styles/pages/submissions.css";
 
 export default function ProblemDetailPage() {
   const { id } = useParams();

@@ -35,6 +35,7 @@ import EditProfileForm from "../components/EditProfileForm";
 import { profileInitials } from "../utils/profile";
 import type { UserProfile } from "../types/user";
 import type { Problem } from "../types/problem";
+import "../styles/pages/profile.css";
 import "../styles/pages/account.css";
 import "../styles/pages/profile-live.css";
 
