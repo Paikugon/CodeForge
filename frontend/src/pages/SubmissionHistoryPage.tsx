@@ -7,7 +7,6 @@ import {
   Clock3,
   FileClock,
   Filter,
-  LoaderCircle,
   RefreshCw,
 } from "lucide-react";
 import { getMySubmissions, getSubmissions } from "../api/submissions";
@@ -16,6 +15,7 @@ import { useAuth } from "../context/AuthContext";
 import Table from "../components/ui/Table";
 import TableRow from "../components/ui/TableRow";
 import TablePagination from "../components/ui/TablePagination";
+import { SkeletonTable } from "../components/ui/Skeleton";
 import type {
   SubmissionListItem,
   SubmissionVerdict,
@@ -305,10 +305,7 @@ export default function SubmissionHistoryPage() {
             </div>
           )}
           {query.isPending ? (
-            <div className="history-state" role="status">
-              <LoaderCircle size={24} className="spin" aria-hidden="true" />
-              <p>{t("loading")}</p>
-            </div>
+            <SkeletonTable columns={7} rows={6} label={t("loading")} />
           ) : (
             data &&
             !forbidden && (

@@ -49,21 +49,23 @@ public class ProblemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ADMIN')")
-    public ProblemResponse create(@Valid @RequestBody ProblemRequest request) {
-        return problemService.create(request);
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROBLEM_MANAGER')")
+    public ProblemResponse create(
+            @Valid @RequestBody ProblemRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        return problemService.create(request, Long.parseLong(jwt.getSubject()));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROBLEM_MANAGER')")
     public void delete(@PathVariable Long id) {
         problemService.delete(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROBLEM_MANAGER')")
     public ProblemResponse edit(@PathVariable Long id, @Valid @RequestBody ProblemRequest request) {
         return problemService.edit(id, request);
     }
@@ -80,15 +82,15 @@ public class ProblemController {
 
         PaginationValidator.validate(page, size, 100);
 
-        return problemService.findAll(pageable, enabled, difficulty, tagIds, isAdmin(authentication));
+        return problemService.findAll(pageable, enabled, difficulty, tagIds, canManageProblems(authentication));
     }
 
     @GetMapping("/{id}")
     public ProblemResponse findById(
             @PathVariable Long id,
             Authentication authentication) {
-        boolean isAdmin = isAdmin(authentication);
-        return problemService.findById(id, isAdmin, isAdmin);
+        boolean canManageProblems = canManageProblems(authentication);
+        return problemService.findById(id, canManageProblems, canManageProblems);
     }
 
     @GetMapping("/me/solved")
@@ -102,7 +104,7 @@ public class ProblemController {
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         PaginationValidator.validate(page, size, 100);
         return problemService.findSolvedByUserId(
-                Long.parseLong(jwt.getSubject()), pageable, difficulty, tagIds, isAdmin(authentication));
+                Long.parseLong(jwt.getSubject()), pageable, difficulty, tagIds, canManageProblems(authentication));
     }
 
     @GetMapping("/me/unsolved")
@@ -116,7 +118,7 @@ public class ProblemController {
             @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         PaginationValidator.validate(page, size, 100);
         return problemService.findUnsolvedByUserId(
-                Long.parseLong(jwt.getSubject()), pageable, difficulty, tagIds, isAdmin(authentication));
+                Long.parseLong(jwt.getSubject()), pageable, difficulty, tagIds, canManageProblems(authentication));
     }
 
     @GetMapping("/{userId}/solved")
@@ -146,11 +148,11 @@ public class ProblemController {
     }
     
     @GetMapping("/{id}/authoring")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROBLEM_MANAGER')")
     public ProblemResponse authoring(@PathVariable Long id) { return problemService.authoring(id); }
 
     @PatchMapping("/batch-visibility")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'PROBLEM_MANAGER')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void visibilityBatch(@Valid @RequestBody ProblemBatchVisibilityRequest request) {
         problemService.updateVisibilityBatch(request.ids(), request.enabled());
@@ -163,12 +165,13 @@ public class ProblemController {
             Authentication authentication) {
 
         return ResponseEntity.ok(
-                runCodeService.run(id, request, isAdmin(authentication)));
+                runCodeService.run(id, request, canManageProblems(authentication)));
     }
 
-    private boolean isAdmin(Authentication authentication) {
+    private boolean canManageProblems(Authentication authentication) {
         return authentication != null
                 && authentication.getAuthorities().stream()
-                        .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority()));
+                        .anyMatch(authority -> "ROLE_ADMIN".equals(authority.getAuthority())
+                                || "ROLE_PROBLEM_MANAGER".equals(authority.getAuthority()));
     }
 }

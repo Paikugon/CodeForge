@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import {
   Link,
   NavLink,
@@ -15,11 +15,13 @@ import {
   Sun,
   UserRound,
   Settings2,
+  UsersRound,
 } from "lucide-react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTheme } from "../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
+import { PageSkeleton } from "./ui/Skeleton";
 
 export default function AppLayout() {
   const { pathname, search } = useLocation();
@@ -103,18 +105,33 @@ export default function AppLayout() {
             <UserRound size={19} />
             {t("profile:mine")}
           </NavLink>
-          {user?.role === "ADMIN" && !user.mustChangePassword && (
-            <NavLink
-              to="/admin/problems"
-              className={({ isActive }) =>
-                `nav-item ${isActive ? "active" : ""}`
-              }
-              onClick={() => setMenuOpen(false)}
-            >
-              <Settings2 size={19} />
-              {t("admin:title")}
-            </NavLink>
-          )}
+          {["ADMIN", "PROBLEM_MANAGER"].includes(user?.role ?? "") &&
+            !user?.mustChangePassword && (
+              <>
+                <NavLink
+                  to="/admin/problems"
+                  className={({ isActive }) =>
+                    `nav-item ${isActive ? "active" : ""}`
+                  }
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <Settings2 size={19} />
+                  {t("admin:title")}
+                </NavLink>
+                {user?.role === "ADMIN" && (
+                  <NavLink
+                    to="/admin/users"
+                    className={({ isActive }) =>
+                      `nav-item ${isActive ? "active" : ""}`
+                    }
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <UsersRound size={19} />
+                    {t("adminUsers:title")}
+                  </NavLink>
+                )}
+              </>
+            )}
         </nav>
 
         <div className="sidebar-bottom">
@@ -215,7 +232,9 @@ export default function AppLayout() {
         </header>
 
         <main className="main-content">
-          <Outlet />
+          <Suspense fallback={<PageSkeleton label={t("app.loading")} />}>
+            <Outlet />
+          </Suspense>
         </main>
 
         <footer className="footer">

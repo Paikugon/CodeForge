@@ -10,6 +10,7 @@ import org.hibernate.generator.EventType;
 
 import com.codeforge.backend.problem.enums.ProblemDifficulty;
 import com.codeforge.backend.tag.model.Tag;
+import com.codeforge.backend.user.model.User;
 
 @Entity
 @Table(name = "problems")
@@ -21,6 +22,10 @@ public class Problem {
 
     @Column(nullable = false)
     private String title;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
+    private User createdBy;
 
     @Column(nullable = false, unique = true)
     private String slug;
@@ -101,6 +106,14 @@ public class Problem {
 
     public String getTitle() {
         return title;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     public String getSlug() {

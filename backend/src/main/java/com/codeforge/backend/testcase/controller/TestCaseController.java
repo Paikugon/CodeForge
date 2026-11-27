@@ -33,7 +33,7 @@ import static com.codeforge.backend.common.error.ErrorCode.TEST_CASE_SYNC_FAILED
 
 @RestController
 @RequestMapping("/api/problems/{problemId}/test-cases")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN', 'PROBLEM_MANAGER')")
 public class TestCaseController {
 
     private final TestCaseService testCaseService;

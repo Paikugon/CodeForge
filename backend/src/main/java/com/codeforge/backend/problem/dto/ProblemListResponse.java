@@ -12,6 +12,8 @@ import java.util.List;
 public record ProblemListResponse(
         Long id,
         String title,
+        Long createdById,
+        String createdBy,
         String slug,
         Integer timeLimitMs,
         Integer memoryLimitMb,
@@ -27,6 +29,8 @@ public record ProblemListResponse(
     public ProblemListResponse(
             Long id,
             String title,
+            Long createdById,
+            String createdBy,
             String slug,
             Integer timeLimitMs,
             Integer memoryLimitMb,
@@ -34,7 +38,21 @@ public record ProblemListResponse(
             boolean enabled,
             OffsetDateTime createdAt,
             OffsetDateTime updatedAt) {
-        this(id, title, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
+        this(id, title, createdById, createdBy, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
+                createdAt, updatedAt, List.of(), 0, 0, null);
+    }
+
+    public ProblemListResponse(
+            Long id,
+            String title,
+            String slug,
+            Integer timeLimitMs,
+            Integer memoryLimitMb,
+            ProblemDifficulty difficulty,
+            boolean enabled,
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt) {
+        this(id, title, null, null, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
                 createdAt, updatedAt, List.of(), 0, 0, null);
     }
 
@@ -51,14 +69,14 @@ public record ProblemListResponse(
             long acceptedSubmissionCount,
             long judgedSubmissionCount,
             BigDecimal acceptanceRate) {
-        this(id, title, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
+            this(id, title, null, null, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
                 createdAt, updatedAt, List.of(), acceptedSubmissionCount,
                 judgedSubmissionCount, acceptanceRate);
     }
 
     public ProblemListResponse withTags(List<TagResponse> tags) {
         return new ProblemListResponse(
-                id, title, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
+                id, title, createdById, createdBy, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
                 createdAt, updatedAt, tags, acceptedSubmissionCount,
                 judgedSubmissionCount, acceptanceRate);
     }
@@ -69,7 +87,7 @@ public record ProblemListResponse(
         }
 
         return new ProblemListResponse(
-                id, title, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
+                id, title, createdById, createdBy, slug, timeLimitMs, memoryLimitMb, difficulty, enabled,
                 createdAt, updatedAt, tags, stats.acceptedSubmissionCount(),
                 stats.judgedSubmissionCount(), stats.acceptanceRate());
     }
@@ -78,6 +96,8 @@ public record ProblemListResponse(
         return new ProblemListResponse(
                 problem.getId(),
                 problem.getTitle(),
+                problem.getCreatedBy() == null ? null : problem.getCreatedBy().getId(),
+                problem.getCreatedBy() == null ? null : problem.getCreatedBy().getUsername(),
                 problem.getSlug(),
                 problem.getTimeLimitMs(),
                 problem.getMemoryLimitMb(),

@@ -17,6 +17,7 @@ export default function ProblemTable({
         <tr>
           <th scope="col">ID</th>
           <th scope="col">Problem</th>
+          <th scope="col">Created by</th>
           <th scope="col">Difficulty</th>
           <th scope="col">Acceptance</th>
         </tr>
@@ -25,7 +26,7 @@ export default function ProblemTable({
       <tbody>
         {problems.length === 0 ? (
           <tr>
-            <td colSpan={4} className="problem-empty-cell">
+            <td colSpan={5} className="problem-empty-cell">
               <strong>No matching problems</strong>
               <p>Try another difficulty or remove a tag.</p>
             </td>
@@ -55,6 +56,16 @@ export default function ProblemTable({
               </td>
 
               <td>
+                {problem.createdById === null ? (
+                  "-"
+                ) : (
+                  <Link to={`/users/${problem.createdById}`}>
+                    {problem.createdBy}
+                  </Link>
+                )}
+              </td>
+
+              <td>
                 <span className={`badge ${problem.difficulty.toLowerCase()}`}>
                   {problem.difficulty === "EASY"
                     ? "Easy"
@@ -69,7 +80,7 @@ export default function ProblemTable({
                 title={`${problem.acceptedSubmissionCount} accepted / ${problem.judgedSubmissionCount} judged`}
               >
                 {problem.acceptanceRate === null
-                  ? "—"
+                  ? "-"
                   : `${problem.acceptanceRate.toFixed(2)}%`}
               </td>
             </TableRow>

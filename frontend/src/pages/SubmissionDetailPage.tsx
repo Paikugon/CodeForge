@@ -3,9 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import CodeMirror from "@uiw/react-codemirror";
-import { cpp } from "@codemirror/lang-cpp";
-import { java } from "@codemirror/lang-java";
-import { python } from "@codemirror/lang-python";
 import {
   AlertCircle,
   ArrowLeft,
@@ -27,14 +24,15 @@ import { getProblemById } from "../api/problems";
 import { ApiError } from "../api/http";
 import { useTheme } from "../context/ThemeContext";
 import type { Submission } from "../types/submission";
+import { SkeletonBlock } from "../components/ui/Skeleton";
+import { useLanguageExtension } from "../components/useLanguageExtension";
+import "../styles/pages/submissions.css";
 
 const languageNames: Record<string, string> = {
   cpp: "C++ 20",
   java: "Java 21",
   python: "Python 3",
 };
-const languageExtensions = { cpp: cpp(), java: java(), python: python() };
-
 function isActive(status?: Submission["status"]) {
   return status === "PENDING" || status === "JUDGING";
 }
@@ -91,6 +89,55 @@ function CopyCodeButton({ source }: { source: string }) {
   );
 }
 
+function SubmissionDetailSkeleton({ label }: { label: string }) {
+  return (
+    <section
+      className="live-submission-detail submission-detail-skeleton"
+      role="status"
+      aria-label={label}
+    >
+      <div className="submission-skeleton-heading">
+        <SkeletonBlock className="skeleton--heading" />
+        <SkeletonBlock className="skeleton--line skeleton--line-short" />
+      </div>
+      <div className="submission-skeleton-banner">
+        <SkeletonBlock className="skeleton--pill" />
+        <div>
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+        </div>
+      </div>
+      <div className="submission-skeleton-metrics">
+        {Array.from({ length: 4 }, (_, index) => (
+          <div key={index}>
+            <SkeletonBlock className="skeleton--line skeleton--line-short" />
+            <SkeletonBlock className="submission-skeleton-metric" />
+          </div>
+        ))}
+      </div>
+      <div className="submission-skeleton-grid">
+        <div className="submission-skeleton-main">
+          <div className="submission-skeleton-card">
+            <SkeletonBlock className="skeleton--line skeleton--line-short" />
+            <SkeletonBlock className="submission-skeleton-code" />
+          </div>
+          <div className="submission-skeleton-card">
+            <SkeletonBlock className="skeleton--line skeleton--line-short" />
+            <SkeletonBlock className="skeleton--line" />
+            <SkeletonBlock className="skeleton--line" />
+          </div>
+        </div>
+        <div className="submission-skeleton-card">
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function SubmissionDetailPage() {
   const { id } = useParams();
   const { t, i18n } = useTranslation();
@@ -111,6 +158,9 @@ export default function SubmissionDetailPage() {
   });
 
   const submission = submissionQuery.data;
+  const languageKey = submission?.language.toLowerCase() ?? "";
+  const { extension, failed: languageExtensionFailed } =
+    useLanguageExtension(languageKey);
   const problemId = submission?.problemId;
   const responseStatus =
     submissionQuery.error instanceof ApiError
@@ -173,15 +223,7 @@ export default function SubmissionDetailPage() {
   }
 
   if (!submission) {
-    return (
-      <section
-        className="live-submission-detail live-detail-state"
-        role="status"
-      >
-        <LoaderCircle className="spin" size={28} aria-hidden="true" />
-        <p>{t("submissionDetail.loading")}</p>
-      </section>
-    );
+    return <SubmissionDetailSkeleton label={t("submissionDetail.loading")} />;
   }
 
   const active = isActive(submission.status);
@@ -210,10 +252,7 @@ export default function SubmissionDetailPage() {
       : tone === "danger"
         ? XCircle
         : AlertCircle;
-  const languageKey = submission.language.toLowerCase();
   const language = languageNames[languageKey] ?? submission.language;
-  const extension =
-    languageExtensions[languageKey as keyof typeof languageExtensions];
   const locale = i18n.resolvedLanguage?.startsWith("vi") ? "vi-VN" : "en-GB";
   const problemTitle =
     problemQuery.data?.title ??
@@ -343,6 +382,9 @@ export default function SubmissionDetailPage() {
                     tabSize: 4,
                   }}
                 />
+                {languageExtensionFailed && (
+                  <p role="alert">{t("app.languageSupportError")}</p>
+                )}
               </div>
             ) : (
               <div className="source-locked">

@@ -6,6 +6,7 @@ import { Plus, RefreshCw } from "lucide-react";
 import { deleteProblem, getProblems } from "../../api/problems";
 import { setProblemVisibility } from "../../api/admin";
 import Table from "../../components/ui/Table";
+import { SkeletonTable } from "../../components/ui/Skeleton";
 import {
   AdminError,
   AdminPagination,
@@ -47,6 +48,14 @@ export default function AdminProblemsPage() {
   useEffect(() => {
     setSelected([]);
   }, [page, difficulty, enabled]);
+  useEffect(() => {
+    if (!saved) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setSaved(false), 5_000);
+    return () => window.clearTimeout(timeout);
+  }, [saved]);
   const refresh = async () => {
     setSelected([]);
     await Promise.all([
@@ -141,9 +150,9 @@ export default function AdminProblemsPage() {
         </button>
       </form>
       {saved && (
-        <p className="admin-success" role="status">
+        <div className="toast" role="status" aria-live="polite">
           {t("saved")}
-        </p>
+        </div>
       )}
       {query.isError && (
         <AdminError error={query.error} retry={() => void query.refetch()} />
@@ -173,7 +182,7 @@ export default function AdminProblemsPage() {
         </button>
       </FloatingSelection>
       {query.isPending ? (
-        <p role="status">{t("loading")}</p>
+        <SkeletonTable columns={7} rows={7} label={t("loading")} />
       ) : (
         query.data && (
           <Table
@@ -212,6 +221,7 @@ export default function AdminProblemsPage() {
                 </th>
                 <th scope="col">{t("id")}</th>
                 <th scope="col">{t("name")}</th>
+                <th scope="col">{t("createdBy")}</th>
                 <th scope="col">{t("difficulty")}</th>
                 <th scope="col">{t("visibility")}</th>
                 <th scope="col">{t("actions")}</th>
@@ -220,7 +230,7 @@ export default function AdminProblemsPage() {
             <tbody>
               {!rows.length ? (
                 <tr>
-                  <td colSpan={6} className="admin-empty">
+                  <td colSpan={7} className="admin-empty">
                     {t("empty")}
                   </td>
                 </tr>
@@ -251,6 +261,15 @@ export default function AdminProblemsPage() {
                         {problem.title}
                       </Link>
                       <small>{problem.slug}</small>
+                    </td>
+                    <td>
+                      {problem.createdById === null ? (
+                        "-"
+                      ) : (
+                        <Link to={`/users/${problem.createdById}`}>
+                          {problem.createdBy}
+                        </Link>
+                      )}
                     </td>
                     <td>
                       <span

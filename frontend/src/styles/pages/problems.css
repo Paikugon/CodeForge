@@ -327,3 +327,27 @@
 html[data-theme="dark"] .live-problem-tag {
   color: #8dccff;
 }
+
+.problem-skeleton {
+  display: grid;
+  gap: 18px;
+}
+
+.problem-skeleton-header {
+  margin-bottom: 6px;
+}
+
+.problem-skeleton-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.problem-tag-skeleton {
+  width: 220px;
+}
+
+.problem-find-skeleton {
+  width: 88px;
+}

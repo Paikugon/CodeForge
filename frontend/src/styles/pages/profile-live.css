@@ -438,6 +438,70 @@
   padding: 22px;
   color: var(--muted);
 }
+.profile-skeleton {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.profile-skeleton-card,
+.profile-skeleton-panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--white);
+}
+.profile-skeleton-cover {
+  height: 108px;
+  border-radius: 0;
+}
+.profile-skeleton-identity {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 0 24px 24px;
+}
+.profile-skeleton-avatar {
+  width: 68px;
+  height: 68px;
+  margin-top: -22px;
+  border: 3px solid var(--white);
+  border-radius: 19px;
+}
+.profile-skeleton-identity .skeleton--heading {
+  width: 85%;
+  margin-top: 12px;
+}
+.profile-skeleton-main {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+.profile-skeleton-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--white);
+}
+.profile-skeleton-metrics > div {
+  display: grid;
+  gap: 10px;
+  padding: 22px 18px;
+}
+.profile-skeleton-metric {
+  width: 58%;
+  height: 28px;
+}
+.profile-skeleton-panel {
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+}
+.profile-skeleton-panel > .skeleton--heading {
+  margin-bottom: 4px;
+}
 html[data-theme="dark"] .live-profile .account-difficulty-stat {
   --difficulty-color: #79c6a5;
 }
@@ -452,6 +516,10 @@ html[data-theme="dark"] .live-profile .account-difficulty-stat.hard {
     grid-template-columns: 235px minmax(0, 1fr);
     gap: 20px;
   }
+  .profile-skeleton {
+    grid-template-columns: 235px minmax(0, 1fr);
+    gap: 20px;
+  }
   .live-profile .account-profile-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -463,6 +531,14 @@ html[data-theme="dark"] .live-profile .account-difficulty-stat.hard {
   }
 }
 @media (max-width: 760px) {
+  .profile-skeleton {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .profile-skeleton-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .live-profile .account-profile-layout {
     grid-template-columns: minmax(0, 1fr);
   }

@@ -1,6 +1,13 @@
-import { lazy, Suspense } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { lazy } from "react";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import AppLayout from "./components/AppLayout";
+import PasswordChangeGuard from "./components/PasswordChangeGuard";
 
 const ProblemList = lazy(() => import("./components/ProblemList"));
 const ProblemDetailPage = lazy(() => import("./pages/ProblemDetailPage"));
@@ -13,18 +20,28 @@ const RegisterPage = lazy(() => import("./pages/RegisterPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const AdminRoute = lazy(() => import("./components/admin/AdminRoute"));
 const AdminProblemsPage = lazy(() => import("./pages/admin/AdminProblemsPage"));
+const AdminUsersPage = lazy(() => import("./pages/admin/AdminUsersPage"));
 const AdminProblemFormPage = lazy(
   () => import("./pages/admin/AdminProblemFormPage"),
 );
-const AdminTestCasesPage = lazy(
-  () => import("./pages/admin/AdminTestCasesPage"),
-);
+function AdminTestCasesRedirect() {
+  const { id = "" } = useParams();
+  const { search } = useLocation();
+  const next = new URLSearchParams(search);
+  next.set("tab", "test-cases");
+  return (
+    <Navigate
+      to={`/admin/problems/${encodeURIComponent(id)}?${next}`}
+      replace
+    />
+  );
+}
 
 export default function App() {
   return (
-    <Suspense fallback={<p role="status">Loading…</p>}>
-      <Routes>
-        <Route element={<AppLayout />}>
+    <Routes>
+      <Route element={<AppLayout />}>
+        <Route element={<PasswordChangeGuard />}>
           <Route index element={<Navigate to="/problems" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -36,6 +53,7 @@ export default function App() {
           <Route path="/submissions" element={<SubmissionHistoryPage />} />
           <Route element={<AdminRoute />}>
             <Route path="/admin/problems" element={<AdminProblemsPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
             <Route
               path="/admin/problems/new"
               element={<AdminProblemFormPage create />}
@@ -46,11 +64,11 @@ export default function App() {
             />
             <Route
               path="/admin/problems/:id/test-cases"
-              element={<AdminTestCasesPage />}
+              element={<AdminTestCasesRedirect />}
             />
           </Route>
         </Route>
-      </Routes>
-    </Suspense>
+      </Route>
+    </Routes>
   );
 }

@@ -27,6 +27,53 @@
   gap: 19px;
   align-items: start;
 }
+.problem-detail-skeleton {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 19px;
+  align-items: start;
+}
+.problem-detail-skeleton-panel {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--white);
+}
+.problem-detail-skeleton-panel > .skeleton--heading {
+  margin-bottom: 8px;
+}
+.problem-detail-skeleton-samples {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+.problem-detail-skeleton-sample {
+  height: 140px;
+  border-radius: 6px;
+}
+.problem-detail-skeleton-editor {
+  padding: 0;
+  overflow: hidden;
+}
+.problem-detail-skeleton-editor-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.problem-detail-skeleton-editor-heading .skeleton--line {
+  margin: 0;
+}
+.problem-detail-skeleton-code {
+  height: 450px;
+  margin: 16px;
+}
 .statement-panel,
 .editor-panel {
   background: white;
@@ -404,6 +451,10 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .problem-detail-skeleton {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .editor-panel {
     margin-top: 0;
   }
@@ -425,6 +476,14 @@
   }
 }
 @media (max-width: 760px) {
+  .problem-detail-skeleton-panel {
+    padding: 20px;
+  }
+
+  .problem-detail-skeleton-code {
+    height: 340px;
+  }
+
   .profile-main .compact-submission {
     padding: 16px 14px;
     gap: 10px;

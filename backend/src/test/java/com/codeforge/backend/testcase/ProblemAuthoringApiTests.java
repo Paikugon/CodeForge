@@ -40,6 +40,7 @@ class ProblemAuthoringApiTests {
     @MockitoBean private TestCaseSyncService syncService;
     private final HttpClient client = HttpClient.newHttpClient();
     private String adminToken;
+    private String problemManagerToken;
     private String memberToken;
 
     @BeforeEach
@@ -48,6 +49,7 @@ class ProblemAuthoringApiTests {
             jdbc.update("delete from " + table);
         }
         adminToken = token("authoradmin", "ADMIN");
+        problemManagerToken = token("problemmanager", "PROBLEM_MANAGER");
         memberToken = token("authormember", "USER");
         reset(syncService);
     }
@@ -62,6 +64,7 @@ class ProblemAuthoringApiTests {
         JsonNode body = mapper.readTree(response.body());
         long id = body.get("id").asLong();
         assertEquals("A plus B", body.get("title").asText());
+        assertEquals("authoradmin", body.get("createdBy").asText());
         assertEquals(2, body.get("testCases").size());
         assertEquals(0, body.at("/testCases/0/orderIndex").asInt());
         assertEquals(1, body.at("/testCases/1/orderIndex").asInt());
@@ -157,12 +160,12 @@ class ProblemAuthoringApiTests {
     }
 
     @Test
-    void mutationsRequireAnAdminAndUnknownProblemReturns404() throws Exception {
+    void mutationsRequireProblemManagementPermissionAndUnknownProblemReturns404() throws Exception {
         long id = problemId();
         var payload = Map.of("testCases", List.of(sample()));
         assertEquals(401, send("POST", casesPath(id) + "/batch", payload, null).statusCode());
         assertEquals(403, send("POST", casesPath(id) + "/batch", payload, memberToken).statusCode());
-        assertEquals(404, send("POST", casesPath(Long.MAX_VALUE) + "/batch", payload, adminToken).statusCode());
+        assertEquals(404, send("POST", casesPath(Long.MAX_VALUE) + "/batch", payload, problemManagerToken).statusCode());
         assertEquals(0, testCases.count());
     }
 

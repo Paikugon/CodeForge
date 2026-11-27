@@ -12,7 +12,6 @@ import {
   Clock3,
   Code2,
   FileClock,
-  LoaderCircle,
   Pencil,
   RefreshCw,
   ShieldCheck,
@@ -30,11 +29,13 @@ import { useAuth } from "../context/AuthContext";
 import Table from "../components/ui/Table";
 import TableRow from "../components/ui/TableRow";
 import TablePagination from "../components/ui/TablePagination";
+import { SkeletonBlock, SkeletonTable } from "../components/ui/Skeleton";
 import ChangePasswordForm from "../components/ChangePasswordForm";
 import EditProfileForm from "../components/EditProfileForm";
 import { profileInitials } from "../utils/profile";
 import type { UserProfile } from "../types/user";
 import type { Problem } from "../types/problem";
+import "../styles/pages/profile.css";
 import "../styles/pages/account.css";
 import "../styles/pages/profile-live.css";
 
@@ -134,8 +135,7 @@ function ProfileProblems({
       ? rawPage
       : 0;
   const rawDifficulty = search.get("difficulty") as
-    | Problem["difficulty"]
-    | null;
+    Problem["difficulty"] | null;
   const difficulty =
     rawDifficulty && difficulties.includes(rawDifficulty)
       ? rawDifficulty
@@ -244,9 +244,7 @@ function ProfileProblems({
         </div>
       )}
       {query.isPending ? (
-        <p role="status" className="account-list-state">
-          {t("loading")}
-        </p>
+        <SkeletonTable columns={4} rows={5} label={t("loading")} />
       ) : (
         data && (
           <>
@@ -529,6 +527,38 @@ function ProfileContent({
   );
 }
 
+function ProfileSkeleton({ label }: { label: string }) {
+  return (
+    <div className="profile-skeleton" role="status" aria-label={label}>
+      <aside className="profile-skeleton-card">
+        <SkeletonBlock className="profile-skeleton-cover" />
+        <div className="profile-skeleton-identity">
+          <SkeletonBlock className="profile-skeleton-avatar" />
+          <SkeletonBlock className="skeleton--heading" />
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+          <SkeletonBlock className="skeleton--line" />
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+        </div>
+      </aside>
+      <div className="profile-skeleton-main">
+        <div className="profile-skeleton-metrics">
+          {Array.from({ length: 4 }, (_, index) => (
+            <div key={index}>
+              <SkeletonBlock className="skeleton--line skeleton--line-short" />
+              <SkeletonBlock className="profile-skeleton-metric" />
+            </div>
+          ))}
+        </div>
+        <div className="profile-skeleton-panel">
+          <SkeletonBlock className="skeleton--heading" />
+          <SkeletonBlock className="skeleton--line skeleton--line-short" />
+          <SkeletonTable columns={4} rows={5} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ProfilePage({ own = false }: { own?: boolean }) {
   const { t } = useTranslation("profile");
   const { id } = useParams();
@@ -606,10 +636,7 @@ export default function ProfilePage({ own = false }: { own?: boolean }) {
           </div>
         </div>
       ) : query.isPending ? (
-        <div className="account-page-state" role="status">
-          <LoaderCircle size={24} className="spin" aria-hidden="true" />
-          <p>{t("loading")}</p>
-        </div>
+        <ProfileSkeleton label={t("loading")} />
       ) : (
         <>
           {query.isError && (
