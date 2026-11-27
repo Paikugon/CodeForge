@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
-import { PageSkeleton } from "./ui/Skeleton";
+import { getSkeletonPageForLocation, PageSkeleton } from "./ui/Skeleton";
 
 export default function PasswordChangeGuard() {
   const {
@@ -18,7 +18,12 @@ export default function PasswordChangeGuard() {
   if (!hasToken) return <Outlet />;
 
   if (authLoading) {
-    return <PageSkeleton label={t("profile:loading")} />;
+    return (
+      <PageSkeleton
+        page={getSkeletonPageForLocation(location.pathname, location.search)}
+        label={t("profile:loading")}
+      />
+    );
   }
 
   if (authError) {

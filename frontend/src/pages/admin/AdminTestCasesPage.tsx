@@ -115,7 +115,14 @@ export default function AdminTestCasesPage({
         <p role="alert">{t("formInvalid")}</p>
       </section>
     );
-  if (problem.isPending) return <PageSkeleton label={t("loading")} />;
+  if (problem.isPending)
+    return (
+      <PageSkeleton
+        page="admin-test-cases"
+        bodyOnly={embedded}
+        label={t("loading")}
+      />
+    );
   if (problem.isError)
     return (
       <section className="live-admin">

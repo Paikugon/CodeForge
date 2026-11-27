@@ -21,7 +21,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import { useTheme } from "../context/ThemeContext";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../context/AuthContext";
-import { PageSkeleton } from "./ui/Skeleton";
+import { getSkeletonPageForLocation, PageSkeleton } from "./ui/Skeleton";
 
 export default function AppLayout() {
   const { pathname, search } = useLocation();
@@ -232,7 +232,14 @@ export default function AppLayout() {
         </header>
 
         <main className="main-content">
-          <Suspense fallback={<PageSkeleton label={t("app.loading")} />}>
+          <Suspense
+            fallback={
+              <PageSkeleton
+                page={getSkeletonPageForLocation(pathname, search)}
+                label={t("app.loading")}
+              />
+            }
+          >
             <Outlet />
           </Suspense>
         </main>

@@ -279,7 +279,7 @@ function ProblemForm({ problem }: { problem?: ProblemDetail }) {
           <fieldset disabled={pending}>
             <legend>{t("tags")}</legend>
             {tags.isPending ? (
-              <span role="status" aria-label={t("loading")}>
+              <span role="status" aria-label={t("loadingTags")}>
                 <SkeletonBlock className="skeleton--control" />
               </span>
             ) : tags.isError ? (
@@ -476,7 +476,7 @@ export default function AdminProblemFormPage({
       ) : create ? (
         <ProblemForm />
       ) : query.isPending ? (
-        <PageSkeleton label={t("loading")} />
+        <PageSkeleton page="admin-form" bodyOnly label={t("loading")} />
       ) : query.isError ? (
         <AdminError error={query.error} retry={() => void query.refetch()} />
       ) : (

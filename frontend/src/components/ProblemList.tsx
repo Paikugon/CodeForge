@@ -94,7 +94,7 @@ export default function ProblemList() {
 
         {/* Tag picker */}
         {tagsQuery.isPending ? (
-          <span role="status" aria-label="Loading tags">
+          <span role="status" aria-label={t("problems.loadingTags")}>
             <SkeletonBlock className="skeleton--control problem-tag-skeleton" />
           </span>
         ) : tagsQuery.isError ? (
